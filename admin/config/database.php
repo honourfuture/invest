@@ -20,10 +20,6 @@ return [
     'type'        => 'mysql',
     // 服务器地址
     'hostname'    => '127.0.0.1',
-    //
-    //yanshiwz_org
-    //aLjhrT8e6ACw3c2s
-    //CNpBfFnSSbmhT32T
     // 数据库名
     'database'    => 'project-invest',
     // 用户名
