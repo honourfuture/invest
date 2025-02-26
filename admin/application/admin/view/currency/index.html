@@ -1,0 +1,79 @@
+{extend name='admin@main'}
+
+{block name="button"}
+{if auth("admin/currency/add")}
+<button data-modal='{:url("add")}' data-title="添加币价" class='layui-btn layui-btn-sm layui-btn-primary'>添加币价</button>
+{/if}
+{if auth("admin/currency/remove")}
+<button data-action='{:url("remove")}' data-rule="id#{key}" class='layui-btn layui-btn-sm layui-btn-primary'>删除币价</button>
+{/if}
+{/block}
+
+{block name="content"}
+<div class="think-box-shadow">
+<!--    {include file='point/index_search'}-->
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='list-table-check-td think-checkbox'>
+                <input data-auto-none data-check-target='.list-check-box' type='checkbox'>
+            </th>
+<!--            <th class='list-table-sort-td'>-->
+<!--                <button type="button" data-reload class="layui-btn layui-btn-xs">排序刷新</button>-->
+<!--            </th>-->
+            <th class='text-left nowrap' width="15%">最新价格</th>
+            <th class='text-left nowrap' width="15%">开盘价</th>
+            <th class='text-left nowrap' width="15%">最低价</th>
+            <th class='text-left nowrap' width="15%">最高价</th>
+            <th class='text-left nowrap' width="15%">添加时间</th>
+            <th></th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr data-dbclick>
+            <td class='list-table-check-td think-checkbox'><input class="list-check-box" value='{$vo.id}' type='checkbox'></td>
+<!--            <td class='list-table-sort-td'><input data-action-blur="{:request()->url()}" data-value="id#{$vo.id};action#sort;sort#{value}" data-loading="false" value="{$vo.sort}" class="list-sort-input"></td>-->
+            <td class='text-left' style="max-width: 250px;overflow: hidden;">
+                {$vo.new_price|default='--'}<br>
+            </td>
+            <td class='text-left' style="max-width: 250px;overflow: hidden;">
+                {$vo.open_price|default='--'}<br>
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.min_price|default='--'}<br>
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.max_price|default='--'}<br>
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.add_time|default='--'}<br>
+            </td>
+            <td class='text-left nowrap'>
+
+                <div class="nowrap margin-bottom-5">
+                    {if auth("admin/currency/edit")}
+                    <a data-dbclick class="layui-btn layui-btn-sm" data-modal='{:url("edit")}?id={$vo.id}'>编 辑</a>
+                    {else}
+                    <a data-tips-text="您没有编辑项目的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled">编 辑</a>
+                    {/if}
+                    {if auth("admin/currency/remove")}
+                    <a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="确定要删除数据吗?" data-action="{:url('remove')}" data-value="id#{$vo.id}" data-csrf="{:systoken('remove')}">删 除</a>
+                    {else}
+                    <a data-tips-text="您没有删除项目的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled" data-csrf="{:systoken('remove')}">删 除</a>
+                    {/if}
+
+                </div>
+
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+
+</div>
+{/block}

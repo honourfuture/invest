@@ -1,0 +1,84 @@
+{extend name='admin@main'}
+{block name="content"}
+<form onsubmit="return false;"  data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+    <div class="think-box-shadow padding-40">
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">用户注册奖励</span>
+                <input name="register" class="layui-input" placeholder="请输入用户注册奖励" value="{$vo.register|default='0'}" required>
+            </label>
+            <!--<label class="layui-col-xs3 relative">-->
+            <!--    <span class="color-green">一级充值奖励（%）</span>-->
+            <!--    <input name="invest1" class="layui-input" placeholder="请输入一级奖励" value="{$vo.invest1|default='0'}" required>-->
+            <!--</label>-->
+            <!--<label class="layui-col-xs3 relative">-->
+            <!--    <span class="color-green">二级充值奖励（%）</span>-->
+            <!--    <input name="invest2" class="layui-input" placeholder="请输入一级奖励" value="{$vo.invest2|default='0'}" required>-->
+            <!--</label>-->
+            <!--<label class="layui-col-xs3 relative">-->
+            <!--    <span class="color-green">三级充值奖励（%）</span>-->
+            <!--    <input name="invest3" class="layui-input" placeholder="请输入一级奖励" value="{$vo.invest3|default='0'}" required>-->
+            <!--</label>-->
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">用户实名奖励</span>
+                <input name="real_name" class="layui-input" placeholder="请输入用户实名奖励" value="{$vo.real_name|default='0'}" required>
+            </label>
+             <label class="layui-col-xs3 relative">
+                <span class="color-green">每日签到奖励/积分</span>
+                <input name="qiandao" class="layui-input" placeholder="请输入每日签到奖励" value="{$vo.qiandao|default='0'}" required>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">新用户首次投资奖励</span>
+                <input name="first_investment_reward" class="layui-input" placeholder="请输入新用户首次投资奖励" value="{$vo.first_investment_reward|default='0'}" required>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">途游宝收益（%）</span>
+                <input name="ebao_rate" class="layui-input" placeholder="请输入途游宝收益" value="{$vo.ebao_rate|default='0'}" required>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">途游宝最低转入（）</span>
+                <input name="ebao_min" class="layui-input" placeholder="请输入途游宝最低转入" value="{$vo.ebao_min|default='0'}" required>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">途游宝最高转入（）</span>
+                <input name="ebao_max" class="layui-input" placeholder="请输入途游宝最高转入" value="{$vo.ebao_max|default='0'}" required>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">在线人数</span>
+                <input name="online_num" class="layui-input" placeholder="请输入在线人数" value="{$vo.online_num|default='0'}" required>
+            </label>
+        </div>
+
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">青铜抽奖每次消耗积分</span>
+                <input name="bronze_point_num" class="layui-input" placeholder="请输入抽奖每次消耗积分" value="{$vo.bronze_point_num|default='0'}" required>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">白银抽奖每次消耗积分</span>
+                <input name="silver_point_num" class="layui-input" placeholder="请输入抽奖每次消耗积分" value="{$vo.silver_point_num|default='0'}" required>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">黄金抽奖每次消耗积分</span>
+                <input name="gold_point_num" class="layui-input" placeholder="请输入抽奖每次消耗积分" value="{$vo.gold_point_num|default='0'}" required>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">新项目提示天数</span>
+                <input name="new_day" class="layui-input" placeholder="请输入新项目提示天数" value="{$vo.new_day|default='0'}" required>
+            </label>
+        </div>
+        
+        <div class="layui-form-item text-left">
+            {notempty name='vo.id'}<input type="hidden" name="id" value="{$vo.id}">{/notempty}
+            <button class="layui-btn" type="submit">保存设置</button>
+        </div>
+    </div>
+</form>
+{/block}
+{block name='script'}
+<script>
+    window.form.render();
+</script>
+{/block}

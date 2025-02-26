@@ -1,0 +1,155 @@
+{extend name='admin@main'}
+
+{block name="content"}
+
+<form onsubmit="return false;" id="GoodsForm" data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+
+    <div class="layui-card-body think-box-shadow padding-left-40">
+
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">是否置顶</span>
+                <select class="layui-select" name="top">
+                    {foreach ['0'=>'否','1'=>'是'] as $k=>$v}
+                    <!--{eq name='$vo.top' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+                
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">排序</span>
+                <input name="sort" class="layui-input" placeholder="请输入排序" value="{$vo.sort|default=''}">
+            </label>
+            <label class="layui-col-xs6 relative">
+                <span class="color-green">接收账号</span>
+                <input name="phone" class="layui-input" placeholder="请输入接收账号（选填）" value="{$vo.phone|default=''}">
+                <input name="id" class="layui-input" value="{$vo.id|default=''}">
+            </label>
+        </div>
+
+        <!--<div class="layui-form-item layui-row layui-col-space15">-->
+        <!--    <label class="layui-col-xs9 relative">-->
+        <!--        <span class="color-green">站内信标题</span>-->
+        <!--        <input name="title" required class="layui-input" placeholder="请输入站内信标题" value="{$vo.title|default=''}">-->
+        <!--    </label>-->
+        <!--</div>-->
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs6 relative">
+                <span class="color-green">站内信标题（中文简体）</span>
+                <input name="title_zh_cn" required class="layui-input" placeholder="请输入站内信标题" value="{$vo.title_zh_cn|default=''}">
+            </label>
+            <label class="layui-col-xs6 relative">
+                <span class="color-green">站内信标题（中文繁体）</span>
+                <input name="title_zh_hk" required class="layui-input" placeholder="请输入站内信标题" value="{$vo.title_zh_hk|default=''}">
+            </label>
+            <label class="layui-col-xs6 relative">
+                <span class="color-green">站内信标题（英语）</span>
+                <input name="title_en_us" required class="layui-input" placeholder="请输入站内信标题" value="{$vo.title_en_us|default=''}">
+            </label>
+        </div>
+        <!--        <div class="layui-form-item layui-row layui-col-space15">-->
+        <!--                <label class="layui-col-xs6 relative">-->
+        <!--        <span class="color-green">站内信标题（泰语）</span>-->
+        <!--        <input name="title_th_th" required class="layui-input" placeholder="请输入站内信标题" value="{$vo.title_th_th|default=''}">-->
+        <!--    </label>-->
+        <!--    <label class="layui-col-xs6 relative">-->
+        <!--        <span class="color-green">站内信标题（越南语）</span>-->
+        <!--        <input name="title_vi_vn" required class="layui-input" placeholder="请输入站内信标题" value="{$vo.title_vi_vn|default=''}">-->
+        <!--    </label>-->
+        <!--</div>-->
+        <!--        <div class="layui-form-item layui-row layui-col-space15">-->
+        <!--                <label class="layui-col-xs6 relative">-->
+        <!--        <span class="color-green">站内信标题（日语）</span>-->
+        <!--        <input name="title_ja_jp" required class="layui-input" placeholder="请输入站内信标题" value="{$vo.title_ja_jp|default=''}">-->
+        <!--    </label>-->
+        <!--    <label class="layui-col-xs6 relative">-->
+        <!--        <span class="color-green">站内信标题（韩语）</span>-->
+        <!--        <input name="title_ko_kr" required class="layui-input" placeholder="请输入站内信标题" value="{$vo.title_ko_kr|default=''}">-->
+        <!--    </label>-->
+        <!--</div>-->
+        <!-- <div class="layui-form-item layui-row layui-col-space15">-->
+        <!--                <label class="layui-col-xs6 relative">-->
+        <!--        <span class="color-green">站内信标题（马来语）</span>-->
+        <!--        <input name="title_ms_my" required class="layui-input" placeholder="请输入站内信标题" value="{$vo.title_ms_my|default=''}">-->
+        <!--    </label>-->
+        </div>
+               
+        <div class="layui-form-item block">
+            <span class="label-required-prev color-green">站内信内容</span>
+            <textarea name="content">{$vo.content|default=''|raw}</textarea>
+        </div>
+        <div class="layui-form-item block">
+            <span class="label-required-prev color-green">站内信内容（中文简体）</span>
+            <textarea name="content_zh_cn">{$vo.content_zh_cn|default=''|raw}</textarea>
+        </div>
+        <div class="layui-form-item block">
+            <span class="label-required-prev color-green">站内信内容（中文繁体）</span>
+            <textarea name="content_zh_hk">{$vo.content_zh_hk|default=''|raw}</textarea>
+        </div>
+        <div class="layui-form-item block">
+            <span class="label-required-prev color-green">站内信内容（英文）</span>
+            <textarea name="content_en_us">{$vo.content_en_us|default=''|raw}</textarea>
+        </div>
+        <!--<div class="layui-form-item block">-->
+        <!--    <span class="label-required-prev color-green">站内信内容（泰语）</span>-->
+        <!--    <textarea name="content_th_th">{$vo.content_th_th|default=''|raw}</textarea>-->
+        <!--</div>-->
+        <!--<div class="layui-form-item block">-->
+        <!--    <span class="label-required-prev color-green">站内信内容（越南语）</span>-->
+        <!--    <textarea name="content_vi_vn">{$vo.content_vi_vn|default=''|raw}</textarea>-->
+        <!--</div>-->
+        <!--<div class="layui-form-item block">-->
+        <!--    <span class="label-required-prev color-green">站内信内容（日语）</span>-->
+        <!--    <textarea name="content_ja_jp">{$vo.content_ja_jp|default=''|raw}</textarea>-->
+        <!--</div>-->
+        <!--<div class="layui-form-item block">-->
+        <!--    <span class="label-required-prev color-green">站内信内容（韩语）</span>-->
+        <!--    <textarea name="content_ko_kr">{$vo.content_ko_kr|default=''|raw}</textarea>-->
+        <!--</div>-->
+        <!--<div class="layui-form-item block">-->
+        <!--    <span class="label-required-prev color-green">站内信内容（马来语）</span>-->
+        <!--    <textarea name="content_ms_my">{$vo.content_ms_my|default=''|raw}</textarea>-->
+        <!--</div>-->
+        
+
+        <div class="layui-form-item text-center">
+            {notempty name='vo.id'}<input type="hidden" name="id" value="{$vo.id}">{/notempty}
+            <button class="layui-btn layui-btn-danger" ng-click="hsitoryBack()" type="button">取消编辑</button>
+            <button class="layui-btn" type="submit">保存站内信</button>
+        </div>
+
+    </div>
+</form>
+{/block}
+
+{block name='script'}
+<script>
+    window.form.render();
+    require(['ckeditor', 'angular'], function () {
+        window.createEditor('[name="content"]', {height: 100});
+        window.createEditor('[name="content_zh_cn"]', {height: 100});
+        window.createEditor('[name="content_zh_hk"]', {height: 100});
+        window.createEditor('[name="content_en_us"]', {height: 100});
+        window.createEditor('[name="content_th_th"]', {height: 100});
+        window.createEditor('[name="content_vi_vn"]', {height: 100});
+        window.createEditor('[name="content_ja_jp"]', {height: 100});
+        window.createEditor('[name="content_ko_kr"]', {height: 100});
+        window.createEditor('[name="content_ms_my"]', {height: 100});
+        var app = angular.module("GoodsForm", []).run(callback);
+        angular.bootstrap(document.getElementById(app.name), [app.name]);
+
+        function callback($rootScope) {
+            $rootScope.hsitoryBack = function () {
+                $.msg.confirm('确定要取消编辑吗？', function (index) {
+                    history.back(), $.msg.close(index);
+                });
+            };
+        }
+
+    })
+</script>
+{/block}

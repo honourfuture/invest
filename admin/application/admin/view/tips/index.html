@@ -1,0 +1,86 @@
+{extend name='admin@main'}
+
+{block name="button"}
+{if auth("admin/tips/add")}
+<!--<button data-modal='{:url("add")}' data-title="添加分类" class='layui-btn layui-btn-sm layui-btn-primary'>添加分类</button>-->
+{/if}
+{/block}
+
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='tips/class_search'}
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <!--<th class='list-table-check-td think-checkbox'>-->
+            <!--    <input data-auto-none data-check-target='.list-check-box' type='checkbox'>-->
+            <!--</th>-->
+            <th class="text-center">id</th>
+            <th class='text-left nowrap'>分类名称</th>
+            <th class='text-left'>zh_cn</th>
+            <th class='text-left'>zh_hk</th>
+            <th class='text-left'>en_us</th>
+            <!--<th class='text-left'>th_th</th>-->
+            <!--<th class='text-left'>vi_vn</th>-->
+            <!--<th class='text-left'>ja_jp</th>-->
+            <!--<th class='text-left'>ko_kr</th>-->
+            <!--<th class='text-left'>ms_my</th>-->
+            <!--<th class="text-center">添加时间</th>-->
+            <!--<th class="text-center">操作</th>-->
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <!--<td class='list-table-check-td think-checkbox'>-->
+            <!--    <input class="list-check-box" value='{$vo.id}' type='checkbox'>-->
+            <!--</td>-->
+            <td class='text-center '>
+                {$vo.id|default=''}
+            </td>
+            <td class='text-left '>
+                <span class="color-desc">{$vo.spl|raw}</span>{$vo.name|default=''}
+            </td>
+            <td class='text-left '>
+                {$vo.zh_cn|default=''}
+            </td>
+            <td class='text-left '>
+                {$vo.zh_hk|default=''}
+            </td>
+            <td class='text-left '>
+                {$vo.en_us|default=''}
+            </td>
+            <!--<td class='text-left '>-->
+            <!--    {$vo.th_th|default=''}-->
+            <!--</td>-->
+            <!--<td class='text-left '>-->
+            <!--    {$vo.vi_vn|default=''}-->
+            <!--</td>-->
+            <!--<td class='text-left '>-->
+            <!--    {$vo.ja_jp|default=''}-->
+            <!--</td>-->
+            <!--<td class='text-left '>-->
+            <!--    {$vo.ko_kr|default=''}-->
+            <!--</td>-->
+            <!--<td class='text-left '>-->
+            <!--    {$vo.ms_my|default=''}-->
+            <!--</td>-->
+            <!--<td class='text-center '>{$vo.add_time|format_datetime}</td>-->
+            <!--<td class='text-left nowrap'>-->
+            <!--    <a class="layui-btn layui-btn-sm layui-btn-primary" data-title="添加子分类" data-modal='{:url("add")}?pid={$vo.id}'>添 加</a>-->
+            <!--    {if auth("admin/tips/edit")}-->
+            <!--    <a data-title="编辑商品分类" class="layui-btn layui-btn-sm" data-modal='{:url("edit")}?id={$vo.id}'>编 辑</a>-->
+            <!--    {/if}-->
+            <!--    {if auth("admin/tips/remove")}-->
+            <!--    <a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="确定要删除数据吗?" data-action="{:url('remove')}" data-value="id#{$vo.id}" data-csrf="{:systoken('remove')}">删 除</a>-->
+            <!--    {/if}-->
+            <!--</td>-->
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+</div>
+{/block}

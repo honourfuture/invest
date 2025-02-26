@@ -1,0 +1,225 @@
+<form onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+
+    <div class="layui-card-body">
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">商品名称（简体）</label>
+            <label class="layui-col-xs10">
+                <input name="title" required value='{$vo.title|default=""}' placeholder="请输入商品名称" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">商品名称（繁体）</label>
+            <label class="layui-col-xs10">
+                <input name="title_zh_hk" required value='{$vo.title_zh_hk|default=""}' placeholder="请输入分类名称" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">商品名称（英文）</label>
+            <label class="layui-col-xs10">
+                <input name="title_en_us" required value='{$vo.title_en_us|default=""}' placeholder="请输入分类名称" class="layui-input">
+            </label>
+        </div>
+        <!--<div class="layui-row margin-bottom-15">-->
+        <!--    <label class="layui-col-xs2 think-form-label">分类名称（泰国）</label>-->
+        <!--    <label class="layui-col-xs10">-->
+        <!--        <input name="th_th" required value='{$vo.th_th|default=""}' placeholder="请输入分类名称" class="layui-input">-->
+        <!--    </label>-->
+        <!--</div>-->
+        <!--<div class="layui-row margin-bottom-15">-->
+        <!--    <label class="layui-col-xs2 think-form-label">分类名称（越南）</label>-->
+        <!--    <label class="layui-col-xs10">-->
+        <!--        <input name="vi_vn" required value='{$vo.vi_vn|default=""}' placeholder="请输入分类名称" class="layui-input">-->
+        <!--    </label>-->
+        <!--</div>-->
+        <!--<div class="layui-row margin-bottom-15">-->
+        <!--    <label class="layui-col-xs2 think-form-label">分类名称（日本）</label>-->
+        <!--    <label class="layui-col-xs10">-->
+        <!--        <input name="ja_jp" required value='{$vo.ja_jp|default=""}' placeholder="请输入分类名称" class="layui-input">-->
+        <!--    </label>-->
+        <!--</div>-->
+        <!--<div class="layui-row margin-bottom-15">-->
+        <!--    <label class="layui-col-xs2 think-form-label">分类名称（韩国）</label>-->
+        <!--    <label class="layui-col-xs10">-->
+        <!--        <input name="ko_kr" required value='{$vo.ko_kr|default=""}' placeholder="请输入分类名称" class="layui-input">-->
+        <!--    </label>-->
+        <!--</div>-->
+        <!--<div class="layui-row margin-bottom-15">-->
+        <!--    <label class="layui-col-xs2 think-form-label">分类名称（马来）</label>-->
+        <!--    <label class="layui-col-xs10">-->
+        <!--        <input name="ms_my" required value='{$vo.ms_my|default=""}' placeholder="请输入分类名称" class="layui-input">-->
+        <!--    </label>-->
+        <!--</div>-->
+        
+
+        <!--<div class="layui-row margin-bottom-15">-->
+        <!--    <label class="layui-col-xs2 think-form-label">商品图片</label>-->
+        <!--    <label class="layui-col-xs10">-->
+        <!--        <table class="layui-table">-->
+        <!--            <thead>-->
+        <!--            <tr>-->
+        <!--                <th class="text-center">商品封面</th>-->
+        <!--            </tr>-->
+        <!--            <tr>-->
+        <!--                <td width="90px" class="text-center">-->
+        <!--                    <input name="images" required type="hidden" value="{$vo.images|default=''}">-->
+        <!--                </td>-->
+        <!--            </tr>-->
+        <!--            </thead>-->
+        <!--        </table>-->
+        <!--    </label>-->
+        <!--    <script>$('[name="images"]').uploadOneImage()</script>-->
+        <!--</div>-->
+
+        <!--<div class="layui-row margin-bottom-15">-->
+        <!--    <label class="layui-col-xs2 think-form-label">商品轮播图</label>-->
+        <!--    <label class="layui-col-xs10">-->
+        <!--        <table class="layui-table">-->
+        <!--            <thead>-->
+        <!--            <tr>-->
+        <!--                <th class="text-center">商品轮播图</th>-->
+        <!--            </tr>-->
+        <!--            <tr>-->
+        <!--                <td width="90px" class="text-center">-->
+        <!--                    <input name="slide_images" required type="hidden" value="{$vo.slide_images|default=''}">-->
+        <!--                </td>-->
+        <!--            </tr>-->
+        <!--            </thead>-->
+        <!--        </table>-->
+        <!--    </label>-->
+        <!--    <script>$('[name="slide_images"]').uploadMultipleImage()</script>-->
+        <!--</div>-->
+        
+        <div class="layui-form-item">
+            <span class="help-label label-required-prev" style="margin-left:20px;"><b>商品封面及轮播图片</span>
+            <table class="layui-table" style="margin-left:130px;">
+                <thead>
+                <tr>
+                    <th class="text-center">封面</th>
+                    <th class="text-left" style="width:100%">轮播图片</th>
+                </tr>
+                <tr>
+                    <td class="text-center text-top padding-0">
+                        <div class="help-images">
+                            <input name="images" data-max-width="500" data-max-height="500" type="hidden" value="{$vo.images|default=''}">
+                            <script>$('[name="images"]').uploadOneImage();</script>
+                        </div>
+                    </td>
+                    <td class="text-left padding-0">
+                        <div class="help-images">
+                            <input name="slide_images" data-max-width="2048" data-max-height="1024" type="hidden" value="{$vo.slide_images|default=''}">
+                            <script>$('[name="slide_images"]').uploadMultipleImage();</script>
+                        </div>
+                    </td>
+                </tr>
+                </thead>
+            </table>
+        </div>
+
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">积分数量</label>
+            <label class="layui-col-xs10">
+                <input name="num" value='{$vo.num|default=""}' placeholder="请输入积分数量" class="layui-input">
+            </label>
+        </div>
+
+
+
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">兑换等级要求</label>
+            <label class="layui-col-xs10">
+
+
+                <select name='level' required class='layui-select' lay-search>
+                    {foreach $member as $key=>$cate}
+                    {eq name='cate.id' value='$vo.level|default=0'}
+                    <option selected value='{$cate.id}'>{$cate.name}</option>
+                    {else}
+                    <option value='{$cate.id}'>{$cate.name}</option>
+                    {/eq}
+                    {/foreach}
+                </select>
+
+            </label>
+        </div>
+
+
+
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">库存</label>
+            <label class="layui-col-xs10">
+                <input name="stock" value='{$vo.stock|default=""}' placeholder="请输入库存数量" class="layui-input">
+            </label>
+        </div>
+
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs6 ">
+                <label class="layui-col-xs2 think-form-label">商品详情-简体</label>
+                <label class="layui-col-xs10"><textarea name="note">{$vo.note|default=''|raw}</textarea></label>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs6 ">
+                <label class="layui-col-xs2 think-form-label">商品详情-繁体</label>
+                <label class="layui-col-xs10"><textarea name="note_hk">{$vo.note_hk|default=''|raw}</textarea></label>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs6 ">
+                <label class="layui-col-xs2 think-form-label">商品详情-英文</label>
+                <label class="layui-col-xs10"><textarea name="note_us">{$vo.note_us|default=''|raw}</textarea></label>
+            </label>
+        </div>
+        <!--<div class="layui-row margin-bottom-15">-->
+        <!--    <label class="layui-col-xs2 think-form-label">商品备注-简体</label>-->
+        <!--    <label class="layui-col-xs10">-->
+        <!--        <textarea class="layui-input" style="height:200px;line-height:20px;" name="note">{$vo.note|default=""}</textarea>-->
+                <!--<input name="note" value='{$vo.note|default=""}' placeholder="请输入商品备注" class="layui-input">-->
+        <!--    </label>-->
+        <!--</div>-->
+
+        <!--<div class="layui-row margin-bottom-15">-->
+        <!--    <label class="layui-col-xs2 think-form-label">商品备注-繁体</label>-->
+        <!--    <label class="layui-col-xs10">-->
+        <!--        <textarea class="layui-input" style="height:200px;line-height:20px;" name="note_hk">{$vo.note_hk|default=""}</textarea>-->
+                <!--<input name="note_hk" value='{$vo.note_hk|default=""}' placeholder="请输入商品备注" class="layui-input">-->
+        <!--    </label>-->
+        <!--</div>-->
+
+        <!--<div class="layui-row margin-bottom-15">-->
+        <!--    <label class="layui-col-xs2 think-form-label">商品备注-英文</label>-->
+        <!--    <label class="layui-col-xs10">-->
+        <!--        <textarea class="layui-input" style="height:200px;line-height:20px;" name="note_us">{$vo.note_us|default=""}</textarea>-->
+                <!--<input name="note_us" value='{$vo.note_us|default=""}' placeholder="请输入商品备注" class="layui-input">-->
+        <!--    </label>-->
+        <!--</div>-->
+
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    <div class="layui-form-item text-center">
+        {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+</form>
+{block name='script'}
+<script>
+    window.form.render();
+    require(['ckeditor', 'angular'], function () {
+        window.createEditor('[name="note"]', {height: 100});
+        window.createEditor('[name="note_hk"]', {height: 100});
+        window.createEditor('[name="note_us"]', {height: 100});
+        var app = angular.module("GoodsForm", []).run(callback);
+        angular.bootstrap(document.getElementById(app.name), [app.name]);
+
+        function callback($rootScope) {
+            $rootScope.hsitoryBack = function () {
+                $.msg.confirm('确定要取消编辑吗？', function (index) {
+                    history.back(), $.msg.close(index);
+                });
+            };
+        }
+
+    })
+</script>
+{/block}

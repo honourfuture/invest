@@ -1,0 +1,37 @@
+<form class="layui-form layui-card" action="{:request()->url()}" data-auto="true" method="post" autocomplete="off">
+
+    <div class="layui-card-body padding-left-40">
+
+        <div class="layui-form-item">
+            <label class="relative block">
+                <span class="color-green font-w7">订单号</span>
+                <!--                <span class="color-desc margin-left-5">id</span>-->
+                <!--{if isset($vo) and isset($vo.id)}-->
+                <input disabled value='{$vo.id|default=""}' class="layui-input layui-bg-gray">
+                <!--{else}-->
+                <input name="id" value='{$vo.id|default=""}' required  class="layui-input">
+                <!--{/if}-->
+            </label>
+            <!--            <p class="help-block">登录用户账号创建后，不允许再次修改。</p>-->
+        </div>
+
+
+        <div class="layui-form-item">
+            <label class="relative block">
+                <span class="color-green font-w7">输入信息</span>
+                <input disabled type="text" value='{$vo.input_data|default=""}' name="shipment_number" required  class="layui-bg-gray layui-input">
+            </label>
+                        <p class="color-desc">{$vo.rule_data}</p>
+        </div>
+
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>完成</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+
+</form>

@@ -1,0 +1,59 @@
+<form onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+
+    <div class="layui-card-body">
+
+<!--        <div class="layui-row margin-bottom-15">-->
+<!--            <label class="layui-col-xs4 think-form-label">签到天数</label>-->
+<!--            <label class="layui-col-xs8">-->
+<!--                <input name="days" required value='{$vo.days|default=""}' placeholder="请输入签到天数" class="layui-input">-->
+<!--            </label>-->
+<!--        </div>-->
+
+<!--        <div class="layui-row margin-bottom-15">-->
+<!--            <label class="layui-col-xs4 think-form-label">奖励类型</label>-->
+<!--            <label class="layui-col-xs8">-->
+<!--                <select class="layui-select" name="reward_type" required>-->
+<!--                    {foreach ['1'=>'红包'] as $k=>$v}-->
+<!--                    &lt;!&ndash;{eq name='$vo.reward_type' value='$k.""'}&ndash;&gt;-->
+<!--                    <option selected value="{$k}">{$v}</option>-->
+<!--                    &lt;!&ndash;{else}&ndash;&gt;-->
+<!--                    <option value="{$k}">{$v}</option>-->
+<!--                    &lt;!&ndash;{/eq}&ndash;&gt;-->
+<!--                    {/foreach}-->
+<!--                </select>-->
+<!--            </label>-->
+<!--        </div>-->
+
+<!--        <div class="layui-row margin-bottom-15">-->
+<!--            <label class="layui-col-xs4 think-form-label">奖励金额</label>-->
+<!--            <label class="layui-col-xs8">-->
+<!--                <input name="reward_num" value='{$vo.reward_num|default="0"}' placeholder="请输入奖励金额" class="layui-input">-->
+<!--            </label>-->
+<!--        </div>-->
+
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs4 think-form-label">挖矿日</label>
+            <label class="layui-col-xs8">
+                <input name="day" required class="layui-input" placeholder="请选择挖矿日" value="{$vo.day|default=''}"
+                       id="day">
+            </label>
+        </div>
+
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    <div class="layui-form-item text-center">
+        {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+</form>
+{block name='script'}
+<script>
+    window.form.render();
+    laydate.render({
+        elem: '#day',
+        type: "datetime"
+    })
+</script>
+{/block}

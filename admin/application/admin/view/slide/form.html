@@ -1,0 +1,102 @@
+<form onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+    <div class="layui-card-body padding-left-40">
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">是否显示</span>
+                <select class="layui-select" name="show" required>
+                    {foreach ['0'=>'隐藏','1'=>'显示'] as $k=>$v}
+                    <!--{eq name='$vo.show' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">类型</span>
+                <select class="layui-select" name="type" required>
+                    {foreach ['0'=>'轮播图','1'=>'新手推荐','2'=>'热门投资','3'=>'稳健智投'] as $k=>$v}
+                    <!--{eq name='$vo.type' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+           
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs8 relative">
+                <span class="color-green">图片链接</span>
+                <input name="url" class="layui-input" placeholder="请输入图片链接" value="{$vo.url|default='#'}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <span class="color-green label-required-prev">图片（轮播: 750x300像素    广告: 370x215像素）</span>
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <td width="" height="80px" class="text-center">
+                        简体
+                        <input name="zh_cn" type="hidden" value="{$vo.zh_cn|default=''}">
+                    </td>
+                    <td width="" height="80px" class="text-center">
+                        繁体
+                        <input name="zh_hk" type="hidden" value="{$vo.zh_hk|default=''}">
+                    </td>
+                    <td width="" height="80px" class="text-center">
+                        英文
+                        <input name="en_us" type="hidden" value="{$vo.en_us|default=''}">
+                    </td>
+                    <!--<td width="" height="80px" class="text-center">-->
+                    <!--    泰国-->
+                    <!--    <input name="th_th" type="hidden" value="{$vo.th_th|default=''}">-->
+                    <!--</td>-->
+                    <!--<td width="" height="80px" class="text-center">-->
+                    <!--    越南-->
+                    <!--    <input name="vi_vn" type="hidden" value="{$vo.vi_vn|default=''}">-->
+                    <!--</td>-->
+                    <!--<td width="" height="80px" class="text-center">-->
+                    <!--    日本-->
+                    <!--    <input name="ja_jp" type="hidden" value="{$vo.ja_jp|default=''}">-->
+                    <!--</td>-->
+                    <!--<td width="" height="80px" class="text-center">-->
+                    <!--    韩国-->
+                    <!--    <input name="ko_kr" type="hidden" value="{$vo.ko_kr|default=''}">-->
+                    <!--</td>-->
+                    <!--<td width="" height="80px" class="text-center">-->
+                    <!--    马来-->
+                    <!--    <input name="ms_my" type="hidden" value="{$vo.ms_my|default=''}">-->
+                    <!--</td>-->
+                </tr>
+                <tr>
+                    
+                </tr>
+                </thead>
+            </table>
+            <script>$('[name="zh_cn"]').uploadOneImage()</script>
+            <script>$('[name="zh_hk"]').uploadOneImage()</script>
+            <script>$('[name="en_us"]').uploadOneImage()</script>
+            <script>$('[name="th_th"]').uploadOneImage()</script>
+            <script>$('[name="vi_vn"]').uploadOneImage()</script>
+            <script>$('[name="ja_jp"]').uploadOneImage()</script>
+            <script>$('[name="ko_kr"]').uploadOneImage()</script>
+            <script>$('[name="ms_my"]').uploadOneImage()</script>
+        </div>
+
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    <div class="layui-form-item text-center">
+        {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+</form>
+{block name='script'}
+<script>
+    window.form.render();
+</script>
+{/block}

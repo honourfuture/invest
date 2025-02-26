@@ -1,0 +1,55 @@
+{extend name='admin@main'}
+{block name="button"}
+{/block}
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='sms_list/index_search'}
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='list-table-check-td think-checkbox'>
+                <label><input data-auto-none data-check-target='.list-check-box' type='checkbox'></label>
+            </th>
+            <th class='text-center nowrap'>编号</th>
+            <th class='text-center nowrap'>手机号</th>
+            <th class='text-center nowrap'>内容</th>
+            <th class="text-center nowrap">状态</th>
+            <th class="text-center nowrap">发送时间</th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+             <td class='list-table-check-td think-checkbox'>
+                <label><input class="list-check-box" value='{$vo.id}' type='checkbox'></label>
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.id|default='--'}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.phone|default='--'}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.msg|default='--'}
+            </td>
+            <td class='text-center nowrap'>
+                {if condition="$vo.status eq 0"}
+                未使用
+                {elseif condition="$vo.status eq 1"/}
+                已使用
+                {elseif condition="$vo.status eq 2"/}
+                已过期
+                {/if}
+            </td>
+            <td>
+                {$vo.time}
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+</div>
+{/block}

@@ -1,0 +1,138 @@
+<form onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+
+    <div class="layui-card-body">
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">产品名称（中文）</label>
+            <label class="layui-col-xs10">
+                <input name="title" required value='{$vo.title|default=""}' placeholder="请输入产品名称" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">产品名称（繁体）</label>
+            <label class="layui-col-xs10">
+                <input name="zh_hk" required value='{$vo.zh_hk|default=""}' placeholder="请输入产品名称" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">产品名称（英文）</label>
+            <label class="layui-col-xs10">
+                <input name="en_us" required value='{$vo.en_us|default=""}' placeholder="请输入产品名称" class="layui-input">
+            </label>
+        </div>
+        <!--<div class="layui-row margin-bottom-15">-->
+        <!--    <label class="layui-col-xs2 think-form-label">分类名称（泰国）</label>-->
+        <!--    <label class="layui-col-xs10">-->
+        <!--        <input name="th_th" required value='{$vo.th_th|default=""}' placeholder="请输入分类名称" class="layui-input">-->
+        <!--    </label>-->
+        <!--</div>-->
+        <!--<div class="layui-row margin-bottom-15">-->
+        <!--    <label class="layui-col-xs2 think-form-label">分类名称（越南）</label>-->
+        <!--    <label class="layui-col-xs10">-->
+        <!--        <input name="vi_vn" required value='{$vo.vi_vn|default=""}' placeholder="请输入分类名称" class="layui-input">-->
+        <!--    </label>-->
+        <!--</div>-->
+        <!--<div class="layui-row margin-bottom-15">-->
+        <!--    <label class="layui-col-xs2 think-form-label">分类名称（日本）</label>-->
+        <!--    <label class="layui-col-xs10">-->
+        <!--        <input name="ja_jp" required value='{$vo.ja_jp|default=""}' placeholder="请输入分类名称" class="layui-input">-->
+        <!--    </label>-->
+        <!--</div>-->
+        <!--<div class="layui-row margin-bottom-15">-->
+        <!--    <label class="layui-col-xs2 think-form-label">分类名称（韩国）</label>-->
+        <!--    <label class="layui-col-xs10">-->
+        <!--        <input name="ko_kr" required value='{$vo.ko_kr|default=""}' placeholder="请输入分类名称" class="layui-input">-->
+        <!--    </label>-->
+        <!--</div>-->
+        <!--<div class="layui-row margin-bottom-15">-->
+        <!--    <label class="layui-col-xs2 think-form-label">分类名称（马来）</label>-->
+        <!--    <label class="layui-col-xs10">-->
+        <!--        <input name="ms_my" required value='{$vo.ms_my|default=""}' placeholder="请输入分类名称" class="layui-input">-->
+        <!--    </label>-->
+        <!--</div>-->
+
+
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">最低</label>
+            <label class="layui-col-xs10">
+                <input name="min_num" required value='{$vo.min_num|default=""}' placeholder="请输入最低购买金额" class="layui-input">
+            </label>
+        </div>
+
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">最高</label>
+            <label class="layui-col-xs10">
+                <input name="max_num" required value='{$vo.max_num|default=""}' placeholder="请输入最高购买金额" class="layui-input">
+            </label>
+        </div>
+
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">锁仓日期(天)</label>
+            <label class="layui-col-xs10">
+                <input name="lock_day" required value='{$vo.lock_day|default=""}' placeholder="请输入锁仓日期" class="layui-input">
+            </label>
+        </div>
+
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">日收益率(%)</label>
+            <label class="layui-col-xs10">
+                <input name="day_rate" required value='{$vo.day_rate|default=""}' placeholder="请输入日收益率" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">类型</label>
+            <label class="layui-col-xs10">
+                <select class="layui-select" name="type" required>
+                    {foreach ['0'=>'每日返息','1'=>'到期返本返息'] as $k=>$v}
+                    <!--{eq name='$vo.type' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+        </div>
+
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">是否推荐</label>
+            <label class="layui-col-xs10">
+                <select class="layui-select" name="is_recommend" required>
+                    {foreach ['0'=>'否','1'=>'是'] as $k=>$v}
+                    <!--{eq name='$vo.is_recommend' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+        </div>
+
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">状态</label>
+            <label class="layui-col-xs10">
+                <select class="layui-select" name="status" required>
+                    {foreach ['0'=>'禁用','1'=>'启用'] as $k=>$v}
+                    <!--{eq name='$vo.status' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+        </div>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    <div class="layui-form-item text-center">
+        {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+</form>
+{block name='script'}
+<script>
+    window.form.render();
+</script>
+{/block}

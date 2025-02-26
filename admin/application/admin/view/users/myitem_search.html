@@ -1,0 +1,80 @@
+<fieldset>
+    <legend>我的团队</legend>
+    <form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get" autocomplete="off">
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">姓名/手机号</label>
+            <div class="layui-input-inline">
+                <input name="phone" value="{$Think.get.phone|default=''}" placeholder="请输入姓名/手机号查询团队" class="layui-input">
+            </div>
+        </div>
+        
+                
+        <div class="layui-form-item layui-inline">
+            <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+        </div>
+        
+   <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">团队人数</label>
+            <div class="layui-input-inline" style="width:80px">
+          
+                <input name="phone" value="{$all_team}" disabled class="layui-input">
+            </div>
+        </div>
+        
+         <input type="hidden" name="flag" value="1" class="layui-input">
+         
+         <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">团队总充值</label>
+            <div class="layui-input-inline" style="width:80px">
+               <!--<span>{$all_czmoney}</spah>-->
+                   <input name="phone" value="{$all_czmoney}" disabled class="layui-input">
+            </div>
+        </div>
+         <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">团队总提现</label>
+            <div class="layui-input-inline" style="width:80px">
+               <!--<span>{$all_czmoney}</spah>-->
+                   <input name="phone" value="{$all_cash}" disabled class="layui-input">
+            </div>
+        </div>
+        <br>
+        <div class="layui-form-item layui-inline">
+            <a data-title="1级会员" {if $level==1} class="layui-btn layui-btn-sm" {else /} class="layui-btn layui-btn-sm layui-btn-primary" {/if} data-open='{:url("admin/users/myitem")}?level=1&userid={$Think.get.userid|default=''}&phone={$Think.get.phone|default=''}&flag=1'>1级会员</a>
+        </div>
+        
+        <div class="layui-form-item layui-inline">
+            <a data-title="2级会员" {if $level==2} class="layui-btn layui-btn-sm" {else /} class="layui-btn layui-btn-sm layui-btn-primary" {/if} style="margin-left: 8px;" data-open='{:url("admin/users/myitem")}?level=2&userid={$Think.get.userid|default=''}&phone={$Think.get.phone|default=''}&flag=1'>2级会员</a>
+        </div>
+            <div class="layui-form-item layui-inline">
+            <a data-title="3级会员" {if $level==3} class="layui-btn layui-btn-sm" {else /} class="layui-btn layui-btn-sm layui-btn-primary" {/if} style="margin-left: 8px;" data-open='{:url("admin/users/myitem")}?level=3&userid={$Think.get.userid|default=''}&phone={$Think.get.phone|default=''}&flag=1'>3级会员</a>
+        </div>
+                <div class="layui-form-item layui-inline">
+            <a data-title="4级会员" {if $level==4} class="layui-btn layui-btn-sm" {else /} class="layui-btn layui-btn-sm layui-btn-primary" {/if} style="margin-left: 8px;" data-open='{:url("admin/users/myitem")}?level=4&userid={$Think.get.userid|default=''}&phone={$Think.get.phone|default=''}&flag=1'>4级会员</a>
+        </div>
+                <div class="layui-form-item layui-inline">
+            <a data-title="5级会员" {if $level==5} class="layui-btn layui-btn-sm" {else /} class="layui-btn layui-btn-sm layui-btn-primary" {/if} style="margin-left: 8px;" data-open='{:url("admin/users/myitem")}?level=5&userid={$Think.get.userid|default=''}&phone={$Think.get.phone|default=''}&flag=1'>5级会员</a>
+        </div>
+                <div class="layui-form-item layui-inline">
+            <a data-title="6级会员" {if $level==6} class="layui-btn layui-btn-sm" {else /} class="layui-btn layui-btn-sm layui-btn-primary" {/if} style="margin-left: 8px;" data-open='{:url("admin/users/myitem")}?level=6&userid={$Think.get.userid|default=''}&phone={$Think.get.phone|default=''}&flag=1'>6级会员</a>
+        </div>
+                <div class="layui-form-item layui-inline">
+            <a data-title="7级会员" {if $level==7} class="layui-btn layui-btn-sm" {else /} class="layui-btn layui-btn-sm layui-btn-primary" {/if} style="margin-left: 8px;" data-open='{:url("admin/users/myitem")}?level=7&userid={$Think.get.userid|default=''}&phone={$Think.get.phone|default=''}&flag=1'>7级会员</a>
+        </div>
+                <div class="layui-form-item layui-inline">
+            <a data-title="8级会员" {if $level==8} class="layui-btn layui-btn-sm" {else /} class="layui-btn layui-btn-sm layui-btn-primary" {/if} style="margin-left: 8px;" data-open='{:url("admin/users/myitem")}?level=8&userid={$Think.get.userid|default=''}&phone={$Think.get.phone|default=''}&flag=1'>8级会员</a>
+        </div>
+                <div class="layui-form-item layui-inline">
+            <a data-title="9级会员" {if $level==9} class="layui-btn layui-btn-sm" {else /} class="layui-btn layui-btn-sm layui-btn-primary" {/if} style="margin-left: 8px;" data-open='{:url("admin/users/myitem")}?level=9&userid={$Think.get.userid|default=''}&phone={$Think.get.phone|default=''}&flag=1'>9级会员</a>
+        </div>
+                <div class="layui-form-item layui-inline">
+            <a data-title="10级会员" {if $level==10} class="layui-btn layui-btn-sm" {else /} class="layui-btn layui-btn-sm layui-btn-primary" {/if} style="margin-left: 8px;" data-open='{:url("admin/users/myitem")}?level=10&userid={$Think.get.userid|default=''}&phone={$Think.get.phone|default=''}&flag=1'>10级会员</a>
+        </div>
+        <div style="font-size: 24px;padding-left: 20px;display: inline-block">
+            <span>团队总业绩：{$yj}</span>&nbsp;&nbsp;
+            <span>团队总奖励：{$countCommission}</span>
+        </div>
+        
+    </form>
+    
+    <script>form.render()</script>
+</fieldset>

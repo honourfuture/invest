@@ -1,0 +1,96 @@
+<form onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+    <div class="layui-card-body padding-left-40">
+        
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs8 relative">
+                <span class="color-green">名称-简体</span>
+                <input name="name" required class="layui-input" placeholder="请输入名称" value="{$vo.name|default=''}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs8 relative">
+                <span class="color-green">名称-繁体</span>
+                <input name="name_zh_hk" required class="layui-input" placeholder="请输入名称" value="{$vo.name_zh_hk|default=''}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs8 relative">
+                <span class="color-green">名称-英文</span>
+                <input name="name_en_us" required class="layui-input" placeholder="请输入名称" value="{$vo.name_en_us|default=''}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs8 relative">
+                <span class="color-green">链接-简体</span>
+                <input name="url" required class="layui-input" placeholder="请输入链接" value="{$vo.url|default=''}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs8 relative">
+                <span class="color-green">链接-繁体</span>
+                <input name="url_zh_hk" required class="layui-input" placeholder="请输入链接" value="{$vo.url_zh_hk|default=''}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs8 relative">
+                <span class="color-green">链接-英文</span>
+                <input name="url_en_us" required class="layui-input" placeholder="请输入链接" value="{$vo.url_en_us|default=''}">
+            </label>
+        </div>
+        
+        <div class="layui-form-item layui-row layui-col-space15">
+            <span class="color-green label-required-prev">图片</span>
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <td width="" height="80px" class="text-center">
+                        <input name="image" type="hidden" value="{$vo.image|default=''}">
+                    </td>
+                </tr>
+                <tr>
+                    
+                </tr>
+                </thead>
+            </table>
+            <script>$('[name="image"]').uploadOneImage()</script>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs8 relative">
+                <span class="color-green">状态</span>
+                <select class="layui-select" name="status" required>
+                    {foreach ['1'=>'正常','0'=>'关闭'] as $k=>$v}
+                    {empty name="vo"}
+                        <option value="{$k}">{$v}</option>
+                    {/empty}
+                    {notempty name="vo"}
+                        {eq name='$vo.status' value='$k.""'}
+                        <option selected value="{$k}">{$v}</option>
+                        {else}
+                        <option value="{$k}">{$v}</option>
+                        {/eq}
+                        {/notempty}
+                    {/foreach}
+                </select>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs8 relative">
+                <span class="color-green">排序</span>
+                <input name="sort" required class="layui-input" placeholder="请输入排序" value="{$vo.sort|default=''}">
+            </label>
+        </div>
+
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    <div class="layui-form-item text-center">
+        {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+</form>
+{block name='script'}
+<script>
+    window.form.render();
+</script>
+{/block}

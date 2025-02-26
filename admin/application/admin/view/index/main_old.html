@@ -1,0 +1,364 @@
+{extend name='main'}
+
+{block name='content'}
+
+<style>
+
+    .store-total-container {
+        font-size: 14px;
+        margin-bottom: 20px;
+        letter-spacing: 1px;
+    }
+
+    .store-total-container .store-total-icon {
+        top: 45%;
+        right: 8%;
+        font-size: 65px;
+        position: absolute;
+        color: rgba(255, 255, 255, 0.4);
+    }
+
+    .store-total-container .store-total-item {
+        color: #fff;
+        line-height: 4em;
+        padding: 15px 25px;
+        position: relative;
+    }
+
+    .store-total-container .store-total-item > div:nth-child(2) {
+        font-size: 16px;
+        line-height: 16px;
+    }
+
+</style>
+
+<div class="think-box-shadow store-total-container notselect">
+    <div class="margin-bottom-15">
+        <form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get" autocomplete="off">
+            <div class="layui-form-item layui-inline">
+                <label class="layui-form-label" style="padding-left: 0;text-align: left;">数据统计</label>
+                <div class="layui-input-inline" style="width:200px;">
+                    <input data-date-range name="search_time" value="{$Think.get.search_time|default=''}" placeholder="请选择时间" class="layui-input">
+                </div>
+            </div>
+            
+            <div class="layui-form-item layui-inline">
+                <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+            </div>
+        </form>
+    </div>
+    
+    
+        
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="store-total-item nowrap" style="background:linear-gradient(-125deg,#60726d,#28eb8e)">
+                <div>已投项目</div>
+                <div>{:number_format($invest_count)}</div>
+            </div>
+            <i class="store-total-icon layui-icon layui-icon-template-1"></i>
+        </div>
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="store-total-item nowrap" style="background:linear-gradient(-125deg,#436ad8,#5e4277)">
+                <div>会员总数</div>
+                <div>{:number_format($user_count)}</div>
+            </div>
+            <i class="store-total-icon layui-icon layui-icon-user"></i>
+        </div>
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="store-total-item nowrap" style="background:linear-gradient(-113deg,#60726d,#28eb8e)">
+                <div>充值总额</div>
+                <div>{:number_format($recharge_sum)}</div>
+            </div>
+            <i class="store-total-icon layui-icon layui-icon-read"></i>
+        </div>
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="store-total-item nowrap" style="background:linear-gradient(-141deg,#436ad8,#5e4277)">
+                <div>提现总额</div>
+                <div>{:number_format($cash_sum)}</div>
+            </div>
+            <i class="store-total-icon layui-icon layui-icon-survey"></i>
+        </div>
+
+
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="store-total-item nowrap" style="background:linear-gradient(-125deg,#60726d,#28eb8e)">
+                <div>今日注册用户</div>
+                <div>{:number_format($current_reg_user_count)}</div>
+            </div>
+            <i class="store-total-icon layui-icon layui-icon-user"></i>
+        </div>
+
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="store-total-item nowrap" style="background:linear-gradient(-125deg,#436ad8,#5e4277)">
+                <div>今日投资用户</div>
+                <div>{:number_format($today_tz_num)}</div>
+            </div>
+            <i class="store-total-icon layui-icon layui-icon-user"></i>
+        </div>
+      <div class="layui-col-sm6 layui-col-md3">
+            <div class="store-total-item nowrap" style="background:linear-gradient(-125deg,#60726d,#28eb8e)">
+                <div>今日真实账户充值</div>
+                <div>{:number_format($today_cz)}</div>
+            </div>
+            <i class="store-total-icon layui-icon layui-icon-user"></i>
+        </div>
+              <div class="layui-col-sm6 layui-col-md3">
+            <div class="store-total-item nowrap" style="background:linear-gradient(-125deg,#436ad8,#5e4277)">
+                <div>今日回款</div>
+                <div>{:number_format($today_hk)}</div>
+            </div>
+            <i class="store-total-icon layui-icon layui-icon-user"></i>
+        </div>
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="store-total-item nowrap" style="background:linear-gradient(-125deg,#60726d,#28eb8e)">
+                <div>昨日投资用户</div>
+                <div>{:number_format($yestoday_tz_num)}</div>
+            </div>
+            <i class="store-total-icon layui-icon layui-icon-user"></i>
+        </div>
+
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="store-total-item nowrap" style="background:linear-gradient(-125deg,#436ad8,#5e4277)">
+                <div>明日预计发放收益</div>
+                <div>{:number_format($money_m)}</div>
+            </div>
+            <i class="store-total-icon layui-icon layui-icon-user"></i>
+        </div>
+
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="store-total-item nowrap" style="background:linear-gradient(-125deg,#60726d,#28eb8e)">
+                <div>明日预计返还本金</div>
+                <div>{:number_format($benjin_bj)}</div>
+            </div>
+            <i class="store-total-icon layui-icon layui-icon-user"></i>
+        </div>
+
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="store-total-item nowrap" style="background:linear-gradient(-125deg,#436ad8,#5e4277)">
+                <div>团队数量</div>
+                <div>{:number_format($grade_num)}</div>
+            </div>
+            <i class="store-total-icon layui-icon layui-icon-user"></i>
+        </div>
+
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="store-total-item nowrap" style="background:linear-gradient(-141deg,#60726d,#28eb8e)">
+                <div>今日项目交易量</div>
+                <div>{:number_format($todayTransaction)}</div>
+            </div>
+            <i class="store-total-icon layui-icon layui-icon-survey"></i>
+        </div>
+
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="store-total-item nowrap" style="background:linear-gradient(-141deg,#436ad8,#5e4277)">
+                <div>昨日项目交易量</div>
+                <div>{:number_format($yesterdayTransaction)}</div>
+            </div>
+            <i class="store-total-icon layui-icon layui-icon-survey"></i>
+        </div>
+
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="store-total-item nowrap" style="background:linear-gradient(-141deg,#60726d,#28eb8e)">
+                <div>本周项目交易量</div>
+                <div>{:number_format($weekTransaction)}</div>
+            </div>
+            <i class="store-total-icon layui-icon layui-icon-survey"></i>
+        </div>
+
+
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="store-total-item nowrap" style="background:linear-gradient(-141deg,#436ad8,#5e4277)">
+                <div>当月项目交易量</div>
+                <div>{:number_format($toMonthTransaction)}</div>
+            </div>
+            <i class="store-total-icon layui-icon layui-icon-survey"></i>
+        </div>
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="store-total-item nowrap" style="background:linear-gradient(-141deg,#60726d,#28eb8e)">
+                <div>今日内部账户充值</div>
+                <div>{:number_format($mn_recharge_sum_today)}</div>
+            </div>
+            <i class="store-total-icon layui-icon layui-icon-survey"></i>
+        </div>
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="store-total-item nowrap" style="background:linear-gradient(-141deg,#436ad8,#5e4277)">
+                <div>今日内部账户提现</div>
+                <div>{:number_format($mn_cash_sum_today)}</div>
+            </div>
+            <i class="store-total-icon layui-icon layui-icon-survey"></i>
+        </div>
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="store-total-item nowrap" style="background:linear-gradient(-141deg,#60726d,#28eb8e)">
+                <div>今日内部账户项目投资额</div>
+                <div>{:number_format($mn_tz_sum_today)}</div>
+            </div>
+            <i class="store-total-icon layui-icon layui-icon-survey"></i>
+        </div>
+
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="store-total-item nowrap" style="background:linear-gradient(-141deg,#436ad8,#5e4277)">
+                <div>内部账户总提现</div>
+                <div>{:number_format($mn_cash_sum)}</div>
+            </div>
+            <i class="store-total-icon layui-icon layui-icon-survey"></i>
+        </div>
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="store-total-item nowrap" style="background:linear-gradient(-141deg,#60726d,#28eb8e)">
+                <div>内部账户总充值</div>
+                <div>{:number_format($mn_recharge_sum)}</div>
+            </div>
+            <i class="store-total-icon layui-icon layui-icon-survey"></i>
+        </div>
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="store-total-item nowrap" style="background:linear-gradient(-141deg,#436ad8,#5e4277)">
+                <div>持币总数</div>
+                <div>{:number_format($imbNum)}</div>
+            </div>
+            <i class="store-total-icon layui-icon layui-icon-survey"></i>
+        </div>
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="store-total-item nowrap" style="background:linear-gradient(-141deg,#60726d,#28eb8e)">
+                <div>提币总数</div>
+                <div>{:number_format($outImbNum)}</div>
+            </div>
+            <i class="store-total-icon layui-icon layui-icon-survey"></i>
+        </div>
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="store-total-item nowrap" style="background:linear-gradient(-141deg,#436ad8,#5e4277)">
+                <div>在线人数</div>
+                <div>{$pCount}</div>
+            </div>
+            <i class="store-total-icon layui-icon layui-icon-survey"></i>
+        </div>
+    </div>
+</div>
+
+<!--<div class="think-box-shadow store-total-container">-->
+<!--    <div class="margin-bottom-15">实时概况</div>-->
+<!--    <div class="layui-row layui-col-space15">-->
+<!--        <div class="layui-col-md6 margin-bottom-15">-->
+<!--            <div class="layui-row">-->
+<!--                <div class="layui-col-xs3 text-center">-->
+<!--                    <i class="layui-icon color-blue" style="font-size:60px;line-height:72px">&#xe65e;</i>-->
+<!--                </div>-->
+<!--                <div class="layui-col-xs4">-->
+<!--                    <div class="font-s14">今日已投金额</div>-->
+<!--                    <div class="font-s16">1351.00</div>-->
+<!--                    <div class="font-s12 color-desc">昨日：974.00</div>-->
+<!--                </div>-->
+<!--                <div class="layui-col-xs5">-->
+<!--                    <div class="font-s14">今日已投项目</div>-->
+<!--                    <div class="font-s16">106</div>-->
+<!--                    <div class="font-s12 color-desc">昨日：76</div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--</div>-->
+<!--<div class="layui-col-md6 margin-bottom-15">-->
+<!--    <div class="layui-row">-->
+<!--        <div class="layui-col-xs3 text-center">-->
+<!--            <i class="layui-icon color-blue" style="font-size:60px;line-height:72px">&#xe663;</i>-->
+<!--        </div>-->
+<!--        <div class="layui-col-xs4">-->
+<!--            <div class="font-s14">今日新增用户</div>-->
+<!--            <div class="font-s16">327</div>-->
+<!--            <div class="font-s12 color-desc">昨日：238</div>-->
+<!--        </div>-->
+<!--        <div class="layui-col-xs5">-->
+<!--            <div class="font-s14">今日充值金额</div>-->
+<!--            <div class="font-s16">69</div>-->
+<!--            <div class="font-s12 color-desc">昨日：34</div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<div class="layui-row layui-col-space15">
+    <div class="layui-col-md12">
+        <div class="think-box-shadow">
+            <table class="layui-table" lay-even>
+                <caption class="text-left margin-bottom-15 font-s14">综合报表</caption>
+                <colgroup>
+                    <col width="30%">
+                </colgroup>
+                <thead>
+                <tr>
+                    <td>备注</td>
+                    <td>入款</td>
+                    <td>出款</td>
+                    <td>发送收益</td>
+                    <td>新增投资</td>
+                    <td>新增投资额</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>上月</td>
+                    <td>{:number_format($last_month['recharge'],2)}</td>
+                    <td>{:number_format($last_month['cash'],2)}</td>
+                    <td>{:number_format($last_month['invest_list'],2)}</td>
+                    <td>{:number_format($last_month['invest'])}项</td>
+                    <td>{:number_format($last_month['invest_sum'],2)}</td>
+                </tr>
+                <tr>
+                    <td>本月</td>
+                    <td>{:number_format($month['recharge'],2)}</td>
+                    <td>{:number_format($month['cash'],2)}</td>
+                    <td>{:number_format($month['invest_list'],2)}</td>
+                    <td>{:number_format($month['invest'])}项</td>
+                    <td>{:number_format($month['invest_sum'],2)}</td>
+                </tr>
+                <tr>
+                    <td>总计</td>
+                    <td><?php echo number_format(Db::name('LcRecharge')->where('status = 1')->sum('money'),2);?></td>
+                    <td><?php echo number_format(Db::name('LcCash')->where('status = 1')->sum('money'),2);?></td>
+                    <td><?php echo number_format(Db::name('LcInvestList')->where('status = 1')->sum('pay1'),2);?></td>
+                    <td><?php echo number_format(Db::name('LcInvest')->count());?>笔</td>
+                    <td><?php echo number_format(Db::name('LcInvest')->sum('money'),2);?></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="layui-row layui-col-space15">
+    <div class="layui-col-md12">
+        <div class="think-box-shadow">
+            <table class="layui-table" lay-even>
+                <caption class="text-left margin-bottom-15 font-s14">本月明细</caption>
+                <colgroup>
+                    <col width="30%">
+                </colgroup>
+                <thead>
+                <tr>
+                    <td>日期</td>
+                    <td>新增用户</td>
+                    <td>入款</td>
+                    <td>出款</td>
+                    <td>发送收益</td>
+                    <td>新增投资</td>
+                    <td>新增投资额</td>
+                    <td>到期本金</td>
+                    <td>应发利息</td>
+                </tr>
+                </thead>
+                <tbody>
+                {volist name="day" id="v"}
+                <tr>
+                    <td>{$v['date']}</td>
+                    <td>{$v['new_user']}人</td>
+                    <td>{:number_format($v['recharge'],2)}</td>
+                    <td>{:number_format($v['cash'],2)}</td>
+                    <td>{:number_format($v['invest_list'],2)}</td>
+                    <td>{:number_format($v['invest'])}项</td>
+                    <td>{:number_format($v['invest_sum'],2)}</td>
+                    <td>{:number_format($v['expire'],2)}</td>
+                    <td>{:number_format($v['interest'],2)}</td>
+                </tr>
+                {/volist}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{/block}

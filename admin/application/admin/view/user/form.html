@@ -1,0 +1,184 @@
+<style>
+.pd25 {
+    padding: 25px;
+}
+
+.bt-form {
+    height: auto;
+}
+
+.mb15 {
+    margin-bottom: 15px;
+}
+
+.layer-info-title {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 15px;
+    font-size: 21px;
+}
+
+.explainDescribeList {
+    border: 1px solid #ececec;
+    border-radius: 6px;
+    margin: 0 auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background: #f7f7f7;
+    padding: 15px;
+    list-style-type: inherit;
+}
+
+
+.c7 {
+    color: #777;
+}
+
+.help-info-text>li {
+    list-style: inside disc;
+    line-height: 24px;
+}
+
+.download_Qcode {
+    overflow: hidden;
+    padding: 10px 0;
+}
+
+
+.download_Qcode .item_down:last-child {
+    border-right: none;
+}
+.download_Qcode .item_down {
+    width: 100%;
+    text-align: center;
+    border-right: 1px solid #ececee;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.download_Qcode .item_down:last-child {
+    border-right: none;
+}
+.download_Qcode .item_down {
+    width: 100%;
+    text-align: center;
+    border-right: 1px solid #ececee;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+
+
+
+</style>
+
+
+<form class="layui-form layui-card" action="{:request()->url()}" data-auto="true" method="post" autocomplete="off">
+    
+  
+    
+    <div class="layui-card-body padding-left-40">
+        <div class="layui-form-item">
+            <label class="relative block">
+                <span class="color-green font-w7">登录用户账号</span>
+                <span class="color-desc margin-left-5">Username</span>
+                {if isset($vo) and isset($vo.username)}
+                <input disabled value='{$vo.username|default=""}' class="layui-input layui-bg-gray">
+                {else}
+                <input name="username" value='{$vo.username|default=""}' required pattern="^.{4,}$" placeholder="请输入4位及以上字符登录用户账号" class="layui-input">
+                {/if}
+            </label>
+            <p class="help-block">登录用户账号创建后，不允许再次修改。</p>
+        </div>
+        
+        
+ 
+        
+        <div class="layui-form-item">
+            <label class="relative block">
+                <span class="color-green font-w7">用户联系手机</span>
+                <span class="color-desc margin-left-5">Phone</span>
+                <input type="tel" maxlength="11" autocomplete="off" autofocus name="phone" value='{$vo.phone|default=""}' pattern="^1[3-9][0-9]{9}$" placeholder="请输入用户联系手机" class="layui-input">
+            </label>
+            <p class="color-desc">可选，用户联系手机号码，需要填写正确的格式</p>
+        </div>
+        <div class="layui-form-item">
+            <label class="relative block">
+                <span class="color-green font-w7">联系电子邮箱</span>
+                <span class="color-desc margin-left-5">Email</span>
+                <input name="mail" autocomplete="off" pattern="^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$" value='{$vo.mail|default=""}' placeholder="请输入联系电子邮箱" class="layui-input">
+            </label>
+            <p class="color-desc">可选，用户联系电子邮箱，需要填写正确的格式</p>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="relative block">
+                <span class="color-green font-w7">登陆绑定ip</span>
+                <span class="color-desc margin-left-5">ip</span>
+                <input name="login_bind_ip" autocomplete="off" value='{$vo.login_bind_ip|default=""}' placeholder="请输入登陆绑定ip" class="layui-input">
+            </label>
+            <p class="color-desc">可选，用户联系电子邮箱，需要填写正确的格式</p>
+        </div>
+
+
+        {notempty name='authorizes'}
+        <div class="layui-form-item relative">
+            <span class="color-green font-w7">角色访问授权</span>
+            <span class="color-desc margin-left-5">Authorization</span>
+            <div class="layui-textarea">
+                {if isset($vo.username) and $vo.username eq 'admin'}
+                <span class="color-desc">超级用户不需要配置权限</span>
+                {elseif empty($authorizes)}
+                <span class="color-desc">未配置权限</span>
+                {else}
+                {foreach $authorizes as $authorize}
+                <label class="think-checkbox layui-unselect">
+                    {if in_array($authorize.id, $vo.authorize)}
+                    <input type="checkbox" checked name="authorize[]" value="{$authorize.id}" lay-ignore> {$authorize.title}
+                    {else}
+                    <input type="checkbox" name="authorize[]" value="{$authorize.id}" lay-ignore> {$authorize.title}
+                    {/if}
+                </label>
+                {/foreach}
+                {/if}
+            </div>
+        </div>
+        {/notempty}
+
+        <div class="layui-form-item">
+            <label class="relative block">
+                <span class="color-green font-w7">用户身份描述</span>
+                <span class="color-desc margin-left-5">Description</span>
+                <textarea placeholder="请输入用户身份描述" class="layui-textarea" name="desc">{$vo.desc|default=""}</textarea>
+            </label>
+        </div>
+        <div class="layui-form-item">
+            <label class="relative block">
+                <span class="color-green font-w7">客服专属链接</span>
+                <span class="color-desc margin-left-5">Phone</span>
+                <input type="tel" autocomplete="off" autofocus name="service_link" value='{$vo.service_link|default=""}' placeholder="请输入客服专属链接" class="layui-input">
+            </label>
+            <p class="color-desc">可选，用户联系手机号码，需要填写正确的格式</p>
+        </div>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+ 
+
+    <div class="layui-form-item"> <label class="layui-form-label">谷歌身份认证</label>
+    <div class="layui-input-block">
+        <input type="checkbox" name="googleauth" lay-skin="switch"  disabled="" {if isset($vo.googlecode) }  checked="" {/if} lay-filter="googleauth" lay-text="开启|关闭">
+        <button type="button" class="layui-btn layui-btn-sm layui-googleauth-btn"  style="margin-top: 5px;margin-left: 20px;">动态口令配置</button>
+        </div>
+    </div>
+
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+
+</form>
+ 
+   

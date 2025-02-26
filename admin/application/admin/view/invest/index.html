@@ -1,0 +1,65 @@
+{extend name='admin@main'}
+
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='invest/index_search'}
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='text-left nowrap' width="40%">投资信息</th>
+            <th class='text-left nowrap' width="15%">投资人</th>
+            <th class='text-left nowrap' width="15%">投资数据</th>
+            <th class="text-left nowrap" width="15%">投资时间</th>
+            <th class="text-left nowrap" width="15%">是否补签</th>
+            <th></th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        
+        <tr>
+            <td class='text-left' style="max-width: 260px;overflow: hidden">
+                项目名称：{$vo.zh_cn|default='--'}<br>
+            </td>
+            <td class='text-left nowrap'>
+                投资人ID：{$vo.uid|default='--'}<br>
+                投资人帐号：{$vo.phone|default='--'}<br>
+            </td>
+            <td class='text-left nowrap'>
+                投资金额：{$vo.money|default='--'} <br>
+                费率：{$vo.rate|default='--'} %<br>
+                周期：{$vo.hour / 24} 天<br>
+            </td>
+            <td class='text-left nowrap'>
+                投资时间：{$vo.time|default='--'}<br>
+            </td>
+            <td class='text-left nowrap'>
+                {if condition="$vo.repair_sign eq 0"}
+                    否
+                {else/}
+                    是
+                {/if}
+            </td>
+            
+            <td class='text-left nowrap'>
+                {if $vo.repair_sign eq 0}
+                <a class="layui-btn layui-btn-primary layui-btn-sm" data-action="{:url('open')}" data-value="id#{$vo.id}" data-csrf="{:systoken('open')}">开启补签 </a>
+                &nbsp;
+                {elseif $vo.repair_sign eq 1}
+                <a class="layui-btn layui-btn-danger layui-btn-sm" data-action="{:url('close')}" data-value="id#{$vo.id}" data-csrf="{:systoken('close')}">关闭补签 </a>
+                &nbsp;
+                {/if}
+                {if auth("admin/invest_list/detail")}
+                <a data-title="查看详情" class="layui-btn layui-btn-sm" data-open='{:url("admin/invest_list/index")}?i_iid={$vo.id}'>查看详情</a>
+                <a data-title="查看合同" class="layui-btn layui-btn-sm" target="_blank" href='/index/pdf/show.html?invest_id={$vo.id}'>查看合同</a>
+                {/if}
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+</div>
+{/block}

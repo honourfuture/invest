@@ -1,0 +1,313 @@
+{extend name='admin@main'}
+{block name="content"}
+<form onsubmit="return false;"  data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+    <div class="think-box-shadow padding-40">
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">网站名称</span>
+                <input name="webname" class="layui-input" placeholder="请输入网站名称" value="{$vo.webname|default=''}" required>
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">网站域名</span>
+                <input name="domain" class="layui-input" placeholder="请输入网站域名" value="{$vo.domain|default=''}" required>
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">客服链接</span>
+                <input name="service" class="layui-input" placeholder="请输入客服链接" value="{$vo.service|default=''}" required>
+            </label>
+        </div>
+
+        <div class="layui-form-item layui-row layui-col-space15">
+            
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">最低提现金额</span>
+                <input name="cash" class="layui-input" placeholder="请输入最低提现金额" value="{$vo.cash|default=''}" required>
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">最低充值金额</span>
+                <input name="min_recharge" class="layui-input" placeholder="请输入最低充值金额" value="{$vo.min_recharge|default=''}" required>
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">每日提现次数</span>
+                <input name="withdraw_num" class="layui-input" value="{$vo.withdraw_num|default=''}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">USDT汇率</span>
+                <input name="rate_usd" class="layui-input" value="{$vo.rate_usd|default=''}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">复投利率(%)</span>
+                <input name="repeat_rate" class="layui-input" value="{$vo.repeat_rate|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">是否开启数字藏品</span>
+                <select class="layui-select" name="is_figure_collect">
+                    {foreach ['1'=>'开启','0'=>'关闭'] as $k=>$v}
+                    <!--{eq name='$vo.is_figure_collect' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+        
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">能否查看下级团队信息</span>
+                <select class="layui-select" name="is_see">
+                    {foreach ['1'=>'能','0'=>'不能'] as $k=>$v}
+                    {eq name='$vo.is_see' value='$k.""'}
+                    <option selected value="{$k}">{$v}</option>
+                    {else}
+                    <option value="{$k}">{$v}</option>
+                    {/eq}
+                    {/foreach}
+                </select>
+            </label>
+            <!--<label class="layui-col-xs3 relative">-->
+            <!--    <span class="color-green">首页K线</span>-->
+            <!--    <select class="layui-select" name="is_kline">-->
+            <!--        {foreach ['1'=>'显示','0'=>'隐藏'] as $k=>$v}-->
+            <!--        {eq name='$vo.is_kline' value='$k.""'}-->
+            <!--        <option selected value="{$k}">{$v}</option>-->
+            <!--        {else}-->
+            <!--        <option value="{$k}">{$v}</option>-->
+            <!--        {/eq}-->
+            <!--        {/foreach}-->
+            <!--    </select>-->
+            <!--</label>-->
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">是否开启盲盒</span>
+                <select class="layui-select" name="is_blind">
+                    {foreach ['1'=>'开启','0'=>'关闭'] as $k=>$v}
+                    <!--{eq name='$vo.is_blind' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">开启盲盒金额</span>
+                <input name="open_blind_money" class="layui-input" value="{$vo.open_blind_money|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">是否开启单聊红包功能</span>
+                <select class="layui-select" name="single_chat_redpack">
+                    {foreach ['1'=>'开启','0'=>'关闭'] as $k=>$v}
+                    <!--{eq name='$vo.single_chat_redpack' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <div class="layui-form-item">
+                <label class="layui-form-label color-green" style="width:140px;padding-left:0;">开启盲盒需满足以下等级</label>
+                <div class="layui-input-block">
+                    {volist name="member_list" id="m"}
+                    <input type="checkbox" {if condition="in_array($m.id, $vo.members)"}checked{/if} name="members[]" title="{$m.name}" value="{$m.id}">
+                    {/volist}
+                </div>
+            </div>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">开启盲盒概率(%)</span>
+                <input name="blind_rate" class="layui-input" value="{$vo.blind_rate|default=''}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">盲盒参与人数</span>
+                <input name="blind_join_num" class="layui-input" value="{$vo.blind_join_num|default=''}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">盲盒已拆人数</span>
+                <input name="blind_open_num" class="layui-input" value="{$vo.blind_open_num|default=''}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <!--<label class="layui-col-xs3 relative">-->
+            <!--    <span class="color-green">是否开启数字藏品</span>-->
+            <!--    <select class="layui-select" name="is_figure_collect">-->
+            <!--        {foreach ['1'=>'开启','0'=>'关闭'] as $k=>$v}-->
+                    <!--{eq name='$vo.is_figure_collect' value='$k.""'}-->
+            <!--        <option selected value="{$k}">{$v}</option>-->
+                    <!--{else}-->
+            <!--        <option value="{$k}">{$v}</option>-->
+                    <!--{/eq}-->
+            <!--        {/foreach}-->
+            <!--    </select>-->
+            <!--</label>-->
+        </div>
+        
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs2 relative">
+                <span class="color-green">平台总人数</span>
+                <input name="plat_total_num" class="layui-input" value="{$vo.plat_total_num|default=''}">
+            </label>
+            <label class="layui-col-xs2 relative">
+                <span class="color-green">今日新增人数/每日修改1次</span>
+                <input name="today_inc_num" class="layui-input" value="{$vo.today_inc_num|default=''}">
+            </label>
+            <label class="layui-col-xs2 relative">
+                <span class="color-green">今日充值人数/每日修改1次</span>
+                <input name="today_recharge_num" class="layui-input" value="{$vo.today_recharge_num|default=''}">
+            </label>
+            <label class="layui-col-xs2 relative">
+                <span class="color-green">总交易金额</span>
+                <input name="trade_total" class="layui-input" value="{$vo.trade_total|default=''}">
+            </label>
+            <label class="layui-col-xs2 relative">
+                <span class="color-green">24h交易/每日修改1次</span>
+                <input name="today_trade" class="layui-input" value="{$vo.today_trade|default=''}">
+            </label>
+            <label class="layui-col-xs2 relative">
+                <span class="color-green">24h提现/每日修改1次</span>
+                <input name="today_withdraw" class="layui-input" value="{$vo.today_withdraw|default=''}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+                <label class="layui-col-xs4 relative">
+                <span class="color-green">后台登录IP白名单(#号隔开)</span>
+                <input name="login_ip" class="layui-input" value="{$vo.login_ip|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">禁止IP<span class="color-red">（多个IP请用半角 , 号隔开）</span></span>
+                <input name="ban_ip" class="layui-input" placeholder="请输入禁止IP（多个IP请用半角 , 号隔开）" value="{$vo.ban_ip|default=''}">
+                </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">项目分享产品 注：设定1就是邀请1个获得1次奖励，设定2就是邀请满2个奖励1次</span>
+                <input name="invite_num" class="layui-input" value="{$vo.invite_num|default=''}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">项目分享奖励/%</span>
+                <input name="invite_rate" class="layui-input" value="{$vo.invite_rate|default=''}">
+            </label>
+            
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">是否开启红包雨</span>
+                <select class="layui-select" name="redpack_rain">
+                    {foreach ['1'=>'开启','0'=>'关闭'] as $k=>$v}
+                    <!--{eq name='$vo.redpack_rain' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+        </div>
+        
+        
+        <div class="layui-form-item layui-row layui-col-space15">
+            <h5 class="color-green">红包雨各等级每天可抽奖次数</h5>
+            <div class="layui-form-item layui-row layui-col-space15">
+            {volist name="member_list" key="key" id="m"}
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">{$m.name}</span>
+                <input name="redpack_lottery_nums[]" required type="number" class="layui-input" placeholder="请输入次数" value="<?php if(count($vo['redpack_lottery_nums'])>1){echo $vo['redpack_lottery_nums'][$key-1];}else{echo 0;} ?>">
+            </label>
+            {/volist}
+        </div>
+        
+        <div class="layui-form-item layui-row layui-col-space15">
+        <!--    <label class="layui-col-xs3 relative">-->
+        <!--        <span class="color-green">禁止IP<span class="color-red">（多个IP请用半角 , 号隔开）</span></span>-->
+        <!--        <input name="ban_ip" class="layui-input" placeholder="请输入禁止IP（多个IP请用半角 , 号隔开）" value="{$vo.ban_ip|default=''}">-->
+            
+        <!--    <label class="layui-col-xs3 relative">-->
+        <!--        <span class="color-green">兑换商品最低用户等级</span></span>-->
+        <!--        <input name="is_leval" class="layui-input" placeholder="请输入兑换商品最低用户等级" value="{$vo.is_leval|default=0}">-->
+        <!--    </label>-->
+        <!--</div>-->
+        
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">VPN线路地址</span>
+                <textarea name="line" placeholder="请输入内容" class="layui-textarea">
+                    {$vo.line|default=''}
+                </textarea>
+                <!--<label class="layui-col-xs3 relative">-->
+                <!--<span class="color-green">兑换商品最低用户等级</span></span>-->
+                <!--<input name="is_leval" class="layui-input" placeholder="请输入兑换商品最低用户等级" value="{$vo.is_leval|default=0}">-->
+            </label>
+            
+            
+            <!--<label class="layui-col-xs3 relative">-->
+            <!--    <span class="color-green">是否开启单聊红包功能</span>-->
+            <!--    <select class="layui-select" name="single_chat_redpack">-->
+            <!--        {foreach ['1'=>'开启','0'=>'关闭'] as $k=>$v}-->
+                    <!--{eq name='$vo.single_chat_redpack' value='$k.""'}-->
+            <!--        <option selected value="{$k}">{$v}</option>-->
+                    <!--{else}-->
+            <!--        <option value="{$k}">{$v}</option>-->
+                    <!--{/eq}-->
+            <!--        {/foreach}-->
+            <!--    </select>-->
+            <!--</label>-->
+        </div>
+        
+        <!--<div class="layui-form-item layui-row layui-col-space15">-->
+        <!--    <span class="color-green label-required-prev">网站LOGO</span>-->
+        <!--    <table class="layui-table">-->
+        <!--        <thead>-->
+        <!--        <tr>-->
+        <!--            <th class="text-center">300x300像素</th>-->
+        <!--        </tr>-->
+        <!--        <tr>-->
+        <!--            <td width="150px" class="text-center">-->
+        <!--                <input name="logo_img" type="hidden" value="{$vo.logo_img|default=''}">-->
+        <!--            </td>-->
+        <!--        </tr>-->
+        <!--        </thead>-->
+        <!--    </table>-->
+        <!--    <script>$('[name="logo_img"]').uploadOneImage()</script>-->
+        <!--</div>-->
+         <div class="layui-form-item layui-row layui-col-space15">
+            <span class="color-green label-required-prev">首页视频</span>
+            <table class="layui-table">
+                 <tr>
+                    <th class="text-center">1240x359像素</th>
+                </tr>
+                 <thead>
+               
+                <tr>
+                    <td width="150px" class="text-center">
+                        <!--<butto name="home_video" type="button" class="layui-btn" id="test1">-->
+                        <!--  <i class="layui-icon">&#xe67c;</i>上传视频-->
+                        <!--</button>-->
+                        <input name="home_video" type="hidden" accept="video" value="{$vo.home_video|default=''}">
+                    </td>
+                </tr>
+                 <tr>
+                    <th class="text-center">
+                        <video width="320" height="240" controls>
+                            <source src="{$vo.home_video|default=''}" type="video/mp4">
+                        </video>
+                    </th>
+                </tr>
+                </thead>
+            </table>
+            <script>$('[name="home_video"]').uploadOneVideo()</script>
+        </div>
+        <div class="layui-form-item text-center">
+            {notempty name='vo.id'}<input type="hidden" name="id" value="{$vo.id}">{/notempty}
+            <button class="layui-btn" type="submit">保存设置</button>
+        </div>
+    </div>
+</form>
+{/block}
+{block name='script'}
+<script>
+    window.form.render();
+    require(['ckeditor', 'angular'], function () {
+        window.createEditor('[name="contract"]', {height: 500});
+    })
+    
+    
+</script>
+{/block}

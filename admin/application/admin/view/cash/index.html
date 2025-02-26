@@ -1,0 +1,175 @@
+{extend name='admin@main'}
+{block name="button"}
+
+
+{if auth("change")}
+<!--<button data-action='{:url("batchAgree")}' data-rule="id#{key}" data-csrf="{:systoken('batchAgree')}" data-confirm="确定要批量通过这些记录吗？" class='layui-btn layui-btn-sm layui-btn-primary'>批量审核</button>-->
+{/if}
+
+<!--{if auth("remove")}-->
+<!--<button data-action='{:url("remove")}' data-rule="id#{key}" data-csrf="{:systoken('remove')}" data-confirm="确定要删除这些记录吗？" class='layui-btn layui-btn-sm layui-btn-primary'>删除记录</button>-->
+<!--{/if}-->
+{/block}
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='cash/index_search'}
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <!--<th class='list-table-check-td think-checkbox'>-->
+            <!--    <label><input data-auto-none data-check-target='.list-check-box' type='checkbox'></label>-->
+            <!--</th>-->
+            {if $adm }
+            <th class='text-center nowrap'>编号</th>
+            {/if}
+            <th class="text-center nowrap">进度</th>
+            <th class='text-center nowrap'>账户</th>
+            <th class='text-center nowrap'>真实姓名</th>
+            <th class="text-center nowrap">提现金额</th>
+            <th class="text-center nowrap">手续费</th>
+            <th class="text-center nowrap">实际到账</th>
+            {if $adm }
+            <th class="text-center nowrap">钱包地址</th>
+            <th class="text-center nowrap">钱包二维码</th>
+            <th class="text-center nowrap">查看已投项目</th>
+            <th class="text-center nowrap">查看充值记录</th>
+            {/if}
+            <th class="text-center nowrap">提现次数</th>
+            <th class="text-center nowrap">提交时间</th>
+            <th class="text-center nowrap">操作</th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <!--<td class='list-table-check-td think-checkbox'>-->
+            <!--    <label><input class="list-check-box" value='{$vo.id}' type='checkbox'></label>-->
+            <!--</td>-->
+            {if $adm }
+            <td class='text-center nowrap'>
+                {$vo.id|default='--'}
+                <div>
+                    商户No：{$vo.order_no|default='--'}
+                    <br>
+                    代付No：{$vo.yun_order_no|default='--'}
+                </div>
+            </td>
+            {/if}
+            
+            <td class='text-center nowrap'>
+                {if $vo.status == 0}
+                <span class="color-red">待审核</span>
+                {/if}
+                {if $vo.status == 1}
+                    <span class="color-green">已审核</span>
+                {/if}
+                {if $vo.status == 2}
+                <span class="color-desc">已拒绝</span>
+                {/if}
+                
+                <!--<div>-->
+                <!--    {if $vo.df_status == 0}-->
+                <!--    <span class="color-desc">代付：未提交</span>-->
+                <!--    {/if}-->
+                <!--    {if $vo.df_status == 1}-->
+                <!--        <span style="color:#49a3ff">代付：代付中</span>-->
+                <!--    {/if}-->
+                <!--    {if $vo.df_status == 2}-->
+                <!--    <span class="color-green">代付：已完成</span>-->
+                <!--    {/if}-->
+                <!--    {if $vo.df_status == 3}-->
+                <!--    <span class="color-red">代付失败-{$vo.df_msg}</span>-->
+                <!--    {/if}-->
+                <!--</div>-->
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.phone|default='--'}
+            </td>
+              <td class='text-center nowrap'>
+                {$vo.uname|default='--'}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.total_money|default='--'}{$vo.money2|default=''}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.charge|default='--'}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.money|default='--'}USDT
+                <br>
+                <!--代付金额（VND）：{$vo.df_money|default='未代付'}-->
+            </td>
+            {if $adm }
+            <td class='text-center nowrap'>
+                {if $vo.bid == 0}
+                <br>{$vo.bank|default='--'}
+                <br>支付宝账号：{$vo.account|default='--'}
+                {else/}
+                {if $vo.bank == '银行卡'}
+                  <br>所属银行：{$vo.banks.bank_type|default='--'}
+                {/if}
+                <br>类型：{$vo.bank|default='--'}
+                <br>用户：{$vo.name|default='--'}
+                <br>账号：{$vo.account|default='--'}
+                {/if}
+            </td>
+             <td class='text-left nowrap'>
+                {notempty name='vo.img'}
+                <img data-tips-image style="width:60px;height:60px" src="{$vo.img|default=''}" class="margin-right-5 text-top">
+                {/notempty}
+            </td>
+            <td class='text-center nowrap'>
+                {if auth("admin/invest_list/detail")}
+                <a data-title="查看详情" class="layui-btn layui-btn-sm" data-open='{:url("admin/invest_list/index")}?u_phone={$vo.phone}'>查看详情</a>
+                {/if}
+            </td>
+            <td class='text-center nowrap'>
+                {if auth("admin/recharge/detail")}
+                <a data-title="查看详情" class="layui-btn layui-btn-sm" data-open='{:url("admin/recharge/index")}?u_phone={$vo.phone}'>查看详情</a>
+                {/if}
+            </td>
+            {/if}
+            <td class='text-center nowrap'>
+                {$vo.withdrawals_num|default='--'}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.time|default='--'}
+            </td>
+            <td class='text-center nowrap'>
+                {if $vo.status eq 0}
+                {if auth("agree")}
+                    {if $vo.cash_type == 10 && $vo.order_no}
+                        {if $vo.df_status == 0}
+                        <!--<a class="layui-btn layui-btn layui-btn-xs" data-confirm="本操作将提交到代付进行打款，请确认？" data-action="{:url('agree')}" data-value="id#{$vo.id};is_df#1" data-csrf="{:systoken('agree')}">通过代付</a>-->
+                        {/if}
+                    {else/}
+                    {/if}
+                    <a class="layui-btn layui-btn layui-btn-xs" data-confirm="本操作只改变打款状态，并不触发打款，请确保已经手动出款？" data-action="{:url('agree')}" data-value="id#{$vo.id}" data-csrf="{:systoken('agree')}" style="background:#ff22e0">通过手动</a>
+                {/if}
+                {if auth("refuse")}
+                <a class="layui-btn layui-btn-danger layui-btn-xs" data-confirm="确定要拒绝提现吗？" data-action="{:url('refuse')}" data-value="id#{$vo.id}" data-csrf="{:systoken('refuse')}">拒 绝</a>
+                {/if}
+                {else}
+                <!--{if auth("remove")}-->
+                <!--<a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="确定要删除数据吗?" data-action="{:url('remove')}" data-value="id#{$vo.id}" data-csrf="{:systoken('remove')}">删 除</a>-->
+                <!--{/if}-->
+                {/if}
+            </td>
+
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+      <div style="display: flex;text-align: center;display:none">
+        <div style="    width: 200px;
+    padding: 4px;
+    margin-left: 31%;">USDT:<span style="">{$cny}</span></div>
+        <div style="    width: 200px;
+    padding: 4px;
+    ">VND:<span style="">{$usdt}</span></div>
+    </div>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+</div>
+{/block}

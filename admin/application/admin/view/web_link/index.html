@@ -1,0 +1,70 @@
+{extend name='admin@main'}
+{block name="button"}
+{if auth("add")}
+<button data-modal='{:url("add")}' data-title="添加" class='layui-btn layui-btn-sm'>添加</button>
+{/if}
+{if auth("remove")}
+<button data-action='{:url("remove")}' data-rule="id#{key}" data-csrf="{:systoken('remove')}" data-confirm="确定要删除这些记录吗？" class='layui-btn layui-btn-sm layui-btn-primary'>删除记录</button>
+{/if}
+{/block}
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='web_link/index_search'}
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='list-table-check-td think-checkbox'>
+                <label><input data-auto-none data-check-target='.list-check-box' type='checkbox'></label>
+            </th>
+            <th class='text-center nowrap'>编号</th>
+            <th class='text-center nowrap'>名称</th>
+            <th class='text-center nowrap'>图片</th>
+            <th class='text-center nowrap'>地址</th>
+            <th class="text-center nowrap">状态</th>
+            <th class='text-center nowrap'>排序</th>
+            <th class="text-center nowrap">操作</th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+             <td class='list-table-check-td think-checkbox'>
+                <label><input class="list-check-box" value='{$vo.id}' type='checkbox'></label>
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.id|default='--'}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.name|default='--'}
+            </td>
+            <td class='text-center nowrap'>
+                {notempty name='vo.image'}
+                <img data-tips-image style="width:60px;height:60px" src="{$vo.image|default=''}" class="margin-right-5 text-top">
+                {/notempty}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.url|default='--'}
+            </td>
+            <td class='text-center nowrap'>
+                {if condition="$vo.status eq 1"}
+                开启
+                {elseif condition="$vo.status eq 0"/}
+                关闭
+                {/if}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.sort|default='0'}
+            </td>
+            <td class='text-center nowrap'>
+                <a data-dbclick class="layui-btn layui-btn-sm" data-modal='{:url("edit")}?id={$vo.id}'>编 辑</a>
+                <a class="layui-btn layui-btn-sm layui-btn-sm" data-confirm="确定要删除数据吗?" data-action="{:url('remove')}" data-value="id#{$vo.id}" data-csrf="{:systoken('remove')}">删 除</a>
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+</div>
+{/block}

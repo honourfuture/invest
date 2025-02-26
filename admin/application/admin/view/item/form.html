@@ -1,0 +1,525 @@
+{extend name='admin@main'}
+
+{block name="content"}
+
+
+<form onsubmit="return false;" id="GoodsForm" data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+
+    <div class="layui-card-body think-box-shadow padding-left-40">
+
+        <div class="layui-form-item layui-row layui-col-space15">
+            <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">项目名称（简体）</span>
+                <input name="zh_cn" required class="layui-input" placeholder="请输入项目名称" value="{$vo.zh_cn|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">项目名称（繁体）</span>
+                <input name="zh_hk" required class="layui-input" placeholder="请输入项目名称" value="{$vo.zh_hk|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">项目名称（英文）</span>
+                <input name="en_us" required class="layui-input" placeholder="请输入项目名称" value="{$vo.en_us|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">前台展示</span>
+                <select class="layui-select" name="index_type" required>
+                   
+                    <!--{foreach ['1'=>'优选体验','3'=>'','4'=>'途游尊享','5'=>'畅游华夏','6'=>'优旅专区','8'=>'首页加权专区','7'=>'领取专区','9'=> '活动专区'] as $k=>$v}-->
+                    {foreach ['1'=>'体验区','4'=>'稳健区','5'=>'热门区','9'=>'福利区','8'=>'首页加权专区','7'=>'临时下架区'] as $k=>$v}
+                    <!--{eq name='$vo.index_type' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <!--<label class="layui-col-xs3 relative">-->
+            <!--    <span class="color-green">项目名称（泰语）</span>-->
+            <!--    <input name="th_th" required class="layui-input" placeholder="请输入项目名称" value="{$vo.th_th|default=''}">-->
+            <!--</label>-->
+            
+        <!--</div>-->
+        <!--<div class="layui-form-item layui-row layui-col-space15">-->
+        <!--    <label class="layui-col-xs3 relative">-->
+        <!--        <span class="color-green">项目名称（越南）</span>-->
+        <!--        <input name="vi_vn" required class="layui-input" placeholder="请输入项目名称" value="{$vo.vi_vn|default=''}">-->
+        <!--    </label>-->
+        <!--    <label class="layui-col-xs3 relative">-->
+        <!--        <span class="color-green">项目名称（日语）</span>-->
+        <!--        <input name="ja_jp" required class="layui-input" placeholder="请输入项目名称" value="{$vo.ja_jp|default=''}">-->
+        <!--    </label>-->
+        <!--    <label class="layui-col-xs3 relative">-->
+        <!--        <span class="color-green">项目名称（韩语）</span>-->
+        <!--        <input name="ko_kr" required class="layui-input" placeholder="请输入项目名称" value="{$vo.ko_kr|default=''}">-->
+        <!--    </label>-->
+        <!--    <label class="layui-col-xs3 relative">-->
+        <!--        <span class="color-green">项目名称（马来）</span>-->
+        <!--        <input name="ms_my" required class="layui-input" placeholder="请输入项目名称" value="{$vo.ms_my|default=''}">-->
+        <!--    </label>-->
+        </div>
+            <!--<label class="layui-col-xs3 relative">-->
+            <!--    <span class="color-green">项目分类</span>-->
+            <!--    <select class="layui-select" required name="class" lay-search>-->
+            <!--        {foreach $class as $cate}-->
+            <!--        {if isset($vo.class) and $vo.class eq $cate.id}-->
+            <!--        <option selected value="{$cate.id}">{$cate.spl|raw}{$cate.zh_cn|default=''}</option>-->
+            <!--        {else}-->
+            <!--        <option value="{$cate.id}">{$cate.spl|raw}{$cate.zh_cn|default=''}</option>-->
+            <!--        {/if}-->
+            <!--        {/foreach}-->
+            <!--    </select>-->
+            <!--</label>-->
+            <!--<label class="layui-col-xs3 relative">-->
+            <!--    <span class="color-green">项目标签【1】</span>-->
+            <!--    <select class="layui-select" name="tag_one" required>-->
+            <!--        <option value="">不选标签</option>-->
+            <!--        {foreach $tag as $k=>$v}-->
+                    <!--{eq name='$vo.tag_one' value='$k.""'}-->
+            <!--        <option selected value="{$v.id}">{$v.tag_name}</option>-->
+                    <!--{else}-->
+            <!--        <option value="{$v.id}">{$v.tag_name}</option>-->
+                    <!--{/eq}-->
+            <!--        {/foreach}-->
+            <!--    </select>-->
+            <!--</label>-->
+
+
+
+            <!--<label class="layui-col-xs3 relative">-->
+            <!--    <span class="color-green">项目标签【2】</span>-->
+            <!--    <select class="layui-select" name="tag_two" required>-->
+            <!--        <option value="">不选标签</option>-->
+            <!--        {foreach $tag as $k=>$v}-->
+                    <!--{eq name='$vo.tag_two' value='$k.""'}-->
+            <!--        <option selected value="{$v.id}">{$v.tag_name}</option>-->
+                    <!--{else}-->
+            <!--        <option value="{$v.id}">{$v.tag_name}</option>-->
+                    <!--{/eq}-->
+            <!--        {/foreach}-->
+            <!--    </select>-->
+            <!--</label>-->
+
+
+
+            <!--<label class="layui-col-xs3 relative">-->
+            <!--    <span class="color-green">项目标签【3】</span>-->
+            <!--    <select class="layui-select" name="tag_three" required>-->
+            <!--        <option value="">不选标签</option>-->
+            <!--        {foreach $tag as $k=>$v}-->
+                    <!--{eq name='$vo.tag_three' value='$k.""'}-->
+            <!--        <option selected value="{$v.id}">{$v.tag_name}</option>-->
+                    <!--{else}-->
+            <!--        <option value="{$v.id}">{$v.tag_name}</option>-->
+                    <!--{/eq}-->
+            <!--        {/foreach}-->
+            <!--    </select>-->
+            <!--</label>-->
+
+
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">担保机构(描述)-简体</span>
+                <input name="dbjg" required class="layui-input" placeholder="担保机构" value="{$vo.dbjg|default=''}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">担保机构(描述)-繁体</span>
+                <input name="dbjg_hk" required class="layui-input" placeholder="担保机构" value="{$vo.dbjg_hk|default=''}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">担保机构(描述)-英文</span>
+                <input name="dbjg_us" required class="layui-input" placeholder="担保机构" value="{$vo.dbjg_us|default=''}">
+            </label>
+
+
+            <!--<label class="layui-col-xs4 relative">-->
+            <!--    <span class="color-green">投资零风险(描述)-简体</span>-->
+            <!--    <input name="tzfx" required class="layui-input" placeholder="投资零风险" value="{$vo.tzfx|default=''}">-->
+            <!--</label>-->
+            <!--<label class="layui-col-xs4 relative">-->
+            <!--    <span class="color-green">投资零风险(描述)-繁体</span>-->
+            <!--    <input name="tzfx_hk" required class="layui-input" placeholder="投资零风险" value="{$vo.tzfx_hk|default=''}">-->
+            <!--</label>-->
+            <!--<label class="layui-col-xs4 relative">-->
+            <!--    <span class="color-green">投资零风险(描述)-英文</span>-->
+            <!--    <input name="tzfx_us" required class="layui-input" placeholder="投资零风险" value="{$vo.tzfx_us|default=''}">-->
+            <!--</label>-->
+
+
+            <!--<label class="layui-col-xs4 relative">-->
+            <!--    <span class="color-green">资金用途(描述)-简体</span>-->
+            <!--    <input name="zjyt" required class="layui-input" placeholder="资金用途" value="{$vo.zjyt|default=''}">-->
+            <!--</label>-->
+            <!--<label class="layui-col-xs4 relative">-->
+            <!--    <span class="color-green">资金用途(描述)-繁体</span>-->
+            <!--    <input name="zjyt_hk" required class="layui-input" placeholder="资金用途" value="{$vo.zjyt_hk|default=''}">-->
+            <!--</label>-->
+            <!--<label class="layui-col-xs4 relative">-->
+            <!--    <span class="color-green">资金用途(描述)-英文</span>-->
+            <!--    <input name="zjyt_us" required class="layui-input" placeholder="资金用途" value="{$vo.zjyt_us|default=''}">-->
+            <!--</label>-->
+
+
+            <!--<label class="layui-col-xs3 relative">-->
+            <!--    <span class="color-green">项目状态</span>-->
+            <!--    <select class="layui-select" name="status" required>-->
+            <!--        {foreach ['0'=>'下架','1'=>'上架'] as $k=>$v}-->
+                    <!--{eq name='$vo.status' value='$k.""'}-->
+            <!--        <option selected value="{$k}">{$v}</option>-->
+                    <!--{else}-->
+            <!--        <option value="{$k}">{$v}</option>-->
+                    <!--{/eq}-->
+            <!--        {/foreach}-->
+            <!--    </select>-->
+            <!--</label>-->
+            
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">返利模式</span>
+                <select class="layui-select" name="cycle_type" required>
+                    {foreach ['1'=>'每小时返利，到期返本','2'=>'每日返利，到期返本','3'=>'每周返利，到期返本','4'=>'每月返利，到期返本','5'=>'到期返本返利','6'=>'每年返利，到期返本'] as $k=>$v}
+                    <!--{eq name='$vo.cycle_type' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <!--<label class="layui-col-xs3 relative">-->
+            <!--    <span class="color-green">赠送积分</span>-->
+            <!--    <select class="layui-select" name="gift_points" required>-->
+            <!--        {foreach ['0'=>'否','1'=>'是'] as $k=>$v}-->
+                    <!--{eq name='$vo.gift_points' value='$k.""'}-->
+            <!--        <option selected value="{$k}">{$v}</option>-->
+                    <!--{else}-->
+            <!--        <option value="{$k}">{$v}</option>-->
+                    <!--{/eq}-->
+            <!--        {/foreach}-->
+            <!--    </select>-->
+            <!--</label>-->
+            <!--<label class="layui-col-xs3 relative">-->
+            <!--    <span class="color-green">是否分享赠送</span>-->
+            <!--    <select class="layui-select" name="is_share" required>-->
+            <!--        {foreach ['0'=>'否','1'=>'是'] as $k=>$v}-->
+                    <!--{eq name='$vo.is_share' value='$k.""'}-->
+            <!--        <option selected value="{$k}">{$v}</option>-->
+                    <!--{else}-->
+            <!--        <option value="{$k}">{$v}</option>-->
+                    <!--{/eq}-->
+            <!--        {/foreach}-->
+            <!--    </select>-->
+            <!--</label>-->
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">是否参与会员加息</span>
+                <select class="layui-select" name="add_rate" required>
+                    {foreach ['0'=>'否','1'=>'是'] as $k=>$v}
+                    <!--{eq name='$vo.add_rate' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">购买金额</span>
+                <input name="purchase_amount" required class="layui-input" placeholder="购买金额" value="{$vo.purchase_amount |default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">最小投资金额</span>
+                <input name="min" required class="layui-input" placeholder="请输入最小投资金额" value="{$vo.min|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">最大投资金额</span>
+                <input name="max" required class="layui-input" placeholder="请输入最大投资金额" value="{$vo.max|default='999999'}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">每天限购数量(仅针对活动专区)</span>
+                <input name="num" required class="layui-input" placeholder="请输入每天限购数量" value="{$vo.num|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">团购收益率（%）</span>
+                <input name="group_yield" required class="layui-input" placeholder="请输入收益率（%）" value="{$vo.group_yield|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">拼赞收益率（%）</span>
+                <input name="live_yield" required class="layui-input" placeholder="请输入收益率（%）" value="{$vo.live_yield|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">收益率（%）</span>
+                <input name="rate" required class="layui-input" placeholder="请输入收益率（%）" value="{$vo.rate|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">周期（天）</span>
+                <input name="hour" required class="layui-input" placeholder="请输入周期（天）" value="<?php echo $vo['hour'] / 24; ?>">
+            </label>
+        </div>
+        
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">项目规模</span>
+                <input name="total" required class="layui-input" placeholder="请输入项目规模" value="{$vo.total|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">模拟进度（%）</span>
+                <input name="percent" required class="layui-input" placeholder="请输入模拟进度（%）" value="{$vo.percent|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">自增进度（30分钟）（%）</span>
+                <input name="percent_add" required class="layui-input" placeholder="请输入自增进度（%）" value="{$vo.percent_add|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">前提项目ID</span>
+                <select class="layui-select" name="pre_item_id" required>
+                    <option value="0" {if condition="$vo.pre_item_id eq 0"}selected{/if}>无</option>
+                    {foreach $pre_items as $k=>$v}
+                    <!--{eq name='$vo.pre_item_id' value='$v.id.""'}-->
+                    <option selected value="{$v.id}">{$v.zh_cn}</option>
+                    <!--{else}-->
+                    <option value="{$v.id}">{$v.zh_cn}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <!--<label class="layui-col-xs3 relative">-->
+            <!--    <span class="color-green">项目周期</span>-->
+
+            <!--    <select class="layui-select" name="hour" required>-->
+            <!--        {foreach ['24'=>'一天','168'=>'一周 ','720'=>'一月','2160'=>'季度','4320'=>'半年','8640'=>'一年'] as $k=>$v}-->
+                    <!--{eq name='$vo.hour' value='$k.""'}-->
+            <!--        <option selected value="{$k}">{$v}</option>-->
+                    <!--{else}-->
+            <!--        <option value="{$k}">{$v}</option>-->
+                    <!--{/eq}-->
+            <!--        {/foreach}-->
+            <!--    </select>-->
+            <!--</label>-->
+            <!--<label class="layui-col-xs3 relative">-->
+            <!--    <span class="color-green">会员等级</span>-->
+            <!--    <select class="layui-select" name="user_member" required>-->
+            <!--        {foreach $user_member as $k=>$v}-->
+                    <!--{eq name='$vo.user_member' value='$v.id.""'}-->
+            <!--        <option selected value="{$v.id}">{$v.name}</option>-->
+                    <!--{else}-->
+            <!--        <option value="{$v.id}">{$v.name}</option>-->
+                    <!--{/eq}-->
+            <!--        {/foreach}-->
+            <!--    </select>-->
+            <!--</label>-->
+           
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            
+            
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">开启红包雨</span>
+                <select class="layui-select" name="is_redpack" required>
+                    {foreach ['0'=>'关闭','1'=>'开启'] as $k=>$v}
+                    <!--{eq name='$vo.is_redpack' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <!--<span class="color-green">红包雨赠送比例（%）</span>-->
+                <span class="color-green">红包雨赠送金额</span>
+                <input name="rate_redpack" required class="layui-input" placeholder="请输入红包雨赠送金额" value="{$vo.rate_redpack|default=''}">
+            </label>
+            <!--<label class="layui-col-xs3 ">-->
+            <!--    <span class="color-green">项目描述（简体）</span>-->
+            <!--    <input name="desc_zh_cn"  class="layui-input" placeholder="请输入项目描述" value="{$vo.desc_zh_cn|default=''}">-->
+            <!--</label>-->
+              <label class="layui-col-xs3 relative">
+                <span class="color-green">是否首页显示</span>
+                <select class="layui-select" name="show_home" required>
+                    {foreach ['0'=>'否','1'=>'是'] as $k=>$v}
+                    <!--{eq name='$vo.show_home' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+
+
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">是否热门推荐</span>
+                <select class="layui-select" name="is_rec" required>
+                    {foreach ['0'=>'否','1'=>'是'] as $k=>$v}
+                    <!--{eq name='$vo.is_rec' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>     
+        </div>
+        
+        
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">成长值开关</span>
+                <select class="layui-select" name="grow_type" required>
+                    {foreach ['0'=>'关闭','1'=>'单倍','2'=>'双倍'] as $k=>$v}
+                    {eq name='$vo.grow_type' value='$k.""'}
+                    <option selected value="{$k}">{$v}</option>
+                    {else}
+                    <option value="{$k}">{$v}</option>
+                    {/eq}
+                    {/foreach}
+                </select>
+            </label>
+              <label class="layui-col-xs3 relative">
+                <span class="color-green">积分开关</span>
+                <select class="layui-select" name="score_type" required>
+                    {foreach ['0'=>'关闭','1'=>'单倍','2'=>'双倍'] as $k=>$v}
+                    {eq name='$vo.score_type' value='$k.""'}
+                    <option selected value="{$k}">{$v}</option>
+                    {else}
+                    <option value="{$k}">{$v}</option>
+                    {/eq}
+                    {/foreach}
+                </select>
+            </label>
+            <!--  <label class="layui-col-xs3 relative">-->
+            <!--    <span class="color-green">预售时间</span>-->
+            <!--        <input type="datetime-local" name="sell_time" value="{$vo.sell_time|default=''}" placeholder="请选择预售时间" class="layui-input">-->
+            <!--</label>-->
+        </div>
+        
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-form-label color-green" style="width:140px;padding-left:0;">购买产品需满足以下等级</label>
+            <div class="layui-input-block">
+                {volist name="user_member" id="m"}
+                <input type="checkbox" {if condition="in_array($m.id, $vo.members)"}checked{/if} name="members[]" title="{$m.name}" value="{$m.id}">
+                <!--<input type="number" name="able_buy_num[]" value="">-->
+                {/volist}
+            </div>
+        </div>
+        
+        
+        <div class="layui-form-item layui-row layui-col-space15">
+            <h5 class="color-green">各等级可购买次数</h5>
+            <div class="layui-form-item layui-row layui-col-space15">
+            {volist name="user_member" key="key" id="m"}
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">{$m.name}</span>
+                <input name="able_buy_num[]" required type="number" class="layui-input" placeholder="请输入项目名称" value="<?php if(count($vo['able_buy_num'])){echo $vo['able_buy_num'][$key-1];}else{echo 0;} ?>">
+            </label>
+            {/volist}
+        </div>
+        
+        
+        <div class="layui-form-item layui-row layui-col-space15">
+            <!--<label class="layui-col-xs3 relative">-->
+            <!--    <span class="color-green">是否分享赠送</span>-->
+            <!--    <select class="layui-select" name="is_share" required>-->
+            <!--        {foreach ['0'=>'否','1'=>'是'] as $k=>$v}-->
+                    <!--{eq name='$vo.is_share' value='$k.""'}-->
+            <!--        <option selected value="{$k}">{$v}</option>-->
+                    <!--{else}-->
+            <!--        <option value="{$k}">{$v}</option>-->
+                    <!--{/eq}-->
+            <!--        {/foreach}-->
+            <!--    </select>-->
+            <!--</label>-->
+        </div>
+        <div class="layui-form-item">
+            <span class="color-green">项目封面图片</span>
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th class="text-center">项目封面</th>
+                </tr>
+                <tr>
+                    <td width="90px" class="text-center"><input name="img" type="hidden" value="{$vo.img|default=''}"></td>
+                </tr>
+                </thead>
+            </table>
+            <script>$('[name="img"]').uploadOneImage()</script>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            
+            <label class="layui-col-xs6 relative">
+                <span class="color-green">项目详情（简体）</span>
+                <textarea name="content_zh_cn">{$vo.content_zh_cn|default='简体'|raw}</textarea>
+            </label>
+            <label class="layui-col-xs6 relative">
+                <span class="color-green">项目详情（繁体）</span>
+                <textarea name="content_zh_hk">{$vo.content_zh_hk|default='繁体'|raw}</textarea>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs6 relative">
+                <span class="color-green">项目详情（英文）</span>
+                <textarea name="content_en_us">{$vo.content_en_us|default='英文'|raw}</textarea>
+            </label>
+            <!--<label class="layui-col-xs6 relative">-->
+            <!--    <span class="color-green">项目详情（泰语）</span>-->
+            <!--    <textarea name="content_th_th">{$vo.content_th_th|default='泰语'|raw}</textarea>-->
+            <!--</label>-->
+        </div>
+        <!--<div class="layui-form-item layui-row layui-col-space15">-->
+        <!--    <label class="layui-col-xs6 relative">-->
+        <!--        <span class="color-green">项目详情（越南）</span>-->
+        <!--        <textarea name="content_vi_vn">{$vo.content_vi_vn|default='越南'|raw}</textarea>-->
+        <!--    </label>-->
+        <!--    <label class="layui-col-xs6 relative">-->
+        <!--        <span class="color-green">项目详情（日语）</span>-->
+        <!--        <textarea name="content_ja_jp">{$vo.content_ja_jp|default='日语'|raw}</textarea>-->
+        <!--    </label>-->
+        <!--</div>-->
+        <!--<div class="layui-form-item layui-row layui-col-space15">-->
+        <!--    <label class="layui-col-xs6 relative">-->
+        <!--        <span class="color-green">项目详情（韩语）</span>-->
+        <!--        <textarea name="content_ko_kr">{$vo.content_ko_kr|default='韩语'|raw}</textarea>-->
+        <!--    </label>-->
+        <!--    <label class="layui-col-xs6 relative">-->
+        <!--        <span class="color-green">项目详情（马来）</span>-->
+        <!--        <textarea name="content_ms_my">{$vo.content_ms_my|default='马来'|raw}</textarea>-->
+        <!--    </label>-->
+        </div>
+        <div class="layui-form-item text-center">
+            <!--{notempty name='vo.id'}<input type="hidden" name="id" value="{$vo.id}">{/notempty}  -->
+            <input name="id"  class="layui-input" placeholder="id" value="{$vo.id|default=''}">
+            <button class="layui-btn layui-btn-danger" ng-click="hsitoryBack()" type="button">取消编辑</button>
+            <button class="layui-btn" type="submit">保存项目</button>
+        </div>
+
+    </div>
+</form>
+{/block}
+
+{block name='script'}
+<script>
+    window.form.render();
+    require(['ckeditor', 'angular'], function () {
+        window.createEditor('[name="content_zh_cn"]', {height: 100});
+        window.createEditor('[name="content_zh_hk"]', {height: 100});
+        window.createEditor('[name="content_en_us"]', {height: 100});
+        window.createEditor('[name="content_th_th"]', {height: 100});
+        window.createEditor('[name="content_vi_vn"]', {height: 100});
+        window.createEditor('[name="content_ja_jp"]', {height: 100});
+        window.createEditor('[name="content_ko_kr"]', {height: 100});
+        window.createEditor('[name="content_ms_my"]', {height: 100});
+        var app = angular.module("GoodsForm", []).run(callback);
+        angular.bootstrap(document.getElementById(app.name), [app.name]);
+
+        function callback($rootScope) {
+            $rootScope.hsitoryBack = function () {
+                $.msg.confirm('确定要取消编辑吗？', function (index) {
+                    history.back(), $.msg.close(index);
+                });
+            };
+        }
+
+    })
+</script>
+{/block}

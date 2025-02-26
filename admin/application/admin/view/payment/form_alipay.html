@@ -1,0 +1,92 @@
+<form onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+    <div class="layui-card-body padding-left-40">
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs4 relative" style="display:none;">
+                <span class="color-green">支付宝</span>
+                <input name="type" class="layui-input" placeholder="支付宝" value="{$vo.type|default='2'}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">是否显示</span>
+                <select class="layui-select" name="show" required>
+                    {foreach ['0'=>'隐藏','1'=>'显示'] as $k=>$v}
+                    <!--{eq name='$vo.show' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">支付宝扫码名称</span>
+                <input name="alipay" class="layui-input" placeholder="支付宝扫码名称" value="{$vo.alipay|default=''}">
+            </label>
+            <!--<label class="layui-col-xs4 relative">-->
+            <!--    <span class="color-green">赠送比例 (例：1.5) %</span>-->
+            <!--    <input name="url" class="layui-input" placeholder="请输入赠送比例" value="{$vo.give|default='0.00'}">-->
+            <!--</label>-->
+            
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">成长值达标显示</span>
+                <input name="level" class="layui-input" placeholder="成长值达标显示" value="{$vo.level|default='0'}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">汇率（货币->美USDT）</span>
+                <input name="rate" class="layui-input" placeholder="汇率（货币->美USDT）" value="{$vo.rate|default='1'}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">货币符号</span>
+                <input name="mark" class="layui-input" placeholder="货币符号" value="{$vo.mark|default='￥'}">
+            </label>
+        </div>
+        
+        <div class="layui-form-item layui-row layui-col-space15">
+            <span class="color-green ">支付方式LOGO</span>
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <td width="160px" height="80px" class="text-center">
+                        <input name="logo" type="hidden" value="{$vo.logo|default=''}">
+                    </td>
+                </tr>
+                </thead>
+            </table>
+            <script>$('[name="logo"]').uploadOneImage()</script>
+        </div>
+                
+        <div class="layui-form-item layui-row layui-col-space15">
+            <span class="color-green ">支付宝二维码</span>
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <td width="160px" height="80px" class="text-center">
+                        <input name="alipay_qrcode" type="hidden" value="{$vo.alipay_qrcode|default=''}">
+                    </td>
+                </tr>
+                </thead>
+            </table>
+            <script>$('[name="alipay_qrcode"]').uploadOneImage()</script>
+        </div>
+        
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">管理员登录密码</label>
+            <label class="layui-col-xs10">
+                <input name="password" required value='' placeholder="请输入管理员登录密码" class="layui-input">
+            </label>
+        </div>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    <div class="layui-form-item text-center">
+        {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+</form>
+{block name='script'}
+<script>
+    window.form.render();
+</script>
+{/block}

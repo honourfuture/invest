@@ -1,0 +1,91 @@
+{extend name='admin@main'}
+{block name="content"}
+<form onsubmit="return false;"  data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+    <div class="think-box-shadow padding-40">
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs6 ">
+                <span class="color-green label-required-prev">弹窗详情（简体）</span>
+                <textarea name="content_zh_cn">{$vo.content_zh_cn|default='简体'|raw}</textarea>
+            </label>
+            <label class="layui-col-xs6 relative">
+                <span class="color-green label-required-prev">弹窗详情（繁体）</span>
+                <textarea name="content_zh_hk">{$vo.content_zh_hk|default='繁体'|raw}</textarea>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs6 ">
+                <span class="color-green label-required-prev">弹窗详情（英文）</span>
+                <textarea name="content_en_us">{$vo.content_en_us|default='英文'|raw}</textarea>
+            </label>
+            <label class="layui-col-xs6 ">
+        <!--        <span class="color-green label-required-prev">弹窗详情（泰语）</span>-->
+        <!--        <textarea name="content_th_th">{$vo.content_th_th|default='泰语'|raw}</textarea>-->
+        <!--    </label>-->
+        <!--</div>-->
+        <!--<div class="layui-form-item layui-row layui-col-space15">-->
+        <!--    <label class="layui-col-xs6 ">-->
+        <!--        <span class="color-green label-required-prev">弹窗详情（越南）</span>-->
+        <!--        <textarea name="content_vi_vn">{$vo.content_vi_vn|default='越南'|raw}</textarea>-->
+        <!--    </label>-->
+        <!--    <label class="layui-col-xs6 ">-->
+        <!--        <span class="color-green label-required-prev">弹窗详情（日语）</span>-->
+        <!--        <textarea name="content_ja_jp">{$vo.content_ja_jp|default='日语'|raw}</textarea>-->
+        <!--    </label>-->
+        <!--</div>-->
+        <!--<div class="layui-form-item layui-row layui-col-space15">-->
+        <!--    <label class="layui-col-xs6 ">-->
+        <!--        <span class="color-green label-required-prev">弹窗详情（韩语）</span>-->
+        <!--        <textarea name="content_ko_kr">{$vo.content_ko_kr|default='韩语'|raw}</textarea>-->
+        <!--    </label>-->
+        <!--    <label class="layui-col-xs6 ">-->
+        <!--        <span class="color-green label-required-prev">弹窗详情（马来）</span>-->
+        <!--        <textarea name="content_ms_my">{$vo.content_ms_my|default='马来'|raw}</textarea>-->
+        <!--    </label>-->
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">是否显示</span>
+                <select class="layui-select" name="show">
+                    {foreach ['1'=>'显示','0'=>'隐藏'] as $k=>$v}
+                    <!--{eq name='$vo.show' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+        </div>
+        <div class="layui-form-item text-left">
+            {notempty name='vo.id'}<input type="hidden" name="id" value="{$vo.id}">{/notempty}
+            <button class="layui-btn" type="submit">保存设置</button>
+        </div>
+    </div>
+</form>
+{/block}
+{block name='script'}
+<script>
+    window.form.render();
+    require(['ckeditor', 'angular'], function () {
+        window.createEditor('[name="content_zh_cn"]', {height: 100});
+        window.createEditor('[name="content_zh_hk"]', {height: 100});
+        window.createEditor('[name="content_en_us"]', {height: 100});
+        window.createEditor('[name="content_th_th"]', {height: 100});
+        window.createEditor('[name="content_vi_vn"]', {height: 100});
+        window.createEditor('[name="content_ja_jp"]', {height: 100});
+        window.createEditor('[name="content_ko_kr"]', {height: 100});
+        window.createEditor('[name="content_ms_my"]', {height: 100});
+        var app = angular.module("GoodsForm", []).run(callback);
+        angular.bootstrap(document.getElementById(app.name), [app.name]);
+
+        function callback($rootScope) {
+            $rootScope.hsitoryBack = function () {
+                $.msg.confirm('确定要取消编辑吗？', function (index) {
+                    history.back(), $.msg.close(index);
+                });
+            };
+        }
+
+    })
+</script>
+{/block}

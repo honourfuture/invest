@@ -1,0 +1,94 @@
+{extend name='admin@main'}
+
+{block name="button"}
+{if auth("admin/article/add")}
+<button data-open='{:url("add")}' data-title="添加活动" class='layui-btn layui-btn-sm layui-btn-primary'>添加活动</button>
+{/if}
+{if auth("admin/article/remove")}
+<button data-action='{:url("remove")}' data-rule="id#{key}" data-csrf="{:systoken('remove')}" class='layui-btn layui-btn-sm layui-btn-primary'>删除活动</button>
+{/if}
+{/block}
+
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='activity/index_search'}
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='list-table-check-td think-checkbox'>
+                <input data-auto-none data-check-target='.list-check-box' type='checkbox'>
+            </th>
+            <th class='list-table-sort-td'>
+                <button type="button" data-reload class="layui-btn layui-btn-xs">刷 新</button>
+            </th>
+            <th class='text-left nowrap'>活动标题</th>
+            <th class='text-left nowrap'>活动描述</th>
+            <th class="text-center nowrap">活动封面</th>
+            <th class='text-center nowrap'>跳转链接</th>
+            <th class='text-center nowrap'>活动状态</th>
+            <th class='text-center nowrap'>发布时间</th>
+            <th class='text-center nowrap'>操作</th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr data-dbclick>
+            <td class='list-table-check-td think-checkbox'>
+                <input class="list-check-box" value='{$vo.id}' type='checkbox'>
+            </td>
+            <td class='list-table-sort-td'>
+                <input data-action-blur="{:request()->url()}" data-value="id#{$vo.id};action#sort;sort#{value}" data-loading="false" value="{$vo.sort}" class="list-sort-input">
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.title_zh_cn|default='--'}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.desc_zh_cn|default='--'}
+            </td>
+            <td class='text-center nowrap'>
+                {notempty name='vo.img_zh_cn'}
+                <img data-tips-image style="width:60px;height:60px" src="{$vo.img_zh_cn|default=''}" class="margin-right-5 text-top">
+                {/notempty}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.url|default='--'}
+            </td>
+            <td class='text-center nowrap'>
+                {if $vo.show == 1}
+                <span class="color-green">显示</span>
+                {/if}
+                {if $vo.show == 0}
+                <span class="color-desc">不显示</span>
+                {/if}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.time|default='--'}
+            </td>
+            <td class='text-center nowrap'>
+
+                <div class="nowrap margin-bottom-5">
+                    {if auth("admin/article/edit")}
+                    <a data-dbclick class="layui-btn layui-btn-sm" data-open='{:url("edit")}?id={$vo.id}'>编 辑</a>
+                    {else}
+                    <a data-tips-text="您没有编辑活动的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled">编 辑</a>
+                    {/if}
+                    {if auth("admin/article/remove")}
+                    <a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="确定要删除数据吗?" data-action="{:url('remove')}" data-value="id#{$vo.id}" data-csrf="{:systoken('remove')}">删 除</a>
+                    {else}
+                    <a data-tips-text="您没有删除活动的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled">删 除</a>
+                    {/if}
+
+                </div>
+
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+
+</div>
+{/block}

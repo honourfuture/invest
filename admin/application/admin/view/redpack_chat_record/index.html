@@ -1,0 +1,85 @@
+{extend name='admin@main'}
+{block name="button"}
+<!--{if auth("add")}-->
+<!--<button data-modal='{:url("add")}' data-title="添加盲盒" class='layui-btn layui-btn-sm'>添加盲盒</button>-->
+<!--{/if}-->
+<!--{if auth("remove")}-->
+<!--<button data-action='{:url("remove")}' data-rule="id#{key}" data-csrf="{:systoken('remove')}" data-confirm="确定要删除这些记录吗？" class='layui-btn layui-btn-sm layui-btn-primary'>删除记录</button>-->
+<!--{/if}-->
+{/block}
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='redpack_chat_record/index_search'}
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='text-center nowrap'>编号</th>
+            <th class='text-center nowrap'>用户名称</th>
+            <th class='text-center nowrap'>手机号</th>
+            <th class='text-center nowrap'>发送方式</th>
+            <th class='text-center nowrap'>红包类型</th>
+            <th class='text-center nowrap'>总金额</th>
+            <th class='text-center nowrap'>红包数量</th>
+            <th class='text-center nowrap'>剩余金额</th>
+            <th class='text-center nowrap'>剩余数量</th>
+            <th class='text-center nowrap'>描述</th>
+            <th class='text-center nowrap'>时间</th>
+            <th class='text-center nowrap'>操作</th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='text-center nowrap'>
+                {$vo.id|default='--'}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.name|default='--'}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.phone|default='--'}
+            </td>
+            <td class='text-center nowrap'>
+                {if condition="$vo.method eq 1"}
+                私聊
+                {elseif condition="$vo.method eq 2"/}
+                群聊
+                {/if}
+            </td>
+            <td class='text-center nowrap'>
+                {if condition="$vo.type eq 1"}
+                普通红包
+                {elseif condition="$vo.type eq 2"/}
+                拼手气
+                {/if}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.total_amount|default='--'}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.num|default='--'}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.remaining_amount|default='--'}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.remaining_num|default='--'}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.description|default='--'}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.add_time}
+            </td>
+            <td class='text-center nowrap'>
+            <a data-open='{:url("admin/redpack_receive/index")}?red_id={$vo.id}'>领取记录</a>
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+</div>
+{/block}

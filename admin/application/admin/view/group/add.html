@@ -1,0 +1,85 @@
+<form onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+
+    <div class="layui-card-body">
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">群聊名称</label>
+            <label class="layui-col-xs10">
+                <input name="name" required value='' placeholder="请输入群聊名称" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">群聊号码</label>
+            <label class="layui-col-xs10">
+                <input name="no" required value='' placeholder="请输入群聊号码" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">群主手机号</label>
+            <label class="layui-col-xs10">
+                <input name="mobile" required value='' placeholder="请输入群主手机号" class="layui-input">
+            </label>
+        </div>
+
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">全员禁言</label>
+            <label class="layui-col-xs10">
+                <select class="layui-select" name="is_estoppel" required>
+                    {foreach ['1'=>'开启','0'=>'关闭'] as $k=>$v}
+                    <option value="{$k}">{$v}</option>
+                    {/foreach}
+                </select>
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">红包功能</label>
+            <label class="layui-col-xs10">
+                <select class="layui-select" name="is_redpack" required>
+                    {foreach ['1'=>'开启','0'=>'关闭'] as $k=>$v}
+                    <option value="{$k}">{$v}</option>
+                    {/foreach}
+                </select>
+            </label>
+        </div>
+        
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">可申请状态</label>
+            <label class="layui-col-xs10">
+                <select class="layui-select" name="able_apply" required>
+                    {foreach ['1'=>'开启','0'=>'关闭'] as $k=>$v}
+                    <option value="{$k}">{$v}</option>
+                    {/foreach}
+                </select>
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">不可申请原因-简体</label>
+            <label class="layui-col-xs10">
+                <input name="reason_zh_cn" value='' placeholder="请输入不可申请原因" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">不可申请原因-繁体</label>
+            <label class="layui-col-xs10">
+                <input name="reason_zh_hk" value='' placeholder="请输入不可申请原因" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">不可申请原因-英文</label>
+            <label class="layui-col-xs10">
+                <input name="reason_en_us" value='' placeholder="请输入不可申请原因" class="layui-input">
+            </label>
+        </div>
+
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+</form>
+{block name='script'}
+<script>
+    window.form.render();
+</script>
+{/block}

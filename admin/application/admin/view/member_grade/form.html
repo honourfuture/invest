@@ -1,0 +1,141 @@
+<form onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+
+    <div class="layui-card-body">
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">名称-简体</label>
+            <label class="layui-col-xs10">
+                <input name="title" required value='{$vo.title|default=""}' placeholder="请输入等级名称" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">名称-繁体</label>
+            <label class="layui-col-xs10">
+                <input name="title_zh_hk" required value='{$vo.title_zh_hk|default=""}' placeholder="请输入等级名称" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">名称-英文</label>
+            <label class="layui-col-xs10">
+                <input name="title_en_us" required value='{$vo.title_en_us|default=""}' placeholder="请输入等级名称" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">等级图标</label>
+            <label class="layui-col-xs10">
+                <table class="layui-table">
+                    <thead>
+                    <tr>
+                        <th class="text-center">等级图标</th>
+                    </tr>
+                    <tr>
+                        <td width="90px" class="text-center">
+                            <input name="picture" required type="hidden" value="{$vo.picture|default=''}">
+                        </td>
+                    </tr>
+                    </thead>
+                </table>
+            </label>
+            <script>$('[name="picture"]').uploadOneImage()</script>
+        </div>
+
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">直推会员人数</label>
+            <label class="layui-col-xs10">
+                <input name="recom_number" value='{$vo.recom_number|default=""}' placeholder="请输入直推会员人数" class="layui-input">
+            </label>
+        </div>
+
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">直推团长人数</label>
+            <label class="layui-col-xs10">
+                <input name="recom_tz" value='{$vo.recom_tz|default=""}' placeholder="请输入直推团长人数" class="layui-input">
+            </label>
+        </div>
+
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">团队累计投资</label>
+            <label class="layui-col-xs10">
+                <input name="all_activity" value='{$vo.all_activity|default=""}' placeholder="请输入团队累计投资" class="layui-input">
+            </label>
+        </div>
+
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">团队奖(%)</label>
+            <label class="layui-col-xs10">
+                <input name="poundage" value='{$vo.poundage|default=""}' placeholder="请输入团队奖" class="layui-input">
+            </label>
+        </div>
+
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">升级是否赠送</label>
+            <label class="layui-col-xs10">
+                <select class="layui-select" name="give_status" required>
+                    {foreach ['1'=>'不赠送','2'=>'赠送'] as $k=>$v}
+                    <!--{eq name='$vo.give_status' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+        </div>
+
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">多少代(n则为无限代)</label>
+            <label class="layui-col-xs10">
+                <input name="statistics" value='{$vo.statistics|default=""}' placeholder="请输入多少代" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">奖励金额</label>
+            <label class="layui-col-xs10">
+                <input name="give_price" value='{$vo.give_price|default=""}' placeholder="请输入奖励金额" class="layui-input">
+            </label>
+        </div>
+
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">默认级别</label>
+            <label class="layui-col-xs10">
+                <select class="layui-select" name="default_status" required>
+                    {foreach ['1'=>'非默认','2'=>'默认'] as $k=>$v}
+                    <!--{eq name='$vo.default_status' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+        </div>
+
+
+
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">状态</label>
+            <label class="layui-col-xs10">
+                <select class="layui-select" name="status" required>
+                    {foreach ['1'=>'正常','2'=>'禁用'] as $k=>$v}
+                    <!--{eq name='$vo.status' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+        </div>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    <div class="layui-form-item text-center">
+        {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+</form>
+{block name='script'}
+<script>
+    window.form.render();
+</script>
+{/block}

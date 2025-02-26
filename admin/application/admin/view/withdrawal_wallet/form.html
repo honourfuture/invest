@@ -1,0 +1,91 @@
+<form onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+    <div class="layui-card-body padding-left-40">
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">钱包类型</span>
+                <select class="layui-select" name="type" required>
+                    {foreach ['1'=>'加密货币','2'=>'支付宝','3'=>'微信','4'=>'银行卡'] as $k=>$v}
+                    <!--{eq name='$vo.type' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">是否显示</span>
+                <select class="layui-select" name="show" required>
+                    {foreach ['0'=>'隐藏','1'=>'显示'] as $k=>$v}
+                    <!--{eq name='$vo.show' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">钱包名称</span>
+                <input name="name" class="layui-input" placeholder="钱包名称" value="{$vo.name|default=''}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">汇率（1当前货币=?法币）</span>
+                <input name="rate" class="layui-input" placeholder="请输入汇率" value="{$vo.rate|default='1.00'}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">货币符号</span>
+                <input name="mark" class="layui-input" placeholder="请输入汇率" value="{$vo.mark|default='$'}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">手续费 (例：1.5) %</span>
+                <input name="charge" class="layui-input" placeholder="请输入提现手续费" value="{$vo.charge|default='0.00'}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">最低提现值金额</span>
+                <input name="min_withdrawals" class="layui-input" placeholder="请输入最高提现金额" value="{$vo.min_withdrawals|default='0'}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">最高提现金额</span>
+                <input name="max_withdrawals" class="layui-input" placeholder="请输入最低提现金额" value="{$vo.max_withdrawals|default='0'}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <span class="color-green">LOGO</span>
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <td width="160px" height="80px" class="text-center">
+                        <input name="logo" type="hidden" value="{$vo.logo|default=''}">
+                    </td>
+                </tr>
+                </thead>
+            </table>
+            <script>$('[name="logo"]').uploadOneImage()</script>
+        </div>
+        
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">管理员登录密码</label>
+            <label class="layui-col-xs10">
+                <input name="password" required value='' placeholder="请输入管理员登录密码" class="layui-input">
+            </label>
+        </div>
+        <br>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    <div class="layui-form-item text-center">
+        {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+</form>
+{block name='script'}
+<script>
+    window.form.render();
+</script>
+{/block}

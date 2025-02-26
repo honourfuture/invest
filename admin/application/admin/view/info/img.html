@@ -1,0 +1,94 @@
+{extend name='admin@main'}
+
+{block name="content"}
+
+<form onsubmit="return false;"  data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+    <div class="layui-tab layui-tab-card">
+        <ul class="layui-tab-title">
+            <li class="layui-this">系统图片</li>
+            <li>首页弹窗</li>
+            <!--<li>重券活动</li>-->
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-card-body padding-10 layui-col-md8">
+                    <div class="layui-form-item">
+                        <span class="color-green label-required-prev">网站LOGO</span>
+                        <table class="layui-table">
+                            <thead>
+                            <tr>
+                                <th class="text-center">300x300像素</th>
+                            </tr>
+                            <tr>
+                                <td width="150px" class="text-center">
+                                    <input name="logo_img" type="hidden" value="{$vo.logo_img|default=''}">
+                                </td>
+                            </tr>
+                            </thead>
+                        </table>
+                        <script>$('[name="logo_img"]').uploadOneImage()</script>
+                    </div>
+                    <div class="layui-form-item" >
+                        <span class="color-green label-required-prev">分享底图（无需二维码，系统自动生成）【<a href="{$vo.login_img|default=''}" target="_blank">点击下载</a>】</span>
+                        <table class="layui-table">
+                            <thead>
+                            <tr>
+                                <th class="text-center">850x1280像素</th>
+                            </tr>
+                            <tr>
+                                <td width="150px" class="text-center">
+                                    <input name="login_img" type="hidden" value="{$vo.login_img|default=''}">
+                                </td>
+                            </tr>
+                            </thead>
+                        </table>
+                        <script>$('[name="login_img"]').uploadOneImage()</script>
+                    </div>
+                    <div class="layui-form-item" style="display:none">
+                        <span class="color-green label-required-prev">公司章</span>
+                        <table class="layui-table">
+                            <thead>
+                            <tr>
+                                <th class="text-center">500x500像素，png格式</th>
+                            </tr>
+                            <tr>
+                                <td width="150px" class="text-center">
+                                    <input name="seal_img" type="hidden" value="{$vo.seal_img|default=''}">
+                                </td>
+                            </tr>
+                            </thead>
+                        </table>
+                        <script>$('[name="seal_img"]').uploadOneImage()</script>
+                    </div>
+                    <div class="layui-form-item" style="display:none">
+                        <span class="color-green label-required-prev">保险章</span>
+                        <table class="layui-table">
+                            <thead>
+                            <tr>
+                                <th class="text-center">500x500像素，png格式</th>
+                            </tr>
+                            <tr>
+                                <td width="150px" class="text-center">
+                                    <input name="safe_seal_img" type="hidden" value="{$vo.safe_seal_img|default=''}">
+                                </td>
+                            </tr>
+                            </thead>
+                        </table>
+                        <script>$('[name="safe_seal_img"]').uploadOneImage()</script>
+                    </div>
+                </div>
+            </div>
+
+        <div class="layui-form-item text-left padding-20">
+            {notempty name='vo.id'}<input type="hidden" name="id" value="{$vo.id}">{/notempty}
+            <button class="layui-btn" type="submit">保存设置</button>
+        </div>
+    </div>
+</form>
+{/block}
+
+{block name='script'}
+<script>
+    window.form.render();
+</script>
+{/block}

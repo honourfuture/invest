@@ -1,0 +1,30 @@
+<fieldset>
+    <legend>条件搜索</legend>
+    <form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get" autocomplete="off">
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">项目名称</label>
+            <div class="layui-input-inline">
+                <input name="zh_cn" value="{$Think.get.zh_cn|default=''}" placeholder="请输入项目名称" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">展示类型</label>
+            <div class="layui-input-inline">
+                <select class="layui-select" name="index_type" lay-search>
+                    <option value="">全部项目</option>
+                    {foreach ['1'=>'体验区','4'=>'稳健区','5'=>'热门区','9'=>'福利区','8'=>'首页加权专区','7'=>'领取专区'] as $k=>$v}
+                    <!--{eq name='Think.get.index_type' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+        </div>
+    </form>
+    <script>form.render()</script>
+</fieldset>

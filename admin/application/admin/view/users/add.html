@@ -1,0 +1,183 @@
+<form class="layui-form layui-card" action="{:url('addto')}" method="post" autocomplete="off">
+    <div class="layui-card-body padding-left-40">
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">起始账号</span>
+                <input name="phone" class="layui-input" required placeholder="请输入用户账号" value="{$vo.phone|default=''}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">签到天数</span>
+                <input name="qdnum" class="layui-input" placeholder="请输入签到天数" value="{$vo.qdnum|default=''}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">姓名</span>
+                <input name="name" class="layui-input" placeholder="请输入姓名" value="{$vo.name|default=''}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">身份证号</span>
+                <input name="idcard" class="layui-input" placeholder="请输入身份证号" value="{$vo.idcard|default=''}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">登录密码</span>
+                <input name="mwpassword" class="layui-input" required placeholder="请输入登录密码" value="{$vo.mwpassword|default='123456'}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">交易密码</span>
+                <input name="mwpassword2" class="layui-input" required placeholder="请输入交易密码" value="{$vo.mwpassword2|default='123456'}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <!--<label class="layui-col-xs4 relative">-->
+            <!--    <span class="color-green">QQ号</span>-->
+            <!--    <input name="qq" class="layui-input" placeholder="请输入QQ号" value="{$vo.qq|default=''}">-->
+            <!--</label>-->
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">途游宝</span>
+                <input name="ebao" class="layui-input" required placeholder="请输入余额" value="{$vo.ebao|default='0'}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">积分</span>
+                <input name="point_num" class="layui-input" placeholder="请输入积分" value="{$vo.point_num|default='0'}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">余额</span>
+                <input name="money" class="layui-input" required placeholder="请输入余额" value="{$vo.money|default='0'}">
+            </label>
+
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">资产</span>
+                <input name="asset" class="layui-input" required placeholder="请输入积分" value="{$vo.asset|default='0'}">
+            </label>
+             <label class="layui-col-xs4 relative">
+                <span class="color-green">邀请码</span>
+                <input name="invite" class="layui-input" required placeholder="请输入积分" value="{$vo.invite|default='0'}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">MM币</span>
+                <input name="kj_money" class="layui-input" required placeholder="请输入积分" value="{$vo.kj_money|default='0'}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">成长值</span>
+                <input name="value" class="layui-input" required placeholder="请输入成长值" value="{$vo.value|default='0'}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">会员组</span>
+                
+                <select name='member' required class='layui-select' lay-search>
+                    {foreach $member as $key=>$cate}
+                    {eq name='cate.id' value='$vo.member|default=0'}
+                    <option selected value='{$cate.id}'>{$cate.name}</option>
+                    {else}
+                    <option value='{$cate.id}'>{$cate.name}</option>
+                    {/eq}
+                    {/foreach}
+                    
+                </select>
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">团队等级</span>
+                <select name='grade_id' required class='layui-select' lay-search>
+                    {foreach $memberGrade as $key=>$grade}
+                    {eq name='$grade.id' value='$vo.grade_id|default=0'}
+                    <option selected value='{$grade.id}'>{$grade.title}</option>
+                    {else}
+                    <option value='{$grade.id}'>{$grade.title}</option>
+                    {/eq}
+                    {/foreach}
+                </select>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <!--<label class="layui-col-xs4 relative">-->
+            <!--    <span class="color-green">真实姓名</span>-->
+            <!--    <input name="name" class="layui-input" placeholder="请输入真实姓名" value="{$vo.name|default=''}">-->
+            <!--</label>-->
+            <!--<label class="layui-col-xs4 relative">-->
+            <!--    <span class="color-green">身份证号</span>-->
+            <!--    <input name="idcard" class="layui-input" placeholder="请输入身份证号" value="{$vo.idcard|default=''}">-->
+            <!--</label>-->
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">邀请码</span>
+                <select class="layui-select" name="is_yq">
+                    {foreach ['0'=>'允许','1'=>'禁止'] as $k=>$v}
+                    <!--{eq name='$vo.is_yq' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">身份</span>
+                <select class="layui-select" name="is_sf">
+                    {foreach ['1'=>'一级内部账号','2'=>'二级内部账号'] as $k=>$v}
+                    <!--{eq name='$vo.is_sf' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">是否认证</span>
+                <select class="layui-select" name="auth">
+                    {foreach ['1'=>'已认证'] as $k=>$v}
+                    <!--{eq name='$vo.auth' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">身份证正面</span>
+                <a target="_blank" href="{$vo.card_front|default=''}"><img class="layui-input" style="width: 80px;height: 40px" src="{$vo.card_front|default=''}" /></a>
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">身份证反面</span>
+                <a target="_blank" href="{$vo.card_back|default=''}"><img class="layui-input" style="width: 80px;height: 40px" src="{$vo.card_back|default=''}" /></a>
+
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">添加数量</span>
+                <input name="number" class="layui-input" required placeholder="请输入添加数量" value="10">
+            </label>
+        </div>
+        
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">代理ID</span>
+                <input name="agent" class="layui-input" required placeholder="请输入代理ID" value="{$vo.agent|default='10000'}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <!--<label class="layui-col-xs4 relative">-->
+            <!--    <span class="color-green">反面</span>-->
+            <!--    <a target="_blank" href="{$vo.card_back|default=''}"><img class="layui-input" style="width: 80px;height: 40px" src="{$vo.card_back|default=''}" /></a>-->
+
+            <!--</label>-->
+        </div>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>批量保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+
+</form>
+{block name='script'}
+<script>
+    window.form.render();
+</script>
+{/block}

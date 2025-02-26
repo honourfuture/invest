@@ -1,0 +1,89 @@
+<form onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+
+    <div class="layui-card-body">
+
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">上级分类</label>
+            <div class="layui-col-xs10">
+                <select name='pid' required class='layui-select' lay-search>
+                    <!--{foreach $class as $menu}-->
+                    <!--{eq name='menu.id' value='$vo.pid|default=0'}-->
+                    <option selected value='{$menu.id}'>{$menu.spl|raw}{$menu.name}</option>
+                    <!--{else}-->
+                    <option value='{$menu.id}'>{$menu.spl|raw}{$menu.name}</option>
+                    <!--{/eq}-->
+                    <!--{/foreach}-->
+                </select>
+                <p class="help-block">必选，请选择上级分类或顶级分类（目前最多支持三级分类）</p>
+            </div>
+        </div>
+
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">分类名称</label>
+            <label class="layui-col-xs10">
+                <input name="name" required value='{$vo.name|default=""}' placeholder="请输入分类名称" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">zh_CN</label>
+            <label class="layui-col-xs10">
+                <input name="zh_cn" value='{$vo.zh_cn|default=""}' placeholder="请输入分类名称" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">zh_HK</label>
+            <label class="layui-col-xs10">
+                <input name="zh_hk" value='{$vo.zh_hk|default=""}' placeholder="请输入分类名称" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">en_US</label>
+            <label class="layui-col-xs10">
+                <input name="en_us" value='{$vo.en_us|default=""}' placeholder="请输入分类名称" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">th_th</label>
+            <label class="layui-col-xs10">
+                <input name="th_th" value='{$vo.th_th|default=""}' placeholder="请输入分类名称" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">vi_vn</label>
+            <label class="layui-col-xs10">
+                <input name="vi_vn" value='{$vo.vi_vn|default=""}' placeholder="请输入分类名称" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">ja_jp</label>
+            <label class="layui-col-xs10">
+                <input name="ja_jp" value='{$vo.ja_jp|default=""}' placeholder="请输入分类名称" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">ko_kr</label>
+            <label class="layui-col-xs10">
+                <input name="ko_kr" value='{$vo.ko_kr|default=""}' placeholder="请输入分类名称" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">ms_my</label>
+            <label class="layui-col-xs10">
+                <input name="ms_my" value='{$vo.ms_my|default=""}' placeholder="请输入分类名称" class="layui-input">
+            </label>
+        </div>
+
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    <div class="layui-form-item text-center">
+        {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+</form>
+{block name='script'}
+<script>
+    window.form.render();
+</script>
+{/block}

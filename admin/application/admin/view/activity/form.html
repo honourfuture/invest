@@ -1,0 +1,238 @@
+{extend name='admin@main'}
+
+{block name="content"}
+
+<form onsubmit="return false;" id="GoodsForm" data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+
+    <div class="layui-card-body think-box-shadow padding-left-40">
+
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">活动标题（简体）</span>
+                <input name="title_zh_cn" required class="layui-input" placeholder="请输入活动名称" value="{$vo.title_zh_cn|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">活动标题（繁体）</span>
+                <input name="title_zh_hk" required class="layui-input" placeholder="请输入活动名称" value="{$vo.title_zh_hk|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">活动标题（英文）</span>
+                <input name="title_en_us" required class="layui-input" placeholder="请输入活动名称" value="{$vo.title_en_us|default=''}">
+            </label>
+        <!--    <label class="layui-col-xs3 relative">-->
+        <!--        <span class="color-green">活动标题（泰语）</span>-->
+        <!--        <input name="title_th_th" required class="layui-input" placeholder="请输入活动名称" value="{$vo.title_th_th|default=''}">-->
+        <!--    </label>-->
+        <!--</div>-->
+        <!--<div class="layui-form-item layui-row layui-col-space15">-->
+        <!--    <label class="layui-col-xs3 relative">-->
+        <!--        <span class="color-green">活动标题（越南）</span>-->
+        <!--        <input name="title_vi_vn" required class="layui-input" placeholder="请输入活动名称" value="{$vo.title_vi_vn|default=''}">-->
+        <!--    </label>-->
+        <!--    <label class="layui-col-xs3 relative">-->
+        <!--        <span class="color-green">活动标题（日语）</span>-->
+        <!--        <input name="title_ja_jp" required class="layui-input" placeholder="请输入活动名称" value="{$vo.title_ja_jp|default=''}">-->
+        <!--    </label>-->
+        <!--    <label class="layui-col-xs3 relative">-->
+        <!--        <span class="color-green">活动标题（韩语）</span>-->
+        <!--        <input name="title_ko_kr" required class="layui-input" placeholder="请输入活动名称" value="{$vo.title_ko_kr|default=''}">-->
+        <!--    </label>-->
+        <!--    <label class="layui-col-xs3 relative">-->
+        <!--        <span class="color-green">活动标题（马来）</span>-->
+        <!--        <input name="title_ms_my" required class="layui-input" placeholder="请输入活动名称" value="{$vo.title_ms_my|default=''}">-->
+        <!--    </label>-->
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">描述（简体）</span>
+                <input name="desc_zh_cn" class="layui-input" placeholder="请输入活动描述" value="{$vo.desc_zh_cn|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">描述（繁体）</span>
+                <input name="desc_zh_hk" class="layui-input" placeholder="请输入活动描述" value="{$vo.desc_zh_hk|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">描述（英文）</span>
+                <input name="desc_en_us" class="layui-input" placeholder="请输入活动描述" value="{$vo.desc_en_us|default=''}">
+            </label>
+        <!--    <label class="layui-col-xs3 relative">-->
+        <!--        <span class="color-green">描述（泰语）</span>-->
+        <!--        <input name="desc_th_th" class="layui-input" placeholder="请输入活动描述" value="{$vo.desc_th_th|default=''}">-->
+        <!--    </label>-->
+        <!--</div>-->
+        
+        <!--<div class="layui-form-item layui-row layui-col-space15">-->
+            
+            
+        <!--</div>-->
+        <!--<div class="layui-form-item layui-row layui-col-space15">-->
+            
+        <!--    <label class="layui-col-xs3 relative">-->
+        <!--        <span class="color-green">描述（越南）</span>-->
+        <!--        <input name="desc_vi_vn" class="layui-input" placeholder="请输入活动描述" value="{$vo.desc_vi_vn|default=''}">-->
+        <!--    </label>-->
+        <!--    <label class="layui-col-xs3 relative">-->
+        <!--        <span class="color-green">描述（日语）</span>-->
+        <!--        <input name="desc_ja_jp" class="layui-input" placeholder="请输入活动描述" value="{$vo.desc_ja_jp|default=''}">-->
+        <!--    </label>-->
+        <!--    <label class="layui-col-xs3 relative">-->
+        <!--        <span class="color-green">描述（韩语）</span>-->
+        <!--        <input name="desc_ko_kr" class="layui-input" placeholder="请输入活动描述" value="{$vo.desc_ko_kr|default=''}">-->
+        <!--    </label>-->
+        <!--    <label class="layui-col-xs3 relative">-->
+        <!--        <span class="color-green">描述（马来）</span>-->
+        <!--        <input name="desc_ms_my" class="layui-input" placeholder="请输入活动描述" value="{$vo.desc_ms_my|default=''}">-->
+        <!--    </label>-->
+        <!--</div>-->
+
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">是否显示</span>
+                <select class="layui-select" name="show">
+                    {foreach ['1'=>'显示','0'=>'隐藏'] as $k=>$v}
+                    <!--{eq name='$vo.show' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs3 ">
+                <span class="color-green">跳转链接（为空则跳到详情）</span>
+                <input name="url" class="layui-input" placeholder="请输入跳转链接" value="{$vo.url|default=''}">
+            </label>
+            <label class="layui-col-xs3 ">
+                <span class="color-green">发布时间</span>
+                    <input type="datetime" name="time" value="{$vo.time|default=''}" placeholder="请选择时间" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <span class="color-green label-required-prev">活动封面</span>
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <td width="" height="80px" class="text-center">
+                        简体
+                        <input name="img_zh_cn" type="hidden" value="{$vo.img_zh_cn|default=''}">
+                    </td>
+                    <td width="" height="80px" class="text-center">
+                        繁体
+                        <input name="img_zh_hk" type="hidden" value="{$vo.img_zh_hk|default=''}">
+                    </td>
+                    <td width="" height="80px" class="text-center">
+                        英文
+                        <input name="img_en_us" type="hidden" value="{$vo.img_en_us|default=''}">
+                    </td>
+                    <!--<td width="" height="80px" class="text-center">-->
+                    <!--    泰国-->
+                    <!--    <input name="img_th_th" type="hidden" value="{$vo.img_th_th|default=''}">-->
+                    <!--</td>-->
+                    <!--<td width="" height="80px" class="text-center">-->
+                    <!--    越南-->
+                    <!--    <input name="img_vi_vn" type="hidden" value="{$vo.img_vi_vn|default=''}">-->
+                    <!--</td>-->
+                    <!--<td width="" height="80px" class="text-center">-->
+                    <!--    日本-->
+                    <!--    <input name="img_ja_jp" type="hidden" value="{$vo.img_ja_jp|default=''}">-->
+                    <!--</td>-->
+                    <!--<td width="" height="80px" class="text-center">-->
+                    <!--    韩国-->
+                    <!--    <input name="img_ko_kr" type="hidden" value="{$vo.img_ko_kr|default=''}">-->
+                    <!--</td>-->
+                    <!--<td width="" height="80px" class="text-center">-->
+                    <!--    马来-->
+                    <!--    <input name="img_ms_my" type="hidden" value="{$vo.img_ms_my|default=''}">-->
+                    <!--</td>-->
+                </tr>
+                <tr>
+                    
+                </tr>
+                </thead>
+            </table>
+            <script>$('[name="img_zh_cn"]').uploadOneImage()</script>
+            <script>$('[name="img_zh_hk"]').uploadOneImage()</script>
+            <script>$('[name="img_en_us"]').uploadOneImage()</script>
+            <script>$('[name="img_th_th"]').uploadOneImage()</script>
+            <script>$('[name="img_vi_vn"]').uploadOneImage()</script>
+            <script>$('[name="img_ja_jp"]').uploadOneImage()</script>
+            <script>$('[name="img_ko_kr"]').uploadOneImage()</script>
+            <script>$('[name="img_ms_my"]').uploadOneImage()</script>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            
+            <label class="layui-col-xs6 ">
+                <span class="color-green label-required-prev">活动详情（简体）</span>
+                <textarea name="content_zh_cn">{$vo.content_zh_cn|default='简体'|raw}</textarea>
+            </label>
+            <label class="layui-col-xs6 relative">
+                <span class="color-green label-required-prev">活动详情（繁体）</span>
+                <textarea name="content_zh_hk">{$vo.content_zh_hk|default='繁体'|raw}</textarea>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs6 ">
+                <span class="color-green label-required-prev">活动详情（英文）</span>
+                <textarea name="content_en_us">{$vo.content_en_us|default='英文'|raw}</textarea>
+            </label>
+        <!--    <label class="layui-col-xs6 ">-->
+        <!--        <span class="color-green label-required-prev">活动详情（泰语）</span>-->
+        <!--        <textarea name="content_th_th">{$vo.content_th_th|default='泰语'|raw}</textarea>-->
+        <!--    </label>-->
+        <!--</div>-->
+        <!--<div class="layui-form-item layui-row layui-col-space15">-->
+        <!--    <label class="layui-col-xs6 ">-->
+        <!--        <span class="color-green label-required-prev">活动详情（越南）</span>-->
+        <!--        <textarea name="content_vi_vn">{$vo.content_vi_vn|default='越南'|raw}</textarea>-->
+        <!--    </label>-->
+        <!--    <label class="layui-col-xs6 ">-->
+        <!--        <span class="color-green label-required-prev">活动详情（日语）</span>-->
+        <!--        <textarea name="content_ja_jp">{$vo.content_ja_jp|default='日语'|raw}</textarea>-->
+        <!--    </label>-->
+        <!--</div>-->
+        <!--<div class="layui-form-item layui-row layui-col-space15">-->
+        <!--    <label class="layui-col-xs6 ">-->
+        <!--        <span class="color-green label-required-prev">活动详情（韩语）</span>-->
+        <!--        <textarea name="content_ko_kr">{$vo.content_ko_kr|default='韩语'|raw}</textarea>-->
+        <!--    </label>-->
+        <!--    <label class="layui-col-xs6 ">-->
+        <!--        <span class="color-green label-required-prev">活动详情（马来）</span>-->
+        <!--        <textarea name="content_ms_my">{$vo.content_ms_my|default='马来'|raw}</textarea>-->
+        <!--    </label>-->
+        </div>
+        <div class="layui-form-item text-center">
+            {notempty name='vo.id'}<input type="hidden" name="id" value="{$vo.id}">{/notempty}
+            <button class="layui-btn layui-btn-danger" ng-click="hsitoryBack()" type="button">取消编辑</button>
+            <button class="layui-btn" type="submit">保存活动</button>
+        </div>
+
+    </div>
+</form>
+{/block}
+
+{block name='script'}
+<script>
+    window.form.render();
+    require(['ckeditor', 'angular'], function () {
+        window.createEditor('[name="content_zh_cn"]', {height: 100});
+        window.createEditor('[name="content_zh_hk"]', {height: 100});
+        window.createEditor('[name="content_en_us"]', {height: 100});
+        window.createEditor('[name="content_th_th"]', {height: 100});
+        window.createEditor('[name="content_vi_vn"]', {height: 100});
+        window.createEditor('[name="content_ja_jp"]', {height: 100});
+        window.createEditor('[name="content_ko_kr"]', {height: 100});
+        window.createEditor('[name="content_ms_my"]', {height: 100});
+        var app = angular.module("GoodsForm", []).run(callback);
+        angular.bootstrap(document.getElementById(app.name), [app.name]);
+
+        function callback($rootScope) {
+            $rootScope.hsitoryBack = function () {
+                $.msg.confirm('确定要取消编辑吗？', function (index) {
+                    history.back(), $.msg.close(index);
+                });
+            };
+        }
+
+    })
+</script>
+{/block}

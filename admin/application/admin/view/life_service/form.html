@@ -1,0 +1,96 @@
+<form onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+
+    <div class="layui-card-body">
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">商品名称-简体</label>
+            <label class="layui-col-xs10">
+                <input name="name" required value='{$vo.name|default=""}' placeholder="请输入商品名称" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">商品名称-繁体</label>
+            <label class="layui-col-xs10">
+                <input name="name_zh_hk" required value='{$vo.name_zh_hk|default=""}' placeholder="请输入商品名称" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">商品名称-英文</label>
+            <label class="layui-col-xs10">
+                <input name="name_en_us" required value='{$vo.name_en_us|default=""}' placeholder="请输入商品名称" class="layui-input">
+            </label>
+        </div>
+
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">状态</label>
+            <label class="layui-col-xs10">
+                <select class="layui-select" name="status" required>
+                    {foreach ['2'=>'下架','1'=>'上架','3'=>'暂未开通'] as $k=>$v}
+                    <!--{eq name='$vo.status' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+        </div>
+
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">商品图标</label>
+            <label class="layui-col-xs10">
+                <table class="layui-table">
+                    <thead>
+                    <tr>
+                        <th class="text-center">商品图标</th>
+                    </tr>
+                    <tr>
+                        <td width="90px" class="text-center">
+                            <input name="images" required type="hidden" value="{$vo.images|default=''}">
+                        </td>
+                    </tr>
+                    </thead>
+                </table>
+            </label>
+            <script>$('[name="images"]').uploadOneImage()</script>
+        </div>
+
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">充值选项</label>
+            <label class="layui-col-xs10">
+                <input name="rule_option" value='{$vo.rule_option|default=""}' placeholder="请输入充值选项，比如19:20代表售价19到账20，多个用,隔开" class="layui-input">
+            </label>
+        </div>
+
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">输入选项-简体</label>
+            <label class="layui-col-xs10">
+                <input name="input_option" value='{$vo.input_option|default=""}' placeholder="请输入输入选项，比如姓名|户号代表需要输入姓名和户号" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">输入选项-繁体</label>
+            <label class="layui-col-xs10">
+                <input name="input_option_zh_hk" value='{$vo.input_option_zh_hk|default=""}' placeholder="请输入输入选项，比如姓名|户号代表需要输入姓名和户号" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">输入选项-英文</label>
+            <label class="layui-col-xs10">
+                <input name="input_option_en_us" value='{$vo.input_option_en_us|default=""}' placeholder="请输入输入选项，比如姓名|户号代表需要输入姓名和户号" class="layui-input">
+            </label>
+        </div>
+
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    <div class="layui-form-item text-center">
+        {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+</form>
+{block name='script'}
+<script>
+    window.form.render();
+</script>
+{/block}

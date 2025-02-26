@@ -1,0 +1,141 @@
+<form onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" class='layui-form layui-card'
+      autocomplete="off">
+
+    <div class="layui-card-body">
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">等级名称</label>
+            <label class="layui-col-xs10">
+                <input name="name" required value='{$vo.name|default=""}' placeholder="请输入等级名称"
+                       class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">成长值限制</label>
+            <label class="layui-col-xs10">
+                <input name="value" value='{$vo.value|default="0"}' placeholder="请输入成长值限制" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">加息利率(%)</label>
+            <label class="layui-col-xs10">
+                <input name="rate" value='{$vo.rate|default="0.00"}' placeholder="请输入加息利率" class="layui-input">
+            </label>
+        </div>
+        <!--        <div class="layui-row margin-bottom-15">-->
+        <!--            <label class="layui-col-xs2 think-form-label">矿机收益率(%)</label>-->
+        <!--            <label class="layui-col-xs10">-->
+        <!--                <input name="machine_rate" value='{$vo.machine_rate|default="0.00"}' placeholder="请输入矿机收益率" class="layui-input">-->
+        <!--            </label>-->
+        <!--        </div>-->
+
+
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">个人充值奖励(%)</label>
+            <label class="layui-col-xs10">
+                <input name="member_rate" value='{$vo.member_rate|default="0.00"}' placeholder="请输入个人充值奖励"
+                       class="layui-input">
+            </label>
+        </div>
+
+
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">一级奖励(%)</label>
+            <label class="layui-col-xs10">
+                <input name="invest1" value='{$vo.invest1|default="0.00"}' placeholder="请输入一级奖励"
+                       class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">二级奖励(%)</label>
+            <label class="layui-col-xs10">
+                <input name="invest2" value='{$vo.invest2|default="0.00"}' placeholder="请输入二级奖励"
+                       class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">三级奖励(%)</label>
+            <label class="layui-col-xs10">
+                <input name="invest3" value='{$vo.invest3|default="0.00"}' placeholder="请输入三级奖励"
+                       class="layui-input">
+            </label>
+        </div>
+
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">四级奖励(%)</label>
+            <label class="layui-col-xs10">
+                <input name="invest4" value='{$vo.invest4|default="0.00"}' placeholder="请输入四级奖励"
+                       class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">五级奖励(%)</label>
+            <label class="layui-col-xs10">
+                <input name="invest5" value='{$vo.invest5|default="0.00"}' placeholder="请输入五级奖励"
+                       class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">六级奖励(%)</label>
+            <label class="layui-col-xs10">
+                <input name="invest6" value='{$vo.invest6|default="0.00"}' placeholder="请输入六级奖励"
+                       class="layui-input">
+            </label>
+        </div>
+
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">七级奖励(%)</label>
+            <label class="layui-col-xs10">
+                <input name="invest7" value='{$vo.invest7|default="0.00"}' placeholder="请输入七级奖励"
+                       class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">八级奖励(%)</label>
+            <label class="layui-col-xs10">
+                <input name="invest8" value='{$vo.invest8|default="0.00"}' placeholder="请输入八级奖励"
+                       class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">九级奖励(%)</label>
+            <label class="layui-col-xs10">
+                <input name="invest9" value='{$vo.invest9|default="0.00"}' placeholder="请输入九级奖励"
+                       class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">十级奖励(%)</label>
+            <label class="layui-col-xs10">
+                <input name="invest10" value='{$vo.invest10|default="0.00"}' placeholder="请输入十级奖励"
+                       class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">挖矿最低虚拟币</label>
+            <label class="layui-col-xs10">
+                <input name="min_sign_ibm" value='{$vo.min_sign_ibm|default="0.00"}' placeholder="请输入挖矿最低虚拟币"
+                       class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">挖矿最高虚拟币</label>
+            <label class="layui-col-xs10">
+                <input name="max_sign_ibm" value='{$vo.max_sign_ibm|default="0.00"}' placeholder="请输入挖矿最高虚拟币"
+                       class="layui-input">
+            </label>
+        </div>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    <div class="layui-form-item text-center">
+        {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑
+        </button>
+    </div>
+</form>
+{block name='script'}
+<script>
+    window.form.render();
+</script>
+{/block}

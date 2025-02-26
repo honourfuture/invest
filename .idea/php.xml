@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="MessDetectorOptionsConfiguration">
+    <option name="transferred" value="true" />
+  </component>
+  <component name="PHPCSFixerOptionsConfiguration">
+    <option name="transferred" value="true" />
+  </component>
+  <component name="PHPCodeSnifferOptionsConfiguration">
+    <option name="highlightLevel" value="WARNING" />
+    <option name="transferred" value="true" />
+  </component>
+  <component name="PhpIncludePathManager">
+    <include_path>
+      <path value="$PROJECT_DIR$/api/vendor/qiniu/php-sdk" />
+      <path value="$PROJECT_DIR$/api/vendor/mtdowling/jmespath.php" />
+      <path value="$PROJECT_DIR$/api/vendor/guzzlehttp/promises" />
+      <path value="$PROJECT_DIR$/api/vendor/guzzlehttp/psr7" />
+      <path value="$PROJECT_DIR$/api/vendor/guzzlehttp/guzzle" />
+      <path value="$PROJECT_DIR$/api/vendor/xkeyi/aliyun-sms" />
+      <path value="$PROJECT_DIR$/api/vendor/composer" />
+      <path value="$PROJECT_DIR$/api/vendor/adbario/php-dot-notation" />
+      <path value="$PROJECT_DIR$/api/vendor/paragonie/random_compat" />
+      <path value="$PROJECT_DIR$/api/vendor/endroid/qr-code" />
+      <path value="$PROJECT_DIR$/api/vendor/firebase/php-jwt" />
+      <path value="$PROJECT_DIR$/api/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/api/vendor/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/api/vendor/psr/http-factory" />
+      <path value="$PROJECT_DIR$/api/vendor/symfony/deprecation-contracts" />
+      <path value="$PROJECT_DIR$/api/vendor/psr/http-client" />
+      <path value="$PROJECT_DIR$/api/vendor/symfony/options-resolver" />
+      <path value="$PROJECT_DIR$/api/vendor/symfony/polyfill-ctype" />
+      <path value="$PROJECT_DIR$/api/vendor/symfony/polyfill-php70" />
+      <path value="$PROJECT_DIR$/api/vendor/symfony/polyfill-php72" />
+      <path value="$PROJECT_DIR$/api/vendor/alibabacloud/credentials" />
+      <path value="$PROJECT_DIR$/api/vendor/symfony/yaml" />
+      <path value="$PROJECT_DIR$/api/vendor/topthink/think-installer" />
+      <path value="$PROJECT_DIR$/api/vendor/alibabacloud/tea-xml" />
+      <path value="$PROJECT_DIR$/api/vendor/symfony/polyfill-intl-normalizer" />
+      <path value="$PROJECT_DIR$/api/vendor/alibabacloud/openapi-util" />
+      <path value="$PROJECT_DIR$/api/vendor/symfony/polyfill-intl-idn" />
+      <path value="$PROJECT_DIR$/api/vendor/alibabacloud/darabonba-openapi" />
+      <path value="$PROJECT_DIR$/api/vendor/alibabacloud/tea" />
+      <path value="$PROJECT_DIR$/api/vendor/alibabacloud/client" />
+      <path value="$PROJECT_DIR$/api/vendor/alibabacloud/tea-utils" />
+      <path value="$PROJECT_DIR$/api/vendor/phpmailer/src" />
+      <path value="$PROJECT_DIR$/api/vendor/alibabacloud/gateway-spi" />
+      <path value="$PROJECT_DIR$/api/vendor/alipayapp/aop" />
+      <path value="$PROJECT_DIR$/api/vendor/ralouphie/getallheaders" />
+      <path value="$PROJECT_DIR$/api/vendor/phpmailer/language" />
+      <path value="$PROJECT_DIR$/api/vendor/lizhichao/one-sm" />
+      <path value="$PROJECT_DIR$/api/vendor/zoujingli/think-library" />
+      <path value="$PROJECT_DIR$/api/vendor/aliyuncs/oss-sdk-php" />
+      <path value="$PROJECT_DIR$/api/vendor/zoujingli/ip2region" />
+      <path value="$PROJECT_DIR$/api/vendor/zoujingli/weopen-developer" />
+      <path value="$PROJECT_DIR$/api/vendor/zoujingli/wechat-developer" />
+      <path value="$PROJECT_DIR$/api/vendor/clagiordano/weblibs-configmanager" />
+      <path value="$PROJECT_DIR$/admin/vendor/paragonie/random_compat" />
+      <path value="$PROJECT_DIR$/admin/vendor/endroid/qr-code" />
+      <path value="$PROJECT_DIR$/admin/vendor/firebase/php-jwt" />
+      <path value="$PROJECT_DIR$/admin/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/admin/vendor/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/admin/vendor/psr/http-factory" />
+      <path value="$PROJECT_DIR$/admin/vendor/symfony/deprecation-contracts" />
+      <path value="$PROJECT_DIR$/admin/vendor/psr/http-client" />
+      <path value="$PROJECT_DIR$/admin/vendor/symfony/options-resolver" />
+      <path value="$PROJECT_DIR$/admin/vendor/symfony/polyfill-ctype" />
+      <path value="$PROJECT_DIR$/admin/vendor/symfony/polyfill-php70" />
+      <path value="$PROJECT_DIR$/admin/vendor/symfony/polyfill-php72" />
+      <path value="$PROJECT_DIR$/admin/vendor/alibabacloud/credentials" />
+      <path value="$PROJECT_DIR$/admin/vendor/symfony/yaml" />
+      <path value="$PROJECT_DIR$/admin/vendor/topthink/think-installer" />
+      <path value="$PROJECT_DIR$/admin/vendor/alibabacloud/tea-xml" />
+      <path value="$PROJECT_DIR$/admin/vendor/symfony/polyfill-intl-normalizer" />
+      <path value="$PROJECT_DIR$/admin/vendor/alibabacloud/openapi-util" />
+      <path value="$PROJECT_DIR$/admin/vendor/symfony/polyfill-intl-idn" />
+      <path value="$PROJECT_DIR$/admin/vendor/alibabacloud/darabonba-openapi" />
+      <path value="$PROJECT_DIR$/admin/vendor/alibabacloud/tea" />
+      <path value="$PROJECT_DIR$/admin/vendor/alibabacloud/client" />
+      <path value="$PROJECT_DIR$/admin/vendor/alibabacloud/tea-utils" />
+      <path value="$PROJECT_DIR$/admin/vendor/phpmailer/src" />
+      <path value="$PROJECT_DIR$/admin/vendor/alibabacloud/gateway-spi" />
+      <path value="$PROJECT_DIR$/admin/vendor/alipayapp/aop" />
+      <path value="$PROJECT_DIR$/admin/vendor/ralouphie/getallheaders" />
+      <path value="$PROJECT_DIR$/admin/vendor/phpmailer/language" />
+      <path value="$PROJECT_DIR$/admin/vendor/lizhichao/one-sm" />
+      <path value="$PROJECT_DIR$/admin/vendor/zoujingli/think-library" />
+      <path value="$PROJECT_DIR$/admin/vendor/aliyuncs/oss-sdk-php" />
+      <path value="$PROJECT_DIR$/admin/vendor/zoujingli/ip2region" />
+      <path value="$PROJECT_DIR$/admin/vendor/zoujingli/weopen-developer" />
+      <path value="$PROJECT_DIR$/admin/vendor/zoujingli/wechat-developer" />
+      <path value="$PROJECT_DIR$/admin/vendor/clagiordano/weblibs-configmanager" />
+      <path value="$PROJECT_DIR$/admin/vendor/qiniu/php-sdk" />
+      <path value="$PROJECT_DIR$/admin/vendor/mtdowling/jmespath.php" />
+      <path value="$PROJECT_DIR$/admin/vendor/guzzlehttp/promises" />
+      <path value="$PROJECT_DIR$/admin/vendor/guzzlehttp/psr7" />
+      <path value="$PROJECT_DIR$/admin/vendor/guzzlehttp/guzzle" />
+      <path value="$PROJECT_DIR$/admin/vendor/xkeyi/aliyun-sms" />
+      <path value="$PROJECT_DIR$/admin/vendor/composer" />
+      <path value="$PROJECT_DIR$/admin/vendor/adbario/php-dot-notation" />
+    </include_path>
+  </component>
+  <component name="PhpProjectSharedConfiguration" php_language_level="8.0">
+    <option name="suggestChangeDefaultLanguageLevel" value="false" />
+  </component>
+  <component name="PhpStanOptionsConfiguration">
+    <option name="transferred" value="true" />
+  </component>
+  <component name="PsalmOptionsConfiguration">
+    <option name="transferred" value="true" />
+  </component>
+</project>

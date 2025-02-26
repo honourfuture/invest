@@ -1,0 +1,61 @@
+{extend name='admin@main'}
+{block name="button"}
+<!--{if auth("add")}-->
+<!--<button data-modal='{:url("add")}' data-title="添加盲盒" class='layui-btn layui-btn-sm'>添加盲盒</button>-->
+<!--{/if}-->
+<!--{if auth("remove")}-->
+<!--<button data-action='{:url("remove")}' data-rule="id#{key}" data-csrf="{:systoken('remove')}" data-confirm="确定要删除这些记录吗？" class='layui-btn layui-btn-sm layui-btn-primary'>删除记录</button>-->
+<!--{/if}-->
+{/block}
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='point_record/index_search'}
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='text-center nowrap'>编号</th>
+            <th class='text-center nowrap'>用户名称</th>
+            <th class='text-center nowrap'>手机号</th>
+            <th class='text-center nowrap'>类型</th>
+            <th class='text-center nowrap'>数量</th>
+            <th class='text-center nowrap'>描述</th>
+            <th class='text-center nowrap'>时间</th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='text-center nowrap'>
+                {$vo.id|default='--'}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.name|default='--'}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.phone|default='--'}
+            </td>
+            <td class='text-center nowrap'>
+                {if condition="$vo.type eq 1"}
+                <span style="color:green;">收入</span>
+                {elseif condition="$vo.type eq 2"/}
+                <span style="color:red;">支出</span>
+                {/if}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.num|default='--'}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.zh_cn|default='--'}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.time}
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+</div>
+{/block}

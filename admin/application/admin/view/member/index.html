@@ -1,0 +1,118 @@
+{extend name='admin@main'}
+
+{block name="button"}
+{if auth("admin/member/add")}
+<button data-modal='{:url("add")}' data-title="添加会员组" class='layui-btn layui-btn-sm layui-btn-primary'>添加会员组</button>
+{/if}
+<!--{if auth("remove")}-->
+<!--<button data-action='{:url("remove")}' data-rule="id#{key}" data-csrf="{:systoken('remove')}" data-confirm="确定要删除这些用户组吗？" class='layui-btn layui-btn-sm layui-btn-primary'>删除用户组</button>-->
+<!--{/if}-->
+{/block}
+
+{block name="content"}
+<div class="think-box-shadow">
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='list-table-check-td think-checkbox'>
+                <input data-auto-none data-check-target='.list-check-box' type='checkbox'>
+            </th>
+            <th class='text-center nowrap'>会员组编号</th>
+            <th class="text-center">等级名称</th>
+            <th class="text-center">累计投资金额</th>
+            <th class="text-center">加息率（%）</th>
+<!--            <th class="text-center">矿机收益率（%）</th>-->
+            <th class="text-center">个人充值奖励（%）</th>
+            <th class="text-center">一级奖励（%）</th>
+            <th class="text-center">二级奖励（%）</th>
+             <th class="text-center">三级奖励（%）</th>
+            <th class="text-center">四级奖励（%）</th>
+            <th class="text-center">五级奖励（%）</th>
+             <th class="text-center">六级奖励（%）</th>
+            <th class="text-center">七级奖励（%）</th>
+            <th class="text-center">八级奖励（%）</th>
+             <th class="text-center">九级奖励（%）</th>
+             <th class="text-center">十级奖励（%）</th>
+             <th class="text-center">挖矿最低虚拟币</th>
+             <th class="text-center">挖矿最高虚拟币</th>
+            <th class="text-center"></th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='list-table-check-td think-checkbox'>
+                <input class="list-check-box" value='{$vo.id}' type='checkbox'>
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.id|default=''}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.name|default=''}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.value|default=''}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.rate|default='0'}
+            </td>
+<!--            <td class='text-center nowrap'>-->
+<!--                {$vo.machine_rate|default='0'}-->
+<!--            </td>-->
+             <td class='text-center nowrap'>
+                 {$vo.member_rate|default='0'}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.invest1|default='0'}
+            </td>
+             <td class='text-center nowrap'>
+                {$vo.invest2|default='0'}
+            </td>
+             <td class='text-center nowrap'>
+                {$vo.invest3|default='0'}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.invest4|default='0'}
+            </td>
+             <td class='text-center nowrap'>
+                {$vo.invest5|default='0'}
+            </td>
+             <td class='text-center nowrap'>
+                {$vo.invest6|default='0'}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.invest7|default='0'}
+            </td>
+             <td class='text-center nowrap'>
+                {$vo.invest8|default='0'}
+            </td>
+             <td class='text-center nowrap'>
+                {$vo.invest9|default='0'}
+            </td>
+             <td class='text-center nowrap'>
+                {$vo.invest10|default='0'}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.min_sign_ibm|default='0'}
+            </td>
+            <td class='text-center nowrap'>
+                {$vo.max_sign_ibm|default='0'}
+            </td>
+            <td class='text-center nowrap'>
+                {if auth("admin/member/edit")}
+                <a data-title="编辑等级分类" class="layui-btn layui-btn-sm" data-modal='{:url("edit")}?id={$vo.id}'>编 辑</a>
+                {/if}
+
+                <!--{if auth("admin/member/remove")}-->
+                <!--<a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="确定要删除数据吗?" data-action="{:url('remove')}" data-value="id#{$vo.id}" data-csrf="{:systoken('remove')}">删 除</a>-->
+                <!--{/if}-->
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+</div>
+{/block}

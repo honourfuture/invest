@@ -1,0 +1,81 @@
+<form onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+
+    <div class="layui-card-body">
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">盲盒名称</label>
+            <label class="layui-col-xs10">
+                <input name="name" required value='{$vo.name|default=""}' placeholder="请输入盲盒名称" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">价格</label>
+            <label class="layui-col-xs10">
+                <input name="price" required value='{$vo.price|default=""}' placeholder="请输入价格" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">利率(%)</label>
+            <label class="layui-col-xs10">
+                <input name="rate" required value='{$vo.rate|default=""}' placeholder="请输入利率" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">周期</label>
+            <label class="layui-col-xs10">
+                <select class="layui-select" name="period" required>
+                    {foreach ['1'=>'天','2'=>'周','3'=>'月'] as $k=>$v}
+                    {empty name="vo"}
+                        <option value="{$k}">{$v}</option>
+                    {/empty}
+                    {notempty name="vo"}
+                        {eq name='$vo.period' value='$k.""'}
+                        <option selected value="{$k}">{$v}</option>
+                        {else}
+                        <option value="{$k}">{$v}</option>
+                        {/eq}
+                        {/notempty}
+                    {/foreach}
+                </select>
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">状态</label>
+            <label class="layui-col-xs10">
+                <select class="layui-select" name="status" required>
+                    {foreach ['1'=>'正常','0'=>'关闭'] as $k=>$v}
+                    {empty name="vo"}
+                        <option value="{$k}">{$v}</option>
+                    {/empty}
+                    {notempty name="vo"}
+                        {eq name='$vo.status' value='$k.""'}
+                        <option selected value="{$k}">{$v}</option>
+                        {else}
+                        <option value="{$k}">{$v}</option>
+                        {/eq}
+                        {/notempty}
+                    {/foreach}
+                </select>
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">排序</label>
+            <label class="layui-col-xs10">
+                <input name="sort" required value='{$vo.sort|default="0"}' placeholder="请输入排序" class="layui-input">
+            </label>
+        </div>
+        
+
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    <div class="layui-form-item text-center">
+        {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+</form>
+{block name='script'}
+<script>
+    window.form.render();
+</script>
+{/block}

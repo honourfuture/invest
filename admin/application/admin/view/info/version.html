@@ -1,0 +1,59 @@
+{extend name='admin@main'}
+{block name="content"}
+<form onsubmit="return false;"  data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+    <div class="think-box-shadow padding-40">
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">APP版本号</span>
+                <input name="app_version" class="layui-input" placeholder="1.0.0" value="{$vo.app_version|default='0'}" required>
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">安卓APP下载地址/热更新</span>
+                <input name="android_app_down_url" class="layui-input" placeholder="https://" value="{$vo.android_app_down_url|default='0'}" required>
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">苹果APP下载地址/热更新</span>
+                <input name="ios_app_down_url" class="layui-input" placeholder="https://" value="{$vo.ios_app_down_url|default='0'}" required>
+            </label>
+            <label class="layui-col-xs12 relative">
+                <span class="color-green">APP更新说明</span>
+                <input name="app_instructions" class="layui-input" placeholder="" value="{$vo.app_instructions|default='0'}" required>
+            </label>
+        </div>
+        
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">安卓APP下载地址/推广</span>
+                <input name="android_download" class="layui-input" placeholder="https://" value="{$vo.android_download|default=''}" required>
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">苹果APP下载地址/推广</span>
+                <input name="ios_download" class="layui-input" placeholder="https://" value="{$vo.ios_download|default=''}" required>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <!--<label class="layui-col-xs4 relative">-->
+            <!--    <span class="color-green">资源包版本号</span>-->
+            <!--    <input name="wgt_version" class="layui-input" placeholder="1.0.0" value="{$vo.wgt_version|default='0'}" required>-->
+            <!--</label>-->
+            <!--<label class="layui-col-xs4 relative">-->
+            <!--    <span class="color-green">资源包下载地址</span>-->
+            <!--    <input name="wgt_down_url" class="layui-input" placeholder="https://" value="{$vo.wgt_down_url|default='0'}" required>-->
+            <!--</label>-->
+            <!--<label class="layui-col-xs12 relative">-->
+            <!--    <span class="color-green">资源包更新说明</span>-->
+            <!--    <input name="wgt_instructions" class="layui-input" placeholder="" value="{$vo.wgt_instructions|default='0'}" required>-->
+            <!--</label>-->
+        </div>
+        <div class="layui-form-item text-left">
+            {notempty name='vo.id'}<input type="hidden" name="id" value="{$vo.id}">{/notempty}
+            <button class="layui-btn" type="submit">保存设置</button>
+        </div>
+    </div>
+</form>
+{/block}
+{block name='script'}
+<script>
+    window.form.render();
+</script>
+{/block}

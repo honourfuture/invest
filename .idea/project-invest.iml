@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/admin/application" isTestSource="false" packagePrefix="app" />
+      <sourceFolder url="file://$MODULE_DIR$/admin/thinkphp/library" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/admin/topthink/think-installer/src" isTestSource="false" packagePrefix="think\composer\" />
+      <sourceFolder url="file://$MODULE_DIR$/api/application" isTestSource="false" packagePrefix="app" />
+      <sourceFolder url="file://$MODULE_DIR$/api/thinkphp/library" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/api/topthink/think-installer/src" isTestSource="false" packagePrefix="think\composer\" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/adbario/php-dot-notation" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/alibabacloud/client" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/alibabacloud/credentials" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/alibabacloud/darabonba-openapi" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/alibabacloud/gateway-spi" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/alibabacloud/openapi-util" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/alibabacloud/tea" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/alibabacloud/tea-utils" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/alibabacloud/tea-xml" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/alipayapp/aop" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/aliyuncs/oss-sdk-php" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/clagiordano/weblibs-configmanager" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/endroid/qr-code" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/firebase/php-jwt" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/guzzlehttp/guzzle" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/guzzlehttp/promises" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/guzzlehttp/psr7" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/lizhichao/one-sm" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/mtdowling/jmespath.php" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/paragonie/random_compat" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/phpmailer/language" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/phpmailer/src" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/psr/http-client" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/psr/http-factory" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/psr/http-message" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/qiniu/php-sdk" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/ralouphie/getallheaders" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/symfony/deprecation-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/symfony/options-resolver" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/symfony/polyfill-ctype" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/symfony/polyfill-intl-idn" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/symfony/polyfill-intl-normalizer" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/symfony/polyfill-mbstring" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/symfony/polyfill-php70" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/symfony/polyfill-php72" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/symfony/yaml" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/topthink/think-installer" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/xkeyi/aliyun-sms" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/zoujingli/ip2region" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/zoujingli/think-library" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/zoujingli/wechat-developer" />
+      <excludeFolder url="file://$MODULE_DIR$/admin/vendor/zoujingli/weopen-developer" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/adbario/php-dot-notation" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/alibabacloud/client" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/alibabacloud/credentials" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/alibabacloud/darabonba-openapi" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/alibabacloud/gateway-spi" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/alibabacloud/openapi-util" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/alibabacloud/tea" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/alibabacloud/tea-utils" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/alibabacloud/tea-xml" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/alipayapp/aop" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/aliyuncs/oss-sdk-php" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/clagiordano/weblibs-configmanager" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/endroid/qr-code" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/firebase/php-jwt" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/guzzlehttp/guzzle" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/guzzlehttp/promises" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/guzzlehttp/psr7" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/lizhichao/one-sm" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/mtdowling/jmespath.php" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/paragonie/random_compat" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/phpmailer/language" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/phpmailer/src" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/psr/http-client" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/psr/http-factory" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/psr/http-message" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/qiniu/php-sdk" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/ralouphie/getallheaders" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/symfony/deprecation-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/symfony/options-resolver" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/symfony/polyfill-ctype" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/symfony/polyfill-intl-idn" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/symfony/polyfill-intl-normalizer" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/symfony/polyfill-mbstring" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/symfony/polyfill-php70" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/symfony/polyfill-php72" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/symfony/yaml" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/topthink/think-installer" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/xkeyi/aliyun-sms" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/zoujingli/ip2region" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/zoujingli/think-library" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/zoujingli/wechat-developer" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/zoujingli/weopen-developer" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

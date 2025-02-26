@@ -1,0 +1,192 @@
+{extend name='main'}
+
+{block name="button"}
+
+<button data-action='{:url("batchSync")}' data-rule="id#{key}" data-csrf="{:systoken('batchSync')}" data-confirm="确定要批量批量同步这些记录吗？" class='layui-btn layui-btn-sm layui-btn-primary'>批量同步</button>
+{if auth("add")}
+<button data-modal='{:url("adds")}' data-title="批量注册内部账号" class='layui-btn layui-btn-sm layui-btn-primary'>批量注册内部账号</button>
+<button data-modal='{:url("add")}' data-title="添加用户" class='layui-btn layui-btn-sm layui-btn-primary'>添加用户</button>
+{/if}
+
+<!--{if auth("forbid")}-->
+<!--<button data-action='{:url("forbid")}' data-rule="id#{key}" data-csrf="{:systoken('forbid')}" data-confirm="确定要冻结这些用户吗？" class='layui-btn layui-btn-sm layui-btn-primary'>冻结用户</button>-->
+<!--{/if}-->
+
+<!--{if auth("remove")}-->
+<!--<button data-action='{:url("remove")}' data-rule="id#{key}" data-csrf="{:systoken('remove')}" data-confirm="确定要删除这些用户吗？" class='layui-btn layui-btn-sm layui-btn-primary'>删除用户</button>-->
+<!--{/if}-->
+
+{/block}
+
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='users/index_search'}
+    <table class="layui-table margin-top-10" lay-skin="nob">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='list-table-check-td think-checkbox'>
+                <label><input data-auto-none data-check-target='.list-check-box' type='checkbox'></label>
+            </th>
+            <th class='text-left nowrap'>用户信息</th>
+            {if $adm }
+            <th class='text-left nowrap'>用户资料</th>
+            {/if}
+            <th class='text-left nowrap'>用户资金（点击金额查看）</th>
+            {if $adm }
+            <th class='text-left nowrap'>用户详情</th>
+            {/if}
+            <th class='text-left nowrap'>其他</th>
+            <th class='text-left nowrap'></th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr data-dbclick>
+            <td class='list-table-check-td think-checkbox'>
+                <label><input class="list-check-box" value='{$vo.id}' type='checkbox'></label>
+            </td>
+            <td class='text-left nowrap'>
+                ID：{$vo.id|default='--'}<br>
+                MID：{$vo.mid|default='--'}<br>
+                用户名：<a data-title="查看流水" data-open='{:url("admin/finance/index")}?u_phone={$vo.phone}'>(+{$vo.guo|default='--'}){$vo.phone|default='--'}</a><br>
+                {if $adm }
+                状态：
+                {eq name='vo.online' value='false'}
+                <span class="color-desc">离线</span>
+                {else}
+                <span class="color-green">在线</span>
+                {/eq}
+                <br>
+                实名：
+                {eq name='vo.auth' value='0'}
+                <span class="color-red">未认证</span>
+                {else}
+                <span class="color-green">已认证</span>
+                {/eq}<br>
+                代理线：{$vo.agent|default='--'}<br>
+                邀请码：{$vo.invite|default='--'}<br>
+                顶级推荐人：{$vo.dj_phone|default='--'}<br>
+                {/if}
+            </td>
+            {if $adm }
+            <td class='text-left nowrap'>
+                标记状态：{if condition="$vo.sign_status eq 0"}
+                            正常
+                            {elseif condition="$vo.sign_status eq 1"}
+                            频繁提现
+                            {elseif condition="$vo.sign_status eq 2"}
+                            僵尸号
+                            {elseif condition="$vo.sign_status eq 3"}
+                            IP重复
+                            {elseif condition="$vo.sign_status eq 4"}
+                            优质客户
+                            {/if}
+                <br>
+                团队等级：{$vo.g_name|default='--'}<br>
+                会员等级：{$vo.m_name|default='--'}<br>
+                真实姓名：{$vo.name|default='--'}<br>
+                推荐人：{$vo.top|default='--'}<br>
+                身份：{if $vo.is_sf==1}一级内部账号{elseif $vo.is_sf==2 /}二级内部账号{else /} 真实客户{/if}<br>
+                IP：{$vo.ip|default='--'}<br>
+            </td>
+            {/if}
+            <td class='text-left nowrap'>
+                账户余额：<a data-title="查看充值记录" class="color-red" data-open='{:url("admin/recharge/index")}?u_phone={$vo.phone}'>{$vo.money|default='--'}</a><br>
+                {if $adm }
+                提现总额：<a data-title="查看提现" class="color-green" data-open='{:url("admin/cash/index")}?u_phone={$vo.phone}&i_status=1'>{$vo.cash_sum|default='--'}</a><br>
+                充值总额：<a data-title="查看充值记录" style="color: orange" data-open='{:url("admin/recharge/index")}?u_phone={$vo.phone}&i_status=1'>{$vo.recharge_sum|default='--'}</a><br>
+                投资总额：<a data-title="查看投资" data-open='{:url("admin/invest/index")}?u_phone={$vo.phone}'>{$vo.invest_sum|default='--'} </a><br>
+                IMB余额：<a data-title="查看IMB余额" data-open='{:url("admin/invest/index")}?u_phone={$vo.phone}'>{if $vo.kj_money==0}0.00{else /}{$vo.kj_money|default='--'}{/if} </a><br>
+            </td>
+            {if $adm }
+            <td class='text-left nowrap'>
+                <!--宝库余额：{$vo.baoku_money|default='0.00'} <br>-->
+                待收利息：{$vo.wait_invest|default='--'} <br>
+                待收本金：{$vo.wait_money|default='--'} <br>
+                途游宝：{$vo.ebao|default='--'}<br>
+                资产：{$vo.asset|default='--'}<br>
+                {/if}
+            </td>
+            {/if}
+            <td class='text-left nowrap'>
+                {if $adm }
+                积分：{$vo.point_num|default='--'}<br>
+                用户状态：
+                {eq name='vo.clock' value='0'}
+                <span class="color-red">已冻结</span>
+                {else}
+                <span class="color-green">正常</span>
+                {/eq}<br>
+                最近操作：{$vo.logintime|format_datetime}<br>
+                {/if}
+                注册时间：{$vo.time}<br>
+                ISP：{$vo.isp|default='--'}<br>
+            </td>
+            <td class='text-left nowrap' >
+                <a  data-action="{:url('sync')}" data-value="id#{$vo.id}" data-csrf="{:systoken('sync')}">同步 </a>
+                
+                <a data-open='{:url("admin/funds/index")}?userid={$vo.id}'>流水明细</a>
+                &nbsp;
+                <a data-open='{:url("admin/users/myitem")}?phone={$vo.phone}&userid={$vo.id}&level=0'>查看团队</a>
+                &nbsp;
+                <a data-open='{:url("admin/loginLog/index")}?userid={$vo.id}'>登录记录</a>
+                &nbsp;
+                {if auth("edit")}
+                <a data-dbclick  data-title="编辑用户" data-modal='{:url("edit")}?id={$vo.id}'>编辑 </a>
+                {/if}
+                
+                <!--{if $vo.clock eq 1 and auth("forbid")}-->
+                <!--<a data-action="{:url('forbid')}" data-value="id#{$vo.id};clock#0" data-csrf="{:systoken('forbid')}">冻结 </a>-->
+                <!--&nbsp;-->
+                <!--{elseif $vo.clock eq 0 and auth("resume")}-->
+                <!--<a  data-action="{:url('resume')}" data-value="id#{$vo.id};clock#1" data-csrf="{:systoken('resume')}">解冻 </a>-->
+                <!--&nbsp;-->
+                <!--{/if}-->
+                
+                
+                <div>
+                    {if $vo.clock eq 1 and auth("freeze")}
+                <a data-dbclick  data-title="冻结用户" data-modal='{:url("freeze")}?id={$vo.id}'>冻结 </a>
+                &nbsp;
+                {elseif $vo.clock eq 0 and auth("resume")}
+                <a  data-action="{:url('resume')}" data-value="id#{$vo.id};clock#1" data-csrf="{:systoken('resume')}">解冻 </a>
+                &nbsp;
+                {/if}
+                
+                <!--{if $vo.is_team eq 1}-->
+                <!--<a data-action="{:url('team_resume')}" data-value="id#{$vo.id};is_team#0" data-csrf="{:systoken('team_resume')}">解冻团队 </a>-->
+                <!--&nbsp;-->
+                <!--{elseif $vo.is_team eq 0}-->
+                <!--<a  data-action="{:url('team_forbid')}" data-value="id#{$vo.id};is_team#1" data-csrf="{:systoken('team_forbid')}">冻结团队 </a>-->
+                <!--&nbsp;-->
+                <!--{/if}-->
+                
+                {if $vo.is_team eq 1}
+                <a data-action="{:url('team_resume')}" data-value="id#{$vo.id};is_team#0" data-csrf="{:systoken('team_resume')}">解冻团队 </a>
+                &nbsp;
+                {elseif $vo.is_team eq 0}
+                <a data-dbclick  data-title="冻结用户" data-modal='{:url("team_freeze")}?id={$vo.id}'>冻结团队 </a>
+                &nbsp;
+                {/if}
+        
+                {if auth("remove")}
+                <a data-confirm="确定要删除该用户吗?" data-action="{:url('remove')}" data-value="id#{$vo.id}" data-csrf="{:systoken('remove')}">删 除</a>
+                {else}
+                <a data-tips-text="您没有删除用户的权限哦！" >删除</a>
+                {/if}
+                
+                </div>
+                <div class="margin-top-10">
+                    <a data-confirm="本操作仅可用于修正部分无法通过手机号搜索到或无法使用手机号登陆的情况，您确定需要进行自动修复吗，用户正常情况下请勿点击，否则可能造成不可逆转的问题，您确定需要操作?" data-action="{:url('revision_login')}" data-value="id#{$vo.id}" data-csrf="{:systoken('revision_login')}" style="color: #fff;padding: 5px;background: #ff8300;">修复手机号</a>
+                </div>
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+</div>
+
+{/block}

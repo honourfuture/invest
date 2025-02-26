@@ -1,0 +1,58 @@
+{extend name='admin@main'}
+{block name="content"}
+<form onsubmit="return false;"  data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+  <div class="think-box-shadow padding-40">
+    <div class="layui-form-item layui-row layui-col-space15">
+      <!--<input name="id" class="layui-input" placeholder="请输入矿币兑换比例" value="{$machinesInfo.id}" required>-->
+      <!--<label class="layui-col-xs3 relative">-->
+      <!--  <span class="color-green">矿机天数</span>-->
+      <!--  <input name="days" class="layui-input" placeholder="请输入矿机天数" value="{$vo.days|default='0'}" required>-->
+      <!--</label>-->
+      <!--<label class="layui-col-xs3 relative">-->
+      <!--  <span class="color-green">矿机收益</span>-->
+      <!--  <input name="yield" class="layui-input" placeholder="请输入矿机收益" value="{$vo.yield|default='0'}" required>-->
+      <!--</label>-->
+      <label class="layui-col-xs3 relative">
+        <span class="color-green">兑换比例（MMH兑CNY）</span>
+        <input name="rate" class="layui-input" placeholder="请输入矿币兑换比例" value="{$machinesInfo.rate|default='0'}" required>
+      </label>
+    </div>
+
+<!--    <div class="layui-form-item layui-row layui-col-space15">-->
+<!--      <label class="layui-col-xs3 relative">-->
+<!--        <span class="color-green">每日签到奖励</span>-->
+<!--        <input name="qiandao" class="layui-input" placeholder="请输入每日签到奖励" value="{$vo.qiandao|default='0'}" required>-->
+<!--      </label>-->
+<!--      <label class="layui-col-xs3 relative">-->
+<!--        <span class="color-green">新用户首次投资奖励（%）</span>-->
+<!--        <input name="qiandao" class="layui-input" placeholder="请输入新用户首次投资奖励" value="{$vo.qiandao|default='0'}" required>-->
+<!--      </label>-->
+<!--    </div>-->
+
+<!--    <div class="layui-form-item layui-row layui-col-space15">-->
+<!--      <label class="layui-col-xs3 relative">-->
+<!--        <span class="color-green">途游宝收益（%）</span>-->
+<!--        <input name="qiandao" class="layui-input" placeholder="请输入途游宝收益" value="{$vo.qiandao|default='0'}" required>-->
+<!--      </label>-->
+<!--      <label class="layui-col-xs3 relative">-->
+<!--        <span class="color-green">途游宝最低转入（）</span>-->
+<!--        <input name="qiandao" class="layui-input" placeholder="请输入途游宝最低转入" value="{$vo.qiandao|default='0'}" required>-->
+<!--      </label>-->
+<!--      <label class="layui-col-xs3 relative">-->
+<!--        <span class="color-green">途游宝最高转入（）</span>-->
+<!--        <input name="qiandao" class="layui-input" placeholder="请输入途游宝最高转入" value="{$vo.qiandao|default='0'}" required>-->
+<!--      </label>-->
+<!--    </div>-->
+
+    <div class="layui-form-item text-left">
+      {notempty name='vo.id'}<input type="hidden" name="id" value="{$vo.id}">{/notempty}
+      <button class="layui-btn" type="submit">保存设置</button>
+    </div>
+  </div>
+</form>
+{/block}
+{block name='script'}
+<script>
+  window.form.render();
+</script>
+{/block}

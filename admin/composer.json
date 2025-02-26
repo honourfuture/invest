@@ -1,0 +1,11 @@
+{
+    "config": {
+        "allow-plugins": {
+            "topthink/think-installer": false
+        }
+    },
+    "require": {
+        "alibabacloud/darabonba-openapi": "^0.2.8",
+        "alibabacloud/client": "^1.5"
+    }
+}

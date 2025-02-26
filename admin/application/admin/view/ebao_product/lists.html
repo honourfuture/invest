@@ -1,0 +1,61 @@
+{extend name='admin@main'}
+
+{block name="content"}
+<div class="think-box-shadow">
+<!--    {include file='point/index_search'}-->
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='list-table-check-td think-checkbox'>
+                <input data-auto-none data-check-target='.list-check-box' type='checkbox'>
+            </th>
+            <th class='text-left nowrap' width="30%">用户ID</th>
+            <th class='text-left nowrap' width="30%">途游宝产品名</th>
+            <th class='text-left nowrap' width="30%">购买金额</th>
+            <th class='text-left nowrap' width="30%">上次结算金额</th>
+            <th class='text-left nowrap' width="15%">锁仓天数</th>
+            <th class='text-left nowrap' width="15%">购买时间</th>
+            <th class='text-left nowrap' width="15%">当前已锁仓天数</th>
+            <th class='text-left nowrap' width="15%">上次结算日期</th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr data-dbclick>
+            <td class='list-table-check-td think-checkbox'><input class="list-check-box" value='{$vo.id}' type='checkbox'></td>
+            
+            <td class='text-left' style="max-width: 100px;overflow: hidden;">
+                {$vo.uid|default='--'}<br>
+            </td>
+            <td class='text-left' style="max-width: 150px;overflow: hidden;">
+                {$vo.title|default='--'}<br>
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.money|default='--'}<br>
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.last_settlement_amount|default='--'}<br>
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.lock_day|default='--'}天<br>
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.add_time|default='--'}<br>
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.current_day|default='--'}天<br>
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.last_settlement_time|default='--'}<br>
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+
+</div>
+{/block}
