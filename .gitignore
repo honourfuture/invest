@@ -1,2 +1,5 @@
 /admin/runtime/
 /api/runtime/
+.idea/
+/admin/config/database.php
+/admin/public/log/

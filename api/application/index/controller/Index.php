@@ -15,11 +15,11 @@
 
 namespace app\index\controller;
 
+use app\api\controller\Aes;
 use library\Controller;
 use think\Db;
-use think\facade\Log;
 use think\facade\Cache;
-use app\api\controller\Aes;
+use think\facade\Log;
 
 /**
  * 应用入口
@@ -30,27 +30,27 @@ class Index extends Controller
 {
     public function getdata($date)
     {
-       $start = strtotime($date);
-        $last = $start+86400-1;
+        $start = strtotime($date);
+        $last = $start + 86400 - 1;
         $real_user = Db::name('lc_user')->where("UNIX_TIMESTAMP(time) BETWEEN $start AND $last")->where('is_sf', 0)->count();
-        $inside_user = Db::name('lc_user')->where("UNIX_TIMESTAMP(time) BETWEEN $start AND $last")->whereIn('is_sf', [1,2])->count();
+        $inside_user = Db::name('lc_user')->where("UNIX_TIMESTAMP(time) BETWEEN $start AND $last")->whereIn('is_sf', [1, 2])->count();
         $real_recharge = Db::name('lc_recharge')->alias('r')->join('lc_user u', 'r.uid = u.id')->where("UNIX_TIMESTAMP(r.time) BETWEEN $start AND $last")->where('is_sf', 0)->where('r.status', 1)->sum('r.money');
-        $inside_recharge = Db::name('lc_recharge')->alias('r')->join('lc_user u', 'r.uid = u.id')->where("UNIX_TIMESTAMP(r.time) BETWEEN $start AND $last")->whereIn('is_sf', [1,2])->where('r.status', 1)->sum('r.money');
-        $real_cash = Db::name('lc_cash')->alias('c')->join('lc_user u', 'c.uid = u.id')->where("UNIX_TIMESTAMP(c.time) BETWEEN $start AND $last")->where('is_sf',0)->where('c.status', 1)->sum('c.money');
-        $inside_cash = Db::name('lc_cash')->alias('c')->join('lc_user u', 'c.uid = u.id')->where("UNIX_TIMESTAMP(c.time) BETWEEN $start AND $last")->whereIn('is_sf', [1,2])->where('c.status', 1)->sum('c.money');
-        $real_profit = Db::name('lc_invest_list')->alias('l')->join('lc_user u', 'l.uid = u.id')->where("UNIX_TIMESTAMP(l.time1) BETWEEN $start AND $last AND status = 1")->where('is_sf',0)->where('l.status', 1)->sum('pay1');
-        $inside_profit = Db::name('lc_invest_list')->alias('l')->join('lc_user u', 'l.uid = u.id')->where("UNIX_TIMESTAMP(l.time1) BETWEEN $start AND $last AND status = 1")->whereIn('is_sf', [1,2])->where('l.status', 1)->sum('pay1');
-        $real_invest_num = Db::name('lc_invest')->alias('l')->join('lc_user u', 'l.uid = u.id')->where('is_sf',0)->where("UNIX_TIMESTAMP(l.time) BETWEEN $start AND $last")->count();
-        $inside_invest_num = Db::name('lc_invest')->alias('l')->join('lc_user u', 'l.uid = u.id')->whereIn('is_sf', [1,2])->where("UNIX_TIMESTAMP(l.time) BETWEEN $start AND $last")->count();
-        $real_invest = Db::name('lc_invest')->alias('l')->join('lc_user u', 'l.uid = u.id')->where('is_sf',0)->where("UNIX_TIMESTAMP(l.time) BETWEEN $start AND $last")->sum('l.money');
-        $inside_invest = Db::name('lc_invest')->alias('l')->join('lc_user u', 'l.uid = u.id')->whereIn('is_sf', [1,2])->where("UNIX_TIMESTAMP(l.time) BETWEEN $start AND $last")->sum('l.money');
-        
-        $real_expire_money = Db::name('lc_invest_list')->alias('l')->join('lc_user u', 'l.uid = u.id')->where("UNIX_TIMESTAMP(l.time1) BETWEEN $start AND $last AND status = 1")->where('is_sf',0)->where('l.status', 1)->sum('money2');
-        $inside_expire_money = Db::name('lc_invest_list')->alias('l')->join('lc_user u', 'l.uid = u.id')->where("UNIX_TIMESTAMP(l.time1) BETWEEN $start AND $last AND status = 1")->whereIn('is_sf', [1,2])->where('l.status', 1)->sum('money2');
-        
-        $real_interest = Db::name('lc_invest_list')->alias('l')->join('lc_user u', 'l.uid = u.id')->where("UNIX_TIMESTAMP(l.time1) BETWEEN $start AND $last AND status = 1")->where('is_sf',0)->where('l.status', 1)->sum('money1');
-        $inside_interest = Db::name('lc_invest_list')->alias('l')->join('lc_user u', 'l.uid = u.id')->where("UNIX_TIMESTAMP(l.time1) BETWEEN $start AND $last AND status = 1")->whereIn('is_sf', [1,2])->where('l.status', 1)->sum('money1'); 
-        
+        $inside_recharge = Db::name('lc_recharge')->alias('r')->join('lc_user u', 'r.uid = u.id')->where("UNIX_TIMESTAMP(r.time) BETWEEN $start AND $last")->whereIn('is_sf', [1, 2])->where('r.status', 1)->sum('r.money');
+        $real_cash = Db::name('lc_cash')->alias('c')->join('lc_user u', 'c.uid = u.id')->where("UNIX_TIMESTAMP(c.time) BETWEEN $start AND $last")->where('is_sf', 0)->where('c.status', 1)->sum('c.money');
+        $inside_cash = Db::name('lc_cash')->alias('c')->join('lc_user u', 'c.uid = u.id')->where("UNIX_TIMESTAMP(c.time) BETWEEN $start AND $last")->whereIn('is_sf', [1, 2])->where('c.status', 1)->sum('c.money');
+        $real_profit = Db::name('lc_invest_list')->alias('l')->join('lc_user u', 'l.uid = u.id')->where("UNIX_TIMESTAMP(l.time1) BETWEEN $start AND $last AND status = 1")->where('is_sf', 0)->where('l.status', 1)->sum('pay1');
+        $inside_profit = Db::name('lc_invest_list')->alias('l')->join('lc_user u', 'l.uid = u.id')->where("UNIX_TIMESTAMP(l.time1) BETWEEN $start AND $last AND status = 1")->whereIn('is_sf', [1, 2])->where('l.status', 1)->sum('pay1');
+        $real_invest_num = Db::name('lc_invest')->alias('l')->join('lc_user u', 'l.uid = u.id')->where('is_sf', 0)->where("UNIX_TIMESTAMP(l.time) BETWEEN $start AND $last")->count();
+        $inside_invest_num = Db::name('lc_invest')->alias('l')->join('lc_user u', 'l.uid = u.id')->whereIn('is_sf', [1, 2])->where("UNIX_TIMESTAMP(l.time) BETWEEN $start AND $last")->count();
+        $real_invest = Db::name('lc_invest')->alias('l')->join('lc_user u', 'l.uid = u.id')->where('is_sf', 0)->where("UNIX_TIMESTAMP(l.time) BETWEEN $start AND $last")->sum('l.money');
+        $inside_invest = Db::name('lc_invest')->alias('l')->join('lc_user u', 'l.uid = u.id')->whereIn('is_sf', [1, 2])->where("UNIX_TIMESTAMP(l.time) BETWEEN $start AND $last")->sum('l.money');
+
+        $real_expire_money = Db::name('lc_invest_list')->alias('l')->join('lc_user u', 'l.uid = u.id')->where("UNIX_TIMESTAMP(l.time1) BETWEEN $start AND $last AND status = 1")->where('is_sf', 0)->where('l.status', 1)->sum('money2');
+        $inside_expire_money = Db::name('lc_invest_list')->alias('l')->join('lc_user u', 'l.uid = u.id')->where("UNIX_TIMESTAMP(l.time1) BETWEEN $start AND $last AND status = 1")->whereIn('is_sf', [1, 2])->where('l.status', 1)->sum('money2');
+
+        $real_interest = Db::name('lc_invest_list')->alias('l')->join('lc_user u', 'l.uid = u.id')->where("UNIX_TIMESTAMP(l.time1) BETWEEN $start AND $last AND status = 1")->where('is_sf', 0)->where('l.status', 1)->sum('money1');
+        $inside_interest = Db::name('lc_invest_list')->alias('l')->join('lc_user u', 'l.uid = u.id')->where("UNIX_TIMESTAMP(l.time1) BETWEEN $start AND $last AND status = 1")->whereIn('is_sf', [1, 2])->where('l.status', 1)->sum('money1');
+
         return [
             'date' => $date,
             'real_user' => $real_user,
@@ -71,17 +71,17 @@ class Index extends Controller
             'inside_interest' => $inside_interest,
         ];
     }
-    
+
     //更新今日数据
     public function updatedata()
     {
         //获取本月开始的时间戳
-        $beginThismonth=mktime(0,0,0,date('m'),1,date('Y'));
+        $beginThismonth = mktime(0, 0, 0, date('m'), 1, date('Y'));
         //获取本月结束的时间戳
-        $endThismonth=mktime(23,59,59,date('m'),date('t'),date('Y'));
+        $endThismonth = mktime(23, 59, 59, date('m'), date('t'), date('Y'));
         $arrs = [];
         $time = $beginThismonth;
-        for($i = 1; $time < time(); $i++) {
+        for ($i = 1; $time < time(); $i++) {
             $time = $beginThismonth + $i * 86400 - 1;
             $arrs[] = date('Y-m-d', $time);
         }
@@ -98,7 +98,7 @@ class Index extends Controller
             Db::name('lc_static')->where('date', $arr)->update($result);
         }
         echo '更新成功';
-        
+
         // $date = date('Y-m-d', time());
         // $start = strtotime($date);
         // $last = $start+86400-1;
@@ -114,13 +114,13 @@ class Index extends Controller
         // $inside_invest_num = Db::name('lc_invest')->alias('l')->join('lc_user u', 'l.uid = u.id')->whereIn('is_sf', [1,2])->where("UNIX_TIMESTAMP(l.time) BETWEEN $start AND $last")->count();
         // $real_invest = Db::name('lc_invest')->alias('l')->join('lc_user u', 'l.uid = u.id')->where('is_sf',0)->where("UNIX_TIMESTAMP(l.time) BETWEEN $start AND $last")->sum('l.money');
         // $inside_invest = Db::name('lc_invest')->alias('l')->join('lc_user u', 'l.uid = u.id')->whereIn('is_sf', [1,2])->where("UNIX_TIMESTAMP(l.time) BETWEEN $start AND $last")->sum('l.money');
-        
+
         // $real_expire_money = Db::name('lc_invest_list')->alias('l')->join('lc_user u', 'l.uid = u.id')->where("UNIX_TIMESTAMP(l.time1) BETWEEN $start AND $last AND status = 1")->where('is_sf',0)->where('l.status', 1)->sum('money2');
         // $inside_expire_money = Db::name('lc_invest_list')->alias('l')->join('lc_user u', 'l.uid = u.id')->where("UNIX_TIMESTAMP(l.time1) BETWEEN $start AND $last AND status = 1")->whereIn('is_sf', [1,2])->where('l.status', 1)->sum('money2');
-        
+
         // $real_interest = Db::name('lc_invest_list')->alias('l')->join('lc_user u', 'l.uid = u.id')->where("UNIX_TIMESTAMP(l.time1) BETWEEN $start AND $last AND status = 1")->where('is_sf',0)->where('l.status', 1)->sum('money1');
         // $inside_interest = Db::name('lc_invest_list')->alias('l')->join('lc_user u', 'l.uid = u.id')->where("UNIX_TIMESTAMP(l.time1) BETWEEN $start AND $last AND status = 1")->whereIn('is_sf', [1,2])->where('l.status', 1)->sum('money1');
-        
+
         // $data = Db::name('lc_static')->where('date', $date)->find();
         // if (!$data) {
         //     Db::name('lc_static')->insert([
@@ -164,23 +164,23 @@ class Index extends Controller
         // }
         // echo '更新成功';
     }
-    
-    
+
+
     //定时更新平台数据
     public function platdata()
     {
         $info = Db::name('lc_info')->field('plat_total_num,today_inc_num,today_recharge_num,trade_total,today_trade,today_withdraw,rate_usd')->find(1);
-        $info['plat_total_num'] += rand(10,20); //平台总人数
-        $info['today_inc_num'] += rand(1,2);    //今日新增人数/每日修改1次
+        $info['plat_total_num'] += rand(10, 20); //平台总人数
+        $info['today_inc_num'] += rand(1, 2);    //今日新增人数/每日修改1次
         $info['today_recharge_num']++;  //今日充值人数/每日修改1次
-        $info['trade_total'] += rand(500,1000); //总交易金额
-        $info['today_trade'] += rand(100,500);  //24h交易/每日修改1次
-        $info['today_withdraw'] += rand(200,600);   //24h提现/每日修改1次
+        $info['trade_total'] += rand(500, 1000); //总交易金额
+        $info['today_trade'] += rand(100, 500);  //24h交易/每日修改1次
+        $info['today_withdraw'] += rand(200, 600);   //24h提现/每日修改1次
         $arr = $info;
         Db::name('lc_info')->where('id', 1)->update($arr);
-        echo date('Y-m-d H:i:s').'更新成功';
+        echo date('Y-m-d H:i:s') . '更新成功';
     }
-    
+
     //奖池开奖
     public function pool_open()
     {
@@ -189,7 +189,7 @@ class Index extends Controller
         $list = Db::name('lc_reward_pool_period')->where('status', 1)->select();
         $aes = new Aes();
         if (count($list)) {
-            
+
             foreach ($list as &$item) {
                 $pool = Db::name('lc_reward_pool')->find($item['pool_id']);
                 $userIds = Db::name('lc_reward_pool_log')->where('period_id', $item['id'])->group('uid')->column('uid');
@@ -208,16 +208,16 @@ class Index extends Controller
                 //弹窗信息
                 Db::name('lc_pool_lottery_msg')->insert([
                     'uid' => $user['id'],
-                    'msg' => '恭喜您'.$item['sn'].'期中奖获得'.$pool['money'].'元，现已返回到您账户余额'
+                    'msg' => '恭喜您' . $item['sn'] . '期中奖获得' . $pool['money'] . '元，现已返回到您账户余额'
                 ]);
                 //流水记录
                 Db::name('lc_finance')->insert([
                     'uid' => $user['id'],
                     'money' => $pool['money'],
                     'type' => 1,
-                    'zh_cn' => '参与'.$item['sn'].'期奖池中奖'.$pool['money'].'元',
-                    'zh_hk' => '參與'.$item['sn'].'期獎池中獎'.$pool['money'].'元',
-                    'en_us' => 'Winning in the prize pool'.$item['sn'].'Mid term prize'.$pool['money'].'first',
+                    'zh_cn' => '参与' . $item['sn'] . '期奖池中奖' . $pool['money'] . '元',
+                    'zh_hk' => '參與' . $item['sn'] . '期獎池中獎' . $pool['money'] . '元',
+                    'en_us' => 'Winning in the prize pool' . $item['sn'] . 'Mid term prize' . $pool['money'] . 'first',
                     'before' => $user['money'],
                     'time' => date('Y-m-d H:i:s', time()),
                     'after_money' => bcadd($user['money'], $pool['money'], 2),
@@ -229,7 +229,7 @@ class Index extends Controller
                 //生成下一期
                 Db::name('lc_reward_pool_period')->insert([
                     'pool_id' => $pool['id'],
-                    'sn' => $item['sn']+1,
+                    'sn' => $item['sn'] + 1,
                     'start_time' => date('Y-m-d H:i:s', time()),
                     'quota' => $pool['quota'],
                 ]);
@@ -237,29 +237,27 @@ class Index extends Controller
             }
         }
     }
-    
+
     //处理到期代金券
     public function handle_coupon()
     {
         $time = time();
         $list = Db::name('lc_coupon_list')->where('status', 0)->where("UNIX_TIMESTAMP(expire_time) < $time")->select();
         if (count($list)) {
-            foreach ($list as $item)
-            {
+            foreach ($list as $item) {
                 Db::name('lc_coupon_list')->where('id', $item['id'])->update(['status' => 2]);
             }
         }
         echo '任务已处理';
     }
-    
+
     //定时任务检测僵尸号
     public function check_user()
     {
         $user = Db::name('lc_user')->select();
         $end_time = time();
-        $start_time = $end_time - 86400*10;
-        foreach ($user as $item)
-        {
+        $start_time = $end_time - 86400 * 10;
+        foreach ($user as $item) {
             //登录情况
             $login_info = Db::name('lc_login_log')->where('uid', $item['id'])->where($this->get_where($start_time, $end_time, 'create_time', 1))->count();
             //充值情况
@@ -268,24 +266,24 @@ class Index extends Controller
             $cash_info = Db::name('lc_cash')->where('uid', $item['id'])->where($this->get_where($start_time, $end_time, 'time', 0))->count();
             //购买产品
             $invest_info = Db::name('lc_invest')->where('uid', $item['id'])->where($this->get_where($start_time, $end_time, 'time', 0))->count();
-            
+
             //累计充值量
             $total_recharge = Db::name('lc_recharge')->where('uid', $item['id'])->count();
             //注册一天还没充值
-            if (strtotime($item['time']) < (time()-86400) && !$total_recharge) {
-                 Db::name('lc_user')->where('id', $item['id'])->update(['sign_status' => 2]);
-                 continue;
+            if (strtotime($item['time']) < (time() - 86400) && !$total_recharge) {
+                Db::name('lc_user')->where('id', $item['id'])->update(['sign_status' => 2]);
+                continue;
             }
-            
+
             if ($login_info || $recharge_info || $cash_info || $invest_info) {
                 Db::name('lc_user')->where('id', $item['id'])->update(['sign_status' => 0]);
             } else {
                 Db::name('lc_user')->where('id', $item['id'])->update(['sign_status' => 2]);
             }
-            
+
         }
     }
-    
+
     public function get_where($start_time, $end_time, $field, $type)
     {
         if ($type) {
@@ -294,20 +292,20 @@ class Index extends Controller
         $where = "UNIX_TIMESTAMP($field) > $start_time AND UNIX_TIMESTAMP($field) < $end_time";
         return $where;
     }
-    
+
     //红包超24小时未领取自动退回
     public function redpack_timeout()
     {
         //查询有剩余并未过期红包
         $now = time() - 86400;
         $list = Db::name('lc_redpack_record')->where("UNIX_TIMESTAMP(add_time) <= $now AND status = '0' AND remaining_num > 0")->select();
-        
+
         if (!count($list)) {
             echo '没有待处理的红包记录';
             exit;
         }
         // var_dump($list);exit;
-        
+
         foreach ($list as $item) {
             if ($item['remaining_amount'] > 0) {
                 $user = Db::name('lc_user')->find($item['uid']);
@@ -330,35 +328,38 @@ class Index extends Controller
                 Db::name('lc_user')->where('id', $item['uid'])->update([
                     'money' => bcadd($user['money'], $item['remaining_amount'], 2)
                 ]);
-                echo '退回用户ID：'.$user['id'].'红包'.$item['remaining_amount'].'元';
+                echo '退回用户ID：' . $user['id'] . '红包' . $item['remaining_amount'] . '元';
             }
             Db::name('lc_redpack_record')->where('id', $item['id'])->update(['status' => 1]);
         }
         return true;
     }
-    
+
     public function test()
     {
         $item = Db::name('lc_user')->find(38724);
-         //当前会员等级
-            $curGrade = Db::name('lc_member_grade')->find($item['grade_id']);
-            //当前团队投资额
-            $memberList = Db::name('lc_user')->field('id,phone,top,czmoney')->select();
-            $itemList = $this->get_downline_list($memberList, $item['id']);
-            $ids = [$item['id']];$recom=[];
-            foreach ($itemList as $value) {
-                $ids[] = $value['id'];
-                $recom[] = $value['id'];
-            }
-            var_dump($ids);exit;
-            $totalInvest = Db::name('lc_invest')->whereIn('uid', $ids)->sum('money');   //总投资额
-            echo $totalInvest;exit;
+        //当前会员等级
+        $curGrade = Db::name('lc_member_grade')->find($item['grade_id']);
+        //当前团队投资额
+        $memberList = Db::name('lc_user')->field('id,phone,top,czmoney')->select();
+        $itemList = $this->get_downline_list($memberList, $item['id']);
+        $ids = [$item['id']];
+        $recom = [];
+        foreach ($itemList as $value) {
+            $ids[] = $value['id'];
+            $recom[] = $value['id'];
+        }
+        var_dump($ids);
+        exit;
+        $totalInvest = Db::name('lc_invest')->whereIn('uid', $ids)->sum('money');   //总投资额
+        echo $totalInvest;
+        exit;
     }
-    
+
     public function update_grade()
     {
         $users = Db::name('lc_user l')->order('id asc')->select();
-        
+
         foreach ($users as $user) {
             //下一级团队等级
             $nextGrade = Db::name("LcMemberGrade")->where("id > {$user['grade_id']}")->order("id asc")->limit(1)->find();
@@ -375,28 +376,28 @@ class Index extends Controller
             //直推会员数
             $hyNum = Db::name('lc_user u')->join('lc_invest l', 'l.uid = u.id')->join('lc_item i', 'l.pid=i.id')->where('index_type', '<>', 7)->where('top', $user['id'])->group('l.uid')->count();
             if ($hyNum < $nextGrade['recom_number']) continue;
-            
+
             //满足全部条件升级
             Db::name('lc_user')->where('id', $user['id'])->update(['grade_id' => $nextGrade['id'], 'grade_name' => $nextGrade['title']]);
-            echo '会员：'.$user['id'].'，升级为'.$nextGrade['title'];
-            echo '总投资：'.$totalInvest;
-            echo '下级额度：'.$nextGrade['all_activity'];
+            echo '会员：' . $user['id'] . '，升级为' . $nextGrade['title'];
+            echo '总投资：' . $totalInvest;
+            echo '下级额度：' . $nextGrade['all_activity'];
             $extra_money = $totalInvest - $nextGrade['all_activity'];
-            echo '额外超出金额：'.$extra_money;
+            echo '额外超出金额：' . $extra_money;
             //普通用户升级一级团队长奖励
             if ($nextGrade['title'] == '一级团队长') {
                 $extra_money = $totalInvest - $nextGrade['all_activity'];
                 //额外超出金额
                 if ($extra_money > 0) {
-                    $rewardMoney = bcdiv($extra_money*$nextGrade['poundage'], 100, 2);
+                    $rewardMoney = bcdiv($extra_money * $nextGrade['poundage'], 100, 2);
                     //赠送记录
                     Db::name('lc_finance')->insert([
                         'uid' => $user['id'],
                         'money' => $rewardMoney,
                         'type' => 1,
-                        'zh_cn' => $nextGrade['title'].'奖励，投资'.$extra_money.'奖励'.$rewardMoney,
-                        'zh_hk' => $nextGrade['title_zh_hk'].'Phần thưởng，Đầu tư'.$extra_money.'Phần thưởng'.$rewardMoney,
-                        'en_us' => $nextGrade['title_en_us'].'rewards, Investments'.$extra_money.'reward'.$rewardMoney,
+                        'zh_cn' => $nextGrade['title'] . '奖励，投资' . $extra_money . '奖励' . $rewardMoney,
+                        'zh_hk' => $nextGrade['title_zh_hk'] . 'Phần thưởng，Đầu tư' . $extra_money . 'Phần thưởng' . $rewardMoney,
+                        'en_us' => $nextGrade['title_en_us'] . 'rewards, Investments' . $extra_money . 'reward' . $rewardMoney,
                         'before' => $user['money'],
                         'time' => date('Y-m-d H:i:s', time()),
                         'reason_type' => 8,
@@ -407,13 +408,13 @@ class Index extends Controller
                     Db::name('lc_user')->where('id', $user['id'])->update(['money' => bcadd($user['money'], $rewardMoney, 2)]);
                 }
             }
-            
+
         }
-        echo '总人数：'.count($users);
-        echo  '<br/>';
+        echo '总人数：' . count($users);
+        echo '<br/>';
         echo '执行成功';
     }
-    
+
     public function getTeam($user_id, $list = [], $flag = true)
     {
         static $list = [];
@@ -428,7 +429,7 @@ class Index extends Controller
         }
         return $list;
     }
-    
+
     //更新会员团队等级
     public function update_grade2()
     {
@@ -442,7 +443,8 @@ class Index extends Controller
             $memberList = Db::name('lc_user')->field('id,phone,top,czmoney')->select();
             $itemList = $this->get_downline_list($memberList, $item['id']);
             // $ids = [$item['id']];
-            $recom=[];$ids = [];
+            $recom = [];
+            $ids = [];
             foreach ($itemList as $value) {
                 $ids[] = $value['id'];
                 $recom[] = $value['id'];
@@ -452,8 +454,8 @@ class Index extends Controller
             // $curRecom = Db::name("lc_user")->where("top", $item['id'])->count();
             $curRecom = Db::name('lc_invest_list l')->join('lc_user u', 'l.uid = u.id')->where('u.top', $item['id'])->group('uid')->count();
             // $curRecom = Db::name('lc_invest l')->join('lc_item i', 'l.pid=i.id')->join('lc_user u', 'l.uid = u.id')->where('index_type', '<>', 7)->where('u.top', $item)->group('uid')->count();
-        
-            
+
+
             //当前一级以上团队长数量
             $curTeam = Db::name('lc_user')->whereIn('id', $recom)->where('grade_id > 1')->count();
             //下一级团队等级信息
@@ -461,25 +463,25 @@ class Index extends Controller
             if ($curRecom >= $nextGrade['recom_number'] && $curTeam >= $nextGrade['recom_tz'] && $totalInvest >= $nextGrade['all_activity']) {
                 //更新会员团队
                 Db::name('lc_user')->where('id', $item['id'])->update(['grade_id' => $nextGrade['id'], 'grade_name' => $nextGrade['title']]);
-                echo '会员：'.$item['phone'].'升级为'.$nextGrade['title'];
-                echo '总投资：'.$totalInvest;
-                echo '下级额度：'.$nextGrade['all_activity'];
+                echo '会员：' . $item['phone'] . '升级为' . $nextGrade['title'];
+                echo '总投资：' . $totalInvest;
+                echo '下级额度：' . $nextGrade['all_activity'];
                 $extra_money = $totalInvest - $nextGrade['all_activity'];
-                echo '额外超出金额：'.$extra_money;
+                echo '额外超出金额：' . $extra_money;
                 //普通用户升级一级团队长奖励
                 if ($nextGrade['title'] == '一级团队长') {
                     $extra_money = $totalInvest - $nextGrade['all_activity'];
                     //额外超出金额
                     if ($extra_money > 0) {
-                        $rewardMoney = bcdiv($extra_money*$nextGrade['poundage'], 100, 2);
+                        $rewardMoney = bcdiv($extra_money * $nextGrade['poundage'], 100, 2);
                         //赠送记录
                         Db::name('lc_finance')->insert([
                             'uid' => $item['id'],
                             'money' => $rewardMoney,
                             'type' => 1,
-                            'zh_cn' => $nextGrade['title'].'奖励，投资'.$extra_money.'奖励'.$rewardMoney,
-                            'zh_hk' => $nextGrade['title_zh_hk'].'Phần thưởng，Đầu tư'.$extra_money.'Phần thưởng'.$rewardMoney,
-                            'en_us' => $nextGrade['title_en_us'].'rewards, Investments'.$extra_money.'reward'.$rewardMoney,
+                            'zh_cn' => $nextGrade['title'] . '奖励，投资' . $extra_money . '奖励' . $rewardMoney,
+                            'zh_hk' => $nextGrade['title_zh_hk'] . 'Phần thưởng，Đầu tư' . $extra_money . 'Phần thưởng' . $rewardMoney,
+                            'en_us' => $nextGrade['title_en_us'] . 'rewards, Investments' . $extra_money . 'reward' . $rewardMoney,
                             'before' => $item['money'],
                             'time' => date('Y-m-d H:i:s', time()),
                             'reason_type' => 8,
@@ -490,8 +492,8 @@ class Index extends Controller
                         Db::name('lc_user')->where('id', $item['id'])->update(['money' => bcadd($item['money'], $rewardMoney, 2)]);
                     }
                 }
-                
-                
+
+
                 // if ($nextGrade['give_status'] == 2) {
                 //     //赠送升级奖励
                 //     $allActivity = Db::name("lc_member_grade")->where("id = {$item['grade_id']}")->sum('all_activity');
@@ -514,22 +516,22 @@ class Index extends Controller
             }
         }
     }
-    
+
     public function get_downline_list($user_list, $telephone, $level = 0)
     {
         // var_dump($telephone);
         $arr = array();
-        foreach ($user_list as $key => $v) { 
+        foreach ($user_list as $key => $v) {
             // var_dump($v['id']);die;
             // if($level<=2){
-                 if ($v['top'] == $telephone) {  //inviteid为0的是顶级分类
+            if ($v['top'] == $telephone) {  //inviteid为0的是顶级分类
                 $v['level'] = $level + 1;
                 $arr[] = $v;
                 // var_dump($arr);die;
                 $arr = array_merge($arr, $this->get_downline_list($user_list, $v['id'], $level + 1));
             }
             // }
-           
+
         }
         return $arr;
     }
@@ -545,14 +547,15 @@ class Index extends Controller
      */
     public function index()
     {
-        if(getInfo("pc_open")) $this->fetch();
-        if(check_wap()) $this->fetch();
+        if (getInfo("pc_open")) $this->fetch();
+        if (check_wap()) $this->fetch();
     }
-    
-    public function rate($money, $rate, $type){
-        
+
+    public function rate($money, $rate, $type)
+    {
+
     }
-    
+
     //盲盒产品结算
     public function blind_setting()
     {
@@ -566,23 +569,23 @@ class Index extends Controller
             // } elseif($item['period'] == 2) {
             //     $setting_time = $item['create_time'] + 30*86400;
             // }
-            $setting_time = $item['create_time'] + 86400*$item['days'];
+            $setting_time = $item['create_time'] + 86400 * $item['days'];
             //判断产品是否已经到期结算
             if ($setting_time > time()) {
                 continue;
             }
-            
+
             //结算奖励
             $userinfo = Db::name('lc_user')->find($item['uid']);
-            if($userinfo){
-                $reward_money = bcdiv($item['money']*$item['rate']*$item['days'], 100, 2);
+            if ($userinfo) {
+                $reward_money = bcdiv($item['money'] * $item['rate'] * $item['days'], 100, 2);
                 Db::name('lc_user')->where('id', $userinfo['id'])->update(['money' => bcadd($userinfo['money'], $reward_money, 2)]);
                 //资金变动记录
                 Db::name('lc_finance')->insert([
                     'uid' => $userinfo['id'],
                     'money' => $reward_money,
                     'type' => 1,
-                    'zh_cn' => '盲盒产品到期奖励 '.$reward_money,
+                    'zh_cn' => '盲盒产品到期奖励 ' . $reward_money,
                     'before' => $userinfo['money'],
                     'time' => date('Y-m-d H:i:s', time()),
                     'after_money' => bcadd($userinfo['money'], $reward_money, 2),
@@ -597,35 +600,35 @@ class Index extends Controller
                     'uid' => $userinfo['id'],
                     'money' => $item['money'],
                     'type' => 1,
-                    'zh_cn' => '退还购买盲盒产品本金 '.$item['money'],
+                    'zh_cn' => '退还购买盲盒产品本金 ' . $item['money'],
                     'before' => $userinfo['money'],
                     'time' => date('Y-m-d H:i:s', time()),
                     'after_money' => bcadd($userinfo['money'], $item['money'], 2),
                     'after_asset' => $userinfo['asset'],
                     'before_asset' => $userinfo['asset']
                 ]);
-            }else{
-               //print_r($item);exit; 
+            } else {
+                //print_r($item);exit;
             }
             //修改订单状态
             Db::name('lc_blind_buy_log')->where('id', $item['id'])->update(['status' => 1, 'setting_time' => time()]);
             echo '结算成功';
         }
     }
-    
+
     // public function ebao_crotab()
     // {
     //     $h = date('H', 1688472000);
     //     echo $h;
     // }
-    
+
     public function ebao_crotab()
     {
-        $user = Db::name('LcUser')->where('ebao','>',0)->field('id,ebao')->select();
+        $user = Db::name('LcUser')->where('ebao', '>', 0)->field('id,ebao')->select();
         $ebao_rate = Db::name('LcReward')->where('id', 1)->find()['ebao_rate'];
         $now = time();
         // var_dump($user);exit;
-        
+
         foreach ($user as $item) {
             //判断今日是否结算
             // if (Db::name('LcEbaoRecord')->where('uid', $item['id'])->where("to_days(time) = to_days(now())")->find()) {
@@ -641,12 +644,13 @@ class Index extends Controller
                 'time' => date('Y-m-d H:i:s', time())
             ]);
             Db::name('LcUser')->where('id', $item['id'])->update(['ebao' => bcadd($item['ebao'], $tempMoney, 2)]);
-            
+
         }
         echo '结算完毕';
     }
-    
-    public function q($type, $hour){
+
+    public function q($type, $hour)
+    {
         $q = 0;
         switch ($type) {
             case 1:
@@ -656,7 +660,7 @@ class Index extends Controller
                 $q = ($hour / 24) < 1 ? 1 : ($hour / 24);
                 break;
             case 3:
-                $q = ($hour / 24 /7 ) < 1 ? 1 : ($hour / 24 /7);
+                $q = ($hour / 24 / 7) < 1 ? 1 : ($hour / 24 / 7);
                 break;
             case 4:
                 $q = ($hour / 24 / 30) < 1 ? 1 : ($hour / 24 / 30);
@@ -670,7 +674,7 @@ class Index extends Controller
         }
         return $q;
     }
-    
+
     /**
      * Describe:定时结算任务 升级 2023/2/7
      * DateTime: 2020/5/14 22:22
@@ -688,72 +692,67 @@ class Index extends Controller
         // $lock->unlock($redisKey);
         $handler = Cache::store('redis')->handler();
         $data = $handler->keys($redisKey);
-        foreach ($data as $key){
+        foreach ($data as $key) {
             $handler->del($key);
         }
         // 缓存时间 <= 当前时间
         $invest_list = Db::name("LcInvestList")->where("UNIX_TIMESTAMP(time1) <= $now AND status = '0'")->select();
         // $invest_list = Db::name("LcInvestList")->where("status = '0'")->where('iid', 2583)->select();//调试结算分红
         // echo json_encode($invest_list);die;
-        if (empty($invest_list)) exit('暂无返息计划-'.date("Y-m-d H:i:s")."|".$now);
+        if (empty($invest_list)) exit('暂无返息计划-' . date("Y-m-d H:i:s") . "|" . $now);
         foreach ($invest_list as $k => $v) {
-            
+
             // 查询这个用户的投资记录，按期数倒叙
             $max = Db::name("LcInvestList")->field('id')->where(['uid' => $v['uid'], 'iid' => $v['iid']])->order('num desc')->find();
             $is_last = false;
             // 如果当前期数是最大期数
             if ($v['id'] == $max['id']) $is_last = true;
             $data = array('time2' => date('Y-m-d H:i:s'), 'pay2' => $v['pay1'], 'status' => 1);
-            if (Db::name("LcInvestList")->where(['id' => $v['id'], 'status'=>0])->update($data)) {
+            if (Db::name("LcInvestList")->where(['id' => $v['id'], 'status' => 0])->update($data)) {
                 if ($v['pay1'] > 0) {
-                    
-                    
                     if ($is_last) {
                         if ($v['pay1'] <= 0) $v['pay1'] = 0;
                         Db::name('LcInvest')->where(['id' => $v['iid']])->update(['status' => 1, 'time2' => date("Y-m-d H:i:s")]);
                     }
                     $LcTips = Db::name('LcTips')->where(['id' => '182']);
                     //获取项目信息
-                    $investInfo = Db::name('lc_invest') -> where('id', $v['iid']) -> find();
-                    $itemInfo = Db::name('lc_item') -> where('id', $investInfo['pid']) -> find();
-                    
+                    $investInfo = Db::name('lc_invest')->where('id', $v['iid'])->find();
+                    $itemInfo = Db::name('lc_item')->where('id', $investInfo['pid'])->find();
+
                     //收益期数
                     // $periods = $this ->q($itemInfo['cycle_type'], $investInfo['hour']);
-                    
-                    
                     //加息
                     $user = Db::name('lc_user u')
-                    ->join('lc_user_member m', 'u.member = m.id')
-                    ->where('u.id', $v['uid'])
-                    ->field('u.id,rate,member')
-                    ->find();
-                    
+                        ->join('lc_user_member m', 'u.member = m.id')
+                        ->where('u.id', $v['uid'])
+                        ->field('u.id,rate,member')
+                        ->find();
+
                     //购买产品时加息率
                     $user['rate'] = $investInfo['user_rate'];
                     // $user['member'] = Db::name('lc_user_member')->find($investInfo['user_member']);
                     $user['member'] = $investInfo['user_member'];
                     if ($itemInfo['show_home']) {
                         //购买产品时等级
-                        $memberList = Db::name('lc_user_member')->order('value asc')->field('id,rate')->select(); 
+                        $memberList = Db::name('lc_user_member')->order('value asc')->field('id,rate')->select();
                         foreach ($memberList as $key => $item) {
-                            if($item['id'] == $user['member']) {
-                                if($key+1 == count($memberList)) {
+                            if ($item['id'] == $user['member']) {
+                                if ($key + 1 == count($memberList)) {
                                     $user['rate'] = $memberList[$key]['rate'];
                                     break;
                                 } else {
-                                    $user['rate'] = $memberList[$key+1]['rate'];
+                                    $user['rate'] = $memberList[$key + 1]['rate'];
                                     break;
                                 }
                             }
                         }
-                        
                     }
                     $periods = 1;
                     if ($itemInfo['add_rate'] == 0) {
                         $user['rate'] = 0;
                     }
                     // $tempMoney = round(($itemInfo['rate']+$user['rate'])*$investInfo['money']/100/$periods, 2);
-                    
+
                     //产品是否参与会员加息
                     $user_rate = 0;
                     if ($itemInfo['add_rate']) {
@@ -765,87 +764,80 @@ class Index extends Controller
                     } else {
                         $rate = $investInfo['rate'];
                     }
-                    
-                    
+
                     if ($itemInfo['add_rate']) {
                         //会员加息率
                         $user = Db::name("LcUser")->find($v['uid']);
                         $member = Db::name("LcUserMember")->find($user['member']);
                         //首页热门精选获得高一等级的加息收益
-                        if($itemInfo['show_home']==1){
-                            $next_member = Db::name("LcUserMember")->where('value > '.$member['value'])->order('value asc')->find();
-                            if($next_member) $member = $next_member;
+                        if ($itemInfo['show_home'] == 1) {
+                            $next_member = Db::name("LcUserMember")->where('value > ' . $member['value'])->order('value asc')->find();
+                            if ($next_member) $member = $next_member;
                         }
-                        $rate = $rate+$member['rate'];
+                        $rate = $rate + $member['rate'];
                         $user_rate = $member['rate'];
                     }
-                    
+
                     $nums = 1;
                     $addTime = "day";
                     $hour = $itemInfo['hour'];
                     $day = $itemInfo['day'];
                     $indexType = $itemInfo['cycle_type'];
                     // 判断项目投资的返利模式
-                    if($indexType == 1){
+                    if ($indexType == 1) {
                         // 按小时
                         $nums = $hour;
                         $addTime = "hour";
-                    }else if($indexType == 2){
+                    } else if ($indexType == 2) {
                         // 按日 小时 * 24
                         $nums = $hour / 24;
-                    }else if($indexType == 3){
+                    } else if ($indexType == 3) {
                         // 每周
                         $nums = ceil(intval($hour / 24 / 7));
-                        $addTime = "week"; 
-                    }else if($indexType == 4){
+                        $addTime = "week";
+                    } else if ($indexType == 4) {
                         // 每月返利
                         $nums = ceil(intval($hour / 24 / 30));
                         $addTime = "month";
-                    } else if($indexType == 6){
+                    } else if ($indexType == 6) {
                         // 每年返利
                         $nums = ceil(intval($hour / 24 / 365));
                         $addTime = "year";
-                    } 
-                    if($nums < 1) $nums = 1;
-                    $day = $hour/$nums;
-                    
-                    $money1 = round($investInfo['money'] * $rate / 100 , 2);
+                    }
+                    if ($nums < 1) $nums = 1;
+                    $day = $hour / $nums;
+
+                    $money1 = round($investInfo['money'] * $rate / 100, 2);
                     // var_dump($investInfo['money']);
                     // var_dump($indexType);
-                    $day = $hour/24;
+                    $day = $hour / 24;
                     if ($indexType == 1) {
-                       $money1 = round($investInfo['money'] * $rate / 24 / 100 , 2);
+                        $money1 = round($investInfo['money'] * $rate / 24 / 100, 2);
                     } elseif ($indexType == 2) {
-                        $money1 = round($investInfo['money'] * $rate / 100 , 2);
+                        $money1 = round($investInfo['money'] * $rate / 100, 2);
                     } elseif ($indexType == 3) {
-                        $money1 = round($investInfo['money'] * $rate * 7 / 100 , 2);
+                        $money1 = round($investInfo['money'] * $rate * 7 / 100, 2);
                     } elseif ($indexType == 4) {
-                        $money1 = round($investInfo['money'] * $rate * 30 / 100 , 2);
+                        $money1 = round($investInfo['money'] * $rate * 30 / 100, 2);
                     } elseif ($indexType == 6) {
-                        $money1 = round($investInfo['money'] * $rate * 365 / 100 , 2);
+                        $money1 = round($investInfo['money'] * $rate * 365 / 100, 2);
                     } elseif ($indexType == 5) {
-                        $money1 = round($investInfo['money'] * $rate * $day  / 100 , 2);
+                        $money1 = round($investInfo['money'] * $rate * $day / 100, 2);
                     }
-                    // var_dump($money1);exit;
-                    
-                    // 纠错，这个用户的投资单需要直接为已固定金额
-                    if($v['iid'] == 2583){
-                        $money1 = $v['money1'];
-                    }
-                    
+
                     Db::name('lc_invest_list')->where('id', $v['id'])->update(['money1' => $money1, 'user_rate' => $user_rate]);
-                    
+
                     $tempMoney = $money1;
                     // $tempMoney = $v['money1'];
-                    
+
                     addFinance($v['uid'], $tempMoney, 1,
-                        "《".$itemInfo['zh_cn']."》 " . $LcTips->value("name").vnd_gsh(bcdiv($tempMoney,1,2)) ,
-                        "《".$itemInfo['zh_hk']."》 " . $LcTips->value("zh_hk").vnd_gsh(bcdiv($tempMoney,1,2)) ,
-                        "《".$itemInfo['en_us']."》 " . $LcTips->value("en_us").vnd_gsh(bcdiv($tempMoney,1,2)) ,
-                        "《".$itemInfo['vi_vn']."》 " . $LcTips->value("vi_vn").vnd_gsh(bcdiv($tempMoney,1,2)) ,
-                        "《".$itemInfo['ja_jp']."》 " . $LcTips->value("ja_jp").vnd_gsh(bcdiv($tempMoney,1,2)) ,
-                        "《".$itemInfo['ko_kr']."》 " . $LcTips->value("ko_kr").vnd_gsh(bcdiv($tempMoney,1,2)) ,
-                        "《".$itemInfo['ms_my']."》 " . $LcTips->value("ms_my").vnd_gsh(bcdiv($tempMoney,1,2)) ,
+                        "《" . $itemInfo['zh_cn'] . "》 " . $LcTips->value("name") . vnd_gsh(bcdiv($tempMoney, 1, 2)),
+                        "《" . $itemInfo['zh_hk'] . "》 " . $LcTips->value("zh_hk") . vnd_gsh(bcdiv($tempMoney, 1, 2)),
+                        "《" . $itemInfo['en_us'] . "》 " . $LcTips->value("en_us") . vnd_gsh(bcdiv($tempMoney, 1, 2)),
+                        "《" . $itemInfo['vi_vn'] . "》 " . $LcTips->value("vi_vn") . vnd_gsh(bcdiv($tempMoney, 1, 2)),
+                        "《" . $itemInfo['ja_jp'] . "》 " . $LcTips->value("ja_jp") . vnd_gsh(bcdiv($tempMoney, 1, 2)),
+                        "《" . $itemInfo['ko_kr'] . "》 " . $LcTips->value("ko_kr") . vnd_gsh(bcdiv($tempMoney, 1, 2)),
+                        "《" . $itemInfo['ms_my'] . "》 " . $LcTips->value("ms_my") . vnd_gsh(bcdiv($tempMoney, 1, 2)),
                         // $itemInfo['zh_hk'] . $LcTips->value("zh_hk").$tempMoney ,
                         // $itemInfo['en_us'] . $LcTips->value("en_us").$tempMoney ,
                         // $itemInfo['zh_cn'] . $LcTips->value("th_th").$tempMoney ,
@@ -853,39 +845,37 @@ class Index extends Controller
                         // $itemInfo['zh_cn'] . $LcTips->value("ja_jp").$tempMoney ,
                         // $itemInfo['zh_cn'] . $LcTips->value("ko_kr").$tempMoney ,
                         // $itemInfo['zh_cn'] . $LcTips->value("ms_my").$tempMoney ,
-                        "","",11
+                        "", "", 11
                     );
                     setNumber('LcUser', 'money', $tempMoney, 1, "id = {$v['uid']}");
                     setNumber('LcUser', 'income', $v['money1'], 1, "id = {$v['uid']}");
-                    
+
                     $uid = $v['uid'];
-                    
-                    
-                    
+
                     //推送
-                    im_send_publish($uid,'Xin chào, thu nhập '.$v['money1'].'U vào tài khoản!');  // Xin chúc mừng bạn mua《'.$itemInfo['zh_hk'].'》Thu nhập'.$v['money1'].'USDT，Vào tài khoản！
-                    
+//                    im_send_publish($uid, 'Xin chào, thu nhập ' . $v['money1'] . 'U vào tài khoản!');  // Xin chúc mừng bạn mua《'.$itemInfo['zh_hk'].'》Thu nhập'.$v['money1'].'USDT，Vào tài khoản！
+
                     // 给上级进行返佣
                     // 先查询用户信息
-                    $user =  Db::name("LcUser")->where("id = {$uid}")->find();
-                    
+                    $user = Db::name("LcUser")->where("id = {$uid}")->find();
+
                     $wait_invest = $v['money1'];
                     $wait_money = 0;
-                    
+
                     //返回本金
-                    if($v['money2'] > 0) {
+                    if ($v['money2'] > 0) {
                         Db::name('LcFinance')->insert([
                             'uid' => $v['uid'],
                             'money' => $v['money2'],
                             'type' => 1,
-                            'zh_cn' => "《".$itemInfo['zh_cn'].'》，投资完成返还本金',
-                            'zh_hk' => "《".$itemInfo['zh_hk'].'》，Khoản đầu tư hoàn thành',
-                            'en_us' => "《".$itemInfo['en_us'].'》，Return of principal upon completion of investment',
-                            'th_th' => "《".$itemInfo['zh_cn'].'》，投资完成返还本金',
-                            'vi_vn' => "《".$itemInfo['zh_cn'].'》，投资完成返还本金',
-                            'ja_jp' => "《".$itemInfo['zh_cn'].'》，投资完成返还本金',
-                            'ko_kr' => "《".$itemInfo['zh_cn'].'》，投资完成返还本金',
-                            'ms_my' => "《".$itemInfo['zh_cn'].'》，投资完成返还本金',
+                            'zh_cn' => "《" . $itemInfo['zh_cn'] . '》，投资完成返还本金',
+                            'zh_hk' => "《" . $itemInfo['zh_hk'] . '》，Khoản đầu tư hoàn thành',
+                            'en_us' => "《" . $itemInfo['en_us'] . '》，Return of principal upon completion of investment',
+                            'th_th' => "《" . $itemInfo['zh_cn'] . '》，投资完成返还本金',
+                            'vi_vn' => "《" . $itemInfo['zh_cn'] . '》，投资完成返还本金',
+                            'ja_jp' => "《" . $itemInfo['zh_cn'] . '》，投资完成返还本金',
+                            'ko_kr' => "《" . $itemInfo['zh_cn'] . '》，投资完成返还本金',
+                            'ms_my' => "《" . $itemInfo['zh_cn'] . '》，投资完成返还本金',
                             'before' => $v['money2'],
                             'time' => date('Y-m-d H:i:s', time()),
                             'after_money' => bcadd($user['money'], $v['money2'], 2),
@@ -901,9 +891,9 @@ class Index extends Controller
                         'wait_money' => bcsub($user['wait_money'], $wait_money, 2)
                     ]);
 
-                    $top=$user['top'];
-                    $top2=$user['top2'];
-                    $top3=$user['top3'];
+                    $top = $user['top'];
+                    $top2 = $user['top2'];
+                    $top3 = $user['top3'];
 
                     // // 一级
                     // $topuser = Db::name("LcUser")->find($top);
@@ -928,33 +918,34 @@ class Index extends Controller
             }
         }
     }
-    
-    
-    public function eBaoCrontab(){
+
+
+    public function eBaoCrontab()
+    {
         //获取途游宝购买记录
-        $eBaoList = Db::name('lc_ebao_product_record r')->join('lc_ebao_product p','r.product_id = p.id')->where('r.status', 0)->where('p.type', 0)->field('r.*')->select();
-        for($i = 0; $i < count($eBaoList); $i++){
-            
+        $eBaoList = Db::name('lc_ebao_product_record r')->join('lc_ebao_product p', 'r.product_id = p.id')->where('r.status', 0)->where('p.type', 0)->field('r.*')->select();
+        for ($i = 0; $i < count($eBaoList); $i++) {
+
             //判断是否到达最大锁仓天数
-            if($eBaoList[$i]['lock_day'] == $eBaoList[$i]['current_day'] || $eBaoList[$i]['lock_day'] < $eBaoList[$i]['current_day']){
+            if ($eBaoList[$i]['lock_day'] == $eBaoList[$i]['current_day'] || $eBaoList[$i]['lock_day'] < $eBaoList[$i]['current_day']) {
                 //跳出当前循环
                 continue;
             }
             //判断是否距离上次结算超过1天
             $addTIme = $eBaoList[$i]['add_time'];
-            if($eBaoList[$i]['current_day'] != 0){
-                if(strtotime($eBaoList[$i]['last_settlement_time']) + ($eBaoList[$i]['current_day'] * 86400) > time()){
+            if ($eBaoList[$i]['current_day'] != 0) {
+                if (strtotime($eBaoList[$i]['last_settlement_time']) + ($eBaoList[$i]['current_day'] * 86400) > time()) {
                     continue;
                 }
-            }else{
-                if((strtotime($addTIme) + 86400) > time()){
+            } else {
+                if ((strtotime($addTIme) + 86400) > time()) {
                     continue;
                 }
             }
-            
+
             //开始结算
             //获取途游宝信息
-            $eBaoInfo = Db::name('lc_ebao_product') -> where('id', $eBaoList[$i]['product_id']) -> find();
+            $eBaoInfo = Db::name('lc_ebao_product')->where('id', $eBaoList[$i]['product_id'])->find();
             $last_settlement_amount = $eBaoList[$i]['money'] * ($eBaoInfo['day_rate'] / 100);
             $data = [
                 'current_day' => $eBaoList[$i]['current_day'] + 1,
@@ -963,109 +954,107 @@ class Index extends Controller
                 'status' => $eBaoList[$i]['lock_day'] == $eBaoList[$i]['current_day'] + 1 ? 1 : 0
             ];
             //更新购买信息
-            Db::name('lc_ebao_product_record') -> where('id',$eBaoList[$i]['id']) -> update($data);
+            Db::name('lc_ebao_product_record')->where('id', $eBaoList[$i]['id'])->update($data);
             //写入途游宝日志
-            Db::name('lc_ebao_record') -> insert([
+            Db::name('lc_ebao_record')->insert([
                 'type' => 1,
-                'title' => '途游宝收益'.$last_settlement_amount,
+                'title' => '途游宝收益' . $last_settlement_amount,
                 'money' => $last_settlement_amount,
                 'uid' => $eBaoList[$i]['uid'],
                 'time' => date('Y-m-d H:i:s', time()),
                 'status' => 1
             ]);
             //加入用户途游宝余额
-            Db::name('lc_user') -> where('id', $eBaoList[$i]['uid']) -> setInc('ebao', $last_settlement_amount);
+            Db::name('lc_user')->where('id', $eBaoList[$i]['uid'])->setInc('ebao', $last_settlement_amount);
             //增加用户途游宝总收益
-            Db::name('lc_user') -> where('id', $eBaoList[$i]['uid']) -> setInc('ebao_total_income', $last_settlement_amount);
+            Db::name('lc_user')->where('id', $eBaoList[$i]['uid'])->setInc('ebao_total_income', $last_settlement_amount);
             //判断是否是今日收益
-            $userInfo = Db::name('lc_user')-> where('id', $eBaoList[$i]['uid']) -> find();
-            if(empty($eBaoList[$i]['ebao_last_time']) || date('d', strtotime($eBaoList[$i]['ebao_last_time'])) != date('d', time())){
+            $userInfo = Db::name('lc_user')->where('id', $eBaoList[$i]['uid'])->find();
+            if (empty($eBaoList[$i]['ebao_last_time']) || date('d', strtotime($eBaoList[$i]['ebao_last_time'])) != date('d', time())) {
                 //增加今日收益
                 //获取用户信息
-                
-                if(empty($userInfo['ebao_last_income'])){
-                    Db::name('lc_user') -> where('id', $eBaoList[$i]['uid']) -> update(['ebao_last_income' => $last_settlement_amount]);
-                }else{
-                     Db::name('lc_user') -> where('id', $eBaoList[$i]['uid']) -> setInc('ebao_last_income', $last_settlement_amount);
+
+                if (empty($userInfo['ebao_last_income'])) {
+                    Db::name('lc_user')->where('id', $eBaoList[$i]['uid'])->update(['ebao_last_income' => $last_settlement_amount]);
+                } else {
+                    Db::name('lc_user')->where('id', $eBaoList[$i]['uid'])->setInc('ebao_last_income', $last_settlement_amount);
                 }
-            }else{
+            } else {
                 //重置今日收益
-                Db::name('lc_user') -> where('id', $eBaoList[$i]['uid']) -> update(['ebao_last_income' => $last_settlement_amount]);
+                Db::name('lc_user')->where('id', $eBaoList[$i]['uid'])->update(['ebao_last_income' => $last_settlement_amount]);
             }
-            
-            
-            
-            
+
+
             //投资完成返还本金
-            if($eBaoList[$i]['current_day']+1 == $eBaoList[$i]['lock_day']) {
+            if ($eBaoList[$i]['current_day'] + 1 == $eBaoList[$i]['lock_day']) {
                 //加入用户途游宝余额
-                Db::name('lc_user') -> where('id', $eBaoList[$i]['uid']) -> setInc('ebao', $eBaoList[$i]['money']);
+                Db::name('lc_user')->where('id', $eBaoList[$i]['uid'])->setInc('ebao', $eBaoList[$i]['money']);
                 //返还记录
                 Db::name('lc_ebao_record')->insert([
                     'type' => 1,
-                    'title' => '返还途游宝投资 '.$eBaoList[$i]['money'],
+                    'title' => '返还途游宝投资 ' . $eBaoList[$i]['money'],
                     'money' => $eBaoList[$i]['money'],
                     'uid' => $eBaoList[$i]['uid'],
                     'time' => date('Y-m-d H:i:s', time()),
                     'status' => 2
                 ]);
             }
-            
-            Db::name('lc_user') -> where('id', $eBaoList[$i]['uid']) -> update(['ebao_last_time' => date('Y-m-d H:i:s', time())]);
+
+            Db::name('lc_user')->where('id', $eBaoList[$i]['uid'])->update(['ebao_last_time' => date('Y-m-d H:i:s', time())]);
             echo "结算订单【ID：{$eBaoList[$i]['id']}，金额：{$last_settlement_amount}，时间：" . date('Y-m-d H:i:s', time()) . "<br>";
         }
         echo '结算完毕';
     }
-    
+
     public function eBaoCrontab2()
     {
         //获取途游宝购买记录
-        $eBaoList = Db::name('lc_ebao_product_record r')->join('lc_ebao_product p','r.product_id = p.id')->where('r.status', 0)->where('p.type', 1)->field('r.*')->select();
+        $eBaoList = Db::name('lc_ebao_product_record r')->join('lc_ebao_product p', 'r.product_id = p.id')->where('r.status', 0)->where('p.type', 1)->field('r.*')->select();
         if (count($eBaoList)) {
             foreach ($eBaoList as &$item) {
                 $time = time();
-                $expire_time = $item['lock_day']*86400 + strtotime($item['add_time']);
+                $expire_time = $item['lock_day'] * 86400 + strtotime($item['add_time']);
                 if ($time > $expire_time) {
                     $user = Db::name('lc_user')->find($item['uid']);
-                    
-                    $eBaoInfo = Db::name('lc_ebao_product') -> where('id', $item['product_id']) -> find();
+
+                    $eBaoInfo = Db::name('lc_ebao_product')->where('id', $item['product_id'])->find();
                     $settlement_amount = $item['money'] * ($eBaoInfo['day_rate'] * $item['lock_day'] / 100);
                     //写入途游宝日志
-                    Db::name('lc_ebao_record') -> insert([
+                    Db::name('lc_ebao_record')->insert([
                         'type' => 1,
-                        'title' => '途游宝收益'.$settlement_amount,
+                        'title' => '途游宝收益' . $settlement_amount,
                         'money' => $settlement_amount,
                         'uid' => $item['uid'],
                         'time' => date('Y-m-d H:i:s', time()),
                         'status' => 1
                     ]);
                     //加入用户途游宝余额
-                    Db::name('lc_user') -> where('id', $item['uid']) -> setInc('ebao', $settlement_amount);
-                    
+                    Db::name('lc_user')->where('id', $item['uid'])->setInc('ebao', $settlement_amount);
+
                     //到期返本-返还记录
                     Db::name('lc_ebao_record')->insert([
                         'type' => 1,
-                        'title' => '返还途游宝投资 '.$item['money'],
+                        'title' => '返还途游宝投资 ' . $item['money'],
                         'money' => $item['money'],
                         'uid' => $item['uid'],
                         'time' => date('Y-m-d H:i:s', time()),
                         'status' => 2
                     ]);
                     //加入用户途游宝余额
-                    Db::name('lc_user') -> where('id', $item['uid']) -> setInc('ebao', $item['money']);
-                    
+                    Db::name('lc_user')->where('id', $item['uid'])->setInc('ebao', $item['money']);
+
                     Db::name('lc_ebao_product_record')->where('id', $item['id'])->update([
                         'status' => 1,
                         'current_day' => $item['lock_day'],
                         'last_settlement_time' => date('Y-m-d H:i:s', time()),
                         'last_settlement_amount' => $settlement_amount
                     ]);
-                    
+
                 }
             }
         }
     }
-    
+
     /**
      * Describe:定时结算任务 升级 2023/2/7
      * DateTime: 2020/5/14 22:22
@@ -1083,88 +1072,88 @@ class Index extends Controller
         if (empty($invest_list)) exit('暂无返息计划');
         foreach ($invest_list as $k => $v) {
             // 查询这个用户的投资记录，按期数倒叙
-               $iid=$v['iid'];//项目id
-               $item=Db::name("lcItem")->where(['id' => $iid])->find();
-               
-          if($item){
-              //每小时返利，到期返本
-              if($item['cycle_type']==1){
-                  
-              }
-              //每日返利，到期返本
-               if($item['cycle_type']==2){
-                  
-              }
-              //每周返利，到期返本
-               if($item['cycle_type']==3){
-                  
-              }
-              //每月返利，到期返本
-               if($item['cycle_type']==4){
-                  
-              }
-              //到期返本返利
-               if($item['cycle_type']==5){
-                        $max = Db::name("LcInvestList")->field('id')->where(['uid' => $v['uid'], 'iid' => $v['iid']])->order('num desc')->find();
-                $is_last = false;
-                // 如果当前期数是最大期数
-                if ($v['id'] == $max['id']) $is_last = true;
-                $data = array('time2' => date('Y-m-d H:i:s'), 'pay2' => $v['pay1'], 'status' => 1);
-                if (Db::name("LcInvestList")->where(['id' => $v['id']])->update($data)) {
-                    if ($v['pay1'] > 0) {
-                    if ($is_last) {
-                        if ($v['pay1'] <= 0) $v['pay1'] = 0;
-                        Db::name('LcInvest')->where(['id' => $v['iid']])->update(['status' => 1, 'time2' => date("Y-m-d H:i:s")]);
-                    }
-                    $LcTips = Db::name('LcTips')->where(['id' => '182']);
-                    addFinance($v['uid'], $v['pay1'], 1,
-                        $v['zh_cn'] . $LcTips->value("name").$v['pay1'] ,
-                        $v['zh_cn'] . $LcTips->value("zh_cn").$v['pay1'] ,
-                        $v['zh_cn'] . $LcTips->value("en_us").$v['pay1'] ,
-                        $v['zh_cn'] . $LcTips->value("th_th").$v['pay1'] ,
-                        $v['zh_cn'] . $LcTips->value("vi_vn").$v['pay1'] ,
-                        $v['zh_cn'] . $LcTips->value("ja_jp").$v['pay1'] ,
-                        $v['zh_cn'] . $LcTips->value("ko_kr").$v['pay1'] ,
-                        $v['zh_cn'] . $LcTips->value("ms_my").$v['pay1'] ,
-                        "","",11
-                    );
-                    setNumber('LcUser', 'money', $v['pay1'], 1, "id = {$v['uid']}");
-                    setNumber('LcUser', 'income', $v['money1'], 1, "id = {$v['uid']}");
+            $iid = $v['iid'];//项目id
+            $item = Db::name("lcItem")->where(['id' => $iid])->find();
 
-                    $uid = $v['uid'];
-                    // 给上级进行返佣
-                    // 先查询用户信息
-                    $user =  Db::name("LcUser")->where("id = {$uid}")->find();
+            if ($item) {
+                //每小时返利，到期返本
+                if ($item['cycle_type'] == 1) {
 
-                    $top=$user['top'];
-                    $top2=$user['top2'];
-                    $top3=$user['top3'];
+                }
+                //每日返利，到期返本
+                if ($item['cycle_type'] == 2) {
 
-                    // 一级
-                    $topuser = Db::name("LcUser")->find($top);
-                    if($topuser && $top){
-                        $invest1 = Db::name("LcUserMember")->where(['id'=>$topuser['member']])->value("invest1");
-                        setRechargeRebate2($top, $v['money1'],$invest1);
-                    }
+                }
+                //每周返利，到期返本
+                if ($item['cycle_type'] == 3) {
 
-                    //二级
-                    $topuser2 = Db::name("LcUser")->find($top2);
-                    if($topuser2 && $top2){
-                        $invest2 = Db::name("LcUserMember")->where(['id'=>$topuser2['member']])->value("invest2");
-                        setRechargeRebate2($top2, $v['money1'],$invest2);
-                    }
-                    //三级
-                    $topuser3 = Db::name("LcUser")->find($top3);
-                    if($topuser3 && $top3){
-                        $invest3 = Db::name("LcUserMember")->where(['id'=>$topuser3['member']])->value("invest3");
-                        setRechargeRebate2($top3, $v['money1'],$invest3);
+                }
+                //每月返利，到期返本
+                if ($item['cycle_type'] == 4) {
+
+                }
+                //到期返本返利
+                if ($item['cycle_type'] == 5) {
+                    $max = Db::name("LcInvestList")->field('id')->where(['uid' => $v['uid'], 'iid' => $v['iid']])->order('num desc')->find();
+                    $is_last = false;
+                    // 如果当前期数是最大期数
+                    if ($v['id'] == $max['id']) $is_last = true;
+                    $data = array('time2' => date('Y-m-d H:i:s'), 'pay2' => $v['pay1'], 'status' => 1);
+                    if (Db::name("LcInvestList")->where(['id' => $v['id']])->update($data)) {
+                        if ($v['pay1'] > 0) {
+                            if ($is_last) {
+                                if ($v['pay1'] <= 0) $v['pay1'] = 0;
+                                Db::name('LcInvest')->where(['id' => $v['iid']])->update(['status' => 1, 'time2' => date("Y-m-d H:i:s")]);
+                            }
+                            $LcTips = Db::name('LcTips')->where(['id' => '182']);
+                            addFinance($v['uid'], $v['pay1'], 1,
+                                $v['zh_cn'] . $LcTips->value("name") . $v['pay1'],
+                                $v['zh_cn'] . $LcTips->value("zh_cn") . $v['pay1'],
+                                $v['zh_cn'] . $LcTips->value("en_us") . $v['pay1'],
+                                $v['zh_cn'] . $LcTips->value("th_th") . $v['pay1'],
+                                $v['zh_cn'] . $LcTips->value("vi_vn") . $v['pay1'],
+                                $v['zh_cn'] . $LcTips->value("ja_jp") . $v['pay1'],
+                                $v['zh_cn'] . $LcTips->value("ko_kr") . $v['pay1'],
+                                $v['zh_cn'] . $LcTips->value("ms_my") . $v['pay1'],
+                                "", "", 11
+                            );
+                            setNumber('LcUser', 'money', $v['pay1'], 1, "id = {$v['uid']}");
+                            setNumber('LcUser', 'income', $v['money1'], 1, "id = {$v['uid']}");
+
+                            $uid = $v['uid'];
+                            // 给上级进行返佣
+                            // 先查询用户信息
+                            $user = Db::name("LcUser")->where("id = {$uid}")->find();
+
+                            $top = $user['top'];
+                            $top2 = $user['top2'];
+                            $top3 = $user['top3'];
+
+                            // 一级
+                            $topuser = Db::name("LcUser")->find($top);
+                            if ($topuser && $top) {
+                                $invest1 = Db::name("LcUserMember")->where(['id' => $topuser['member']])->value("invest1");
+                                setRechargeRebate2($top, $v['money1'], $invest1);
+                            }
+
+                            //二级
+                            $topuser2 = Db::name("LcUser")->find($top2);
+                            if ($topuser2 && $top2) {
+                                $invest2 = Db::name("LcUserMember")->where(['id' => $topuser2['member']])->value("invest2");
+                                setRechargeRebate2($top2, $v['money1'], $invest2);
+                            }
+                            //三级
+                            $topuser3 = Db::name("LcUser")->find($top3);
+                            if ($topuser3 && $top3) {
+                                $invest3 = Db::name("LcUserMember")->where(['id' => $topuser3['member']])->value("invest3");
+                                setRechargeRebate2($top3, $v['money1'], $invest3);
+                            }
+                        }
                     }
                 }
+
             }
-              }
-           
-               }
-      
+
         }
     }
 
@@ -1173,7 +1162,8 @@ class Index extends Controller
      * 途游宝定时结算任务
      * @return void
      */
-    public function ebao_crontab(){
+    public function ebao_crontab()
+    {
         // 查询需要结算的数据
         $now = time();
         // 下次结算时间 <= 当前时间，并且途游宝有钱的用户
@@ -1199,12 +1189,12 @@ class Index extends Controller
             // 修改用户结算信息
             Db::name('LcUser')->where("id = {$v['id']}")->update([
                 'ebao_last_time' => date('Y-m-d H:i:s'),
-                'ebao_next_time' => date("Y-m-d",strtotime("+1 hours")),
+                'ebao_next_time' => date("Y-m-d", strtotime("+1 hours")),
                 'ebao_last_income' => $income,
                 'ebao_total_income' => $v['ebao_total_income'] + $income
             ]);
             // 增加收益
-            Db::name('LcUser')->where("id = ". $v['id'])->setInc('ebao', $income);
+            Db::name('LcUser')->where("id = " . $v['id'])->setInc('ebao', $income);
         }
         if (empty($userList)) exit('任务结束');
     }
@@ -1218,67 +1208,71 @@ class Index extends Controller
      * @throws \think\exception\DbException
      * @throws \think\exception\PDOException
      */
-    public function alipay_notify(){
+    public function alipay_notify()
+    {
         $data = $this->request->param();
         $out_trade_no = $data['out_trade_no'];
-        $trade_status =  $data['trade_status'];
+        $trade_status = $data['trade_status'];
         if ($trade_status == 'TRADE_FINISHED' || $trade_status == 'TRADE_SUCCESS') {
             require_once env("root_path") . "/vendor/alipayapp/aop/AopClient.php";
             $aop = new \AopClient();
             $aop->alipayrsaPublicKey = getInfo('alipay_public_key');
             $sign_check = $aop->rsaCheckV2($data, NULL, "RSA2");
-            $recharge = Db::name("LcRecharge")->where(['orderid'=>$out_trade_no])->find();
-            if($recharge&&$recharge['status'] == 0){
+            $recharge = Db::name("LcRecharge")->where(['orderid' => $out_trade_no])->find();
+            if ($recharge && $recharge['status'] == 0) {
                 $money = $recharge['money'];
                 $uid = $recharge['uid'];
                 $type = $recharge['type'];
-                addFinance($uid, $money,1, $type . '入款' . $money);
+                addFinance($uid, $money, 1, $type . '入款' . $money);
                 setNumber('LcUser', 'money', $money, 1, "id = $uid");
                 sendSms(getUserPhone($uid), '18005', $money);
                 $tid = Db::name('LcUser')->where('id', $uid)->value('top');
-                if($tid) setRechargeRebate($tid, $money);
-                $res = Db::name("LcRecharge")->where(['orderid'=>$out_trade_no])->update(['status' => '1','time2' => date('Y-m-d H:i:s')]);
-                if($res) echo 'success';
-            }elseif ($recharge['status'] == 1){
+                if ($tid) setRechargeRebate($tid, $money);
+                $res = Db::name("LcRecharge")->where(['orderid' => $out_trade_no])->update(['status' => '1', 'time2' => date('Y-m-d H:i:s')]);
+                if ($res) echo 'success';
+            } elseif ($recharge['status'] == 1) {
                 echo 'success';
-            }else {
+            } else {
                 echo 'fail';
             }
-        }else {
+        } else {
             echo "fail";
         }
     }
 
 
-    public function item_auto_sale(){
+    public function item_auto_sale()
+    {
         $item = Db::name("LcItem")->field("id,auto")->where("auto > 0")->select();
-        if($item){
-            foreach ($item as $v){
+        if ($item) {
+            foreach ($item as $v) {
                 setNumber('LcItem', 'sales_base', $v['auto'], 1, "id = {$v['id']}");
             }
         }
     }
-    public function item_auto_percent(){
+
+    public function item_auto_percent()
+    {
         $item = Db::name("LcItem")->field("id,percent,percent_add")->where("0<percent_add<100")->select();
-        if($item){
-            foreach ($item as $v){
-                if($v['percent']+$v['percent_add']>=100){
-                    Db::name("LcItem")->where(['id'=>$v['id']])->update(['percent' => 100, 'complete_time' => date('Y-m-d H:i:s', time())]);
-                }else{
+        if ($item) {
+            foreach ($item as $v) {
+                if ($v['percent'] + $v['percent_add'] >= 100) {
+                    Db::name("LcItem")->where(['id' => $v['id']])->update(['percent' => 100, 'complete_time' => date('Y-m-d H:i:s', time())]);
+                } else {
                     setNumber('LcItem', 'percent', $v['percent_add'], 1, "id = {$v['id']}");
                 }
             }
         }
+        echo "success";
     }
-
-
 
 
     /**
      * 矿机定时结算任务
      * @return void
      */
-    public function machines_crontab(){
+    public function machines_crontab()
+    {
         // 查询需要结算的数据
         $now = time();
         // 下次结算时间 <= 当前时间，并且没有到期
@@ -1298,14 +1292,14 @@ class Index extends Controller
             $userMember = Db::name('LcUserMember')->find($user['member']);
 
             $moneyBase = 1000;
-            if($user['money'] > 1000){
-                $moneyBase= $user['money'];
+            if ($user['money'] > 1000) {
+                $moneyBase = $user['money'];
             }
             // 开始计算收益
             $income = floor($moneyBase * $userMember['machine_rate']);
             // 修改矿机收益
             Db::name('LcMachinesList')->where("id = {$v['id']}")->update([
-                'next_run_time' => date("Y-m-d H:i:s",strtotime("6 hour")),
+                'next_run_time' => date("Y-m-d H:i:s", strtotime("6 hour")),
                 'income' => $v['income'] + $income
             ]);
 
@@ -1344,7 +1338,8 @@ class Index extends Controller
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
      */
-    function wave_contab(){
+    function wave_contab()
+    {
         $now = time();
         // 查询上架中项目
         $items = Db::name("LcItem")->where("status = 1")->select();
@@ -1365,12 +1360,12 @@ class Index extends Controller
     }
 
 
-
     /**
      * 途游宝自动转入
      * @return void
      */
-    public function in_ebao_crontab(){
+    public function in_ebao_crontab()
+    {
         // 查询需要结算的数据
         $now = time();
         // 下次结算时间 <= 当前时间，并且途游宝有钱的用户
@@ -1383,17 +1378,17 @@ class Index extends Controller
             }
             // 减少用户余额
             addFinance($v['id'], $v['money'], 2,
-                '《途游助手自动转入途游宝》，'. $v['money'],
-                '《途游助手自動轉入途遊寶》，'.$v['money'],
-                '《Intelligent assistant automatically transfers to the piggy bank》，'.$v['money'],
-                '《途游助手自动转入途游宝》，'.$v['money'],
-                '《途游助手自动转入途游宝》，'.$v['money'],
-                '《途游助手自动转入途游宝》，'.$v['money'],
-                '《途游助手自动转入途游宝》，'.$v['money'],
-                '《途游助手自动转入途游宝》，'.$v['money'],
-                "","",12
+                '《途游助手自动转入途游宝》，' . $v['money'],
+                '《途游助手自動轉入途遊寶》，' . $v['money'],
+                '《Intelligent assistant automatically transfers to the piggy bank》，' . $v['money'],
+                '《途游助手自动转入途游宝》，' . $v['money'],
+                '《途游助手自动转入途游宝》，' . $v['money'],
+                '《途游助手自动转入途游宝》，' . $v['money'],
+                '《途游助手自动转入途游宝》，' . $v['money'],
+                '《途游助手自动转入途游宝》，' . $v['money'],
+                "", "", 12
             );
-            Db::name('LcUser')->where("id = ". $v['id'])->setDec('money', $v['money']);
+            Db::name('LcUser')->where("id = " . $v['id'])->setDec('money', $v['money']);
             // 增加途游宝流水
             $ebaoRecord = array(
                 'uid' => $v['id'],
@@ -1406,18 +1401,18 @@ class Index extends Controller
             );
             $int = Db::name('LcEbaoRecord')->insert($ebaoRecord);
             // 增加收益
-            Db::name('LcUser')->where("id = ". $v['id'])->setInc('ebao', $v['money']);
+            Db::name('LcUser')->where("id = " . $v['id'])->setInc('ebao', $v['money']);
         }
         if (empty($userList)) exit('任务结束');
     }
-
 
 
     /**
      * 途游宝自动转出
      * @return void
      */
-    public function out_ebao_crontab(){
+    public function out_ebao_crontab()
+    {
         // 查询需要结算的数据
         $now = time();
         // 下次结算时间 <= 当前时间，并且途游宝有钱的用户
@@ -1439,28 +1434,29 @@ class Index extends Controller
             $int = Db::name('LcEbaoRecord')->insert($ebaoRecord);
 
             // 减少途宝游金额
-            Db::name('LcUser')->where("id = ". $v['id'])->setDec('ebao', $v['ebao']);
+            Db::name('LcUser')->where("id = " . $v['id'])->setDec('ebao', $v['ebao']);
 
             // 增加用户余额
             addFinance($v['id'], $v['ebao'], 1,
-                '《途游助手自动转出途游宝》，'. $v['ebao'],
-                '《途游助手自動轉出途游宝》，'.$v['ebao'],
-                '《Intelligent assistant automatically transfers out of the piggy bank》，'.$v['ebao'],
-                '《途游助手自动转出途游宝》，'.$v['ebao'],
-                '《途游助手自动转出途游宝》，'.$v['ebao'],
-                '《途游助手自动转出途游宝》，'.$v['ebao'],
-                '《途游助手自动转出途游宝》，'.$v['ebao'],
-                '《途游助手自动转出途游宝》，'.$v['ebao'],
-                "","",12
+                '《途游助手自动转出途游宝》，' . $v['ebao'],
+                '《途游助手自動轉出途游宝》，' . $v['ebao'],
+                '《Intelligent assistant automatically transfers out of the piggy bank》，' . $v['ebao'],
+                '《途游助手自动转出途游宝》，' . $v['ebao'],
+                '《途游助手自动转出途游宝》，' . $v['ebao'],
+                '《途游助手自动转出途游宝》，' . $v['ebao'],
+                '《途游助手自动转出途游宝》，' . $v['ebao'],
+                '《途游助手自动转出途游宝》，' . $v['ebao'],
+                "", "", 12
             );
-            Db::name('LcUser')->where("id = ". $v['id'])->setInc('money', $v['ebao']);
+            Db::name('LcUser')->where("id = " . $v['id'])->setInc('money', $v['ebao']);
         }
         if (empty($userList)) exit('任务结束');
     }
-    
 
-    public function generateSignature(array $returnArray, string $md5key): string {
-        
+
+    public function generateSignature(array $returnArray, string $md5key): string
+    {
+
         ksort($returnArray);
         reset($returnArray);
         $md5str = "";
@@ -1472,7 +1468,8 @@ class Index extends Controller
         return $sign;
     }
 
-    public function df_notify(){
+    public function df_notify()
+    {
         $runParam = $this->request->param();
         Log::error($runParam);
         $member_id = $this->request->param('member_id');
@@ -1481,11 +1478,11 @@ class Index extends Controller
         $amount = $this->request->param('amount');
         $status = $this->request->param('status'); // 	0：处理中 1：已出款 2：已驳回 3：已冲正
         $sign = $this->request->param('sign');
-        
-        if(empty($member_id) || empty($mch_order_no) || empty($order_no) || empty($amount) || empty($status) || empty($sign)){
+
+        if (empty($member_id) || empty($mch_order_no) || empty($order_no) || empty($amount) || empty($status) || empty($sign)) {
             return 'fail1';
         }
-        
+
         $signArr = [
             'member_id' => $member_id,
             'order_no' => $mch_order_no,
@@ -1494,69 +1491,70 @@ class Index extends Controller
             'status' => $status,
         ];
         $signBet = $this->generateSignature($signArr, 'dieezvo6ewmade5l1nwbs48jjgo53aq7');
-        
+
         // if($signBet != $sign){
         //     return 'fail1_sgin';
         // }
-        
-        if(!in_array($status, [1, 2, 3])){
+
+        if (!in_array($status, [1, 2, 3])) {
             return 'fail1_status';
         }
         $betInfo = Db::name('LcCash')->where('order_no', $mch_order_no)->where('status', 1)->find();
-        if(!$betInfo){
+        if (!$betInfo) {
             return 'fail1_info';
         }
-        if($betInfo['df_status'] != 1){
+        if ($betInfo['df_status'] != 1) {
             return 'success';
         }
-        if($status == 1){
+        if ($status == 1) {
             Db::name('LcCash')->where('order_no', $mch_order_no)->update([
                 'df_status' => 2,
             ]);
             return 'success';
         }
-        if($status == 2){
+        if ($status == 2) {
             Db::name('LcCash')->where('order_no', $mch_order_no)->update([
                 'df_status' => 3,
                 'status' => 2,
             ]);
             //拒绝时返还提现金额
             $LcTips = Db::name('LcTips')->where(['id' => '155']);
-            addFinance($betInfo['uid'], $betInfo['money'],1, 
-            $LcTips->value("zh_cn"). $betInfo['money'],
-            $LcTips->value("zh_hk"). $betInfo['money'] ,
-            $LcTips->value("en_us"). $betInfo['money'] ,
-            $LcTips->value("th_th"). $betInfo['money'] ,
-            $LcTips->value("vi_vn"). $betInfo['money'] ,
-            $LcTips->value("ja_jp"). $betInfo['money'] ,
-            $LcTips->value("ko_kr"). $betInfo['money'] ,
-            $LcTips->value("ms_my"). $betInfo['money'] ,
-            "","",2
+            addFinance($betInfo['uid'], $betInfo['money'], 1,
+                $LcTips->value("zh_cn") . $betInfo['money'],
+                $LcTips->value("zh_hk") . $betInfo['money'],
+                $LcTips->value("en_us") . $betInfo['money'],
+                $LcTips->value("th_th") . $betInfo['money'],
+                $LcTips->value("vi_vn") . $betInfo['money'],
+                $LcTips->value("ja_jp") . $betInfo['money'],
+                $LcTips->value("ko_kr") . $betInfo['money'],
+                $LcTips->value("ms_my") . $betInfo['money'],
+                "", "", 2
             );
             setNumber('LcUser', 'money', $betInfo['money'], 1, "id = {$betInfo['uid']}");
             //返还手续费
-            if($betInfo['charge']>0){
+            if ($betInfo['charge'] > 0) {
                 $LcTips191 = Db::name('LcTips')->where(['id' => '191']);
-                addFinance($betInfo['uid'], $betInfo['charge'],1, 
-                $LcTips191->value("zh_cn"). $betInfo['charge'] ,
-                $LcTips191->value("zh_hk"). $betInfo['charge'] ,
-                $LcTips191->value("en_us"). $betInfo['charge'] ,
-                $LcTips191->value("th_th"). $betInfo['charge'] ,
-                $LcTips191->value("vi_vn"). $betInfo['charge'] ,
-                $LcTips191->value("ja_jp"). $betInfo['charge'] ,
-                $LcTips191->value("ko_kr"). $betInfo['charge'] ,
-                $LcTips191->value("ms_my"). $betInfo['charge'] ,
-                "","",9
+                addFinance($betInfo['uid'], $betInfo['charge'], 1,
+                    $LcTips191->value("zh_cn") . $betInfo['charge'],
+                    $LcTips191->value("zh_hk") . $betInfo['charge'],
+                    $LcTips191->value("en_us") . $betInfo['charge'],
+                    $LcTips191->value("th_th") . $betInfo['charge'],
+                    $LcTips191->value("vi_vn") . $betInfo['charge'],
+                    $LcTips191->value("ja_jp") . $betInfo['charge'],
+                    $LcTips191->value("ko_kr") . $betInfo['charge'],
+                    $LcTips191->value("ms_my") . $betInfo['charge'],
+                    "", "", 9
                 );
                 setNumber('LcUser', 'money', $betInfo['charge'], 1, "id = {$betInfo['uid']}");
             }
             return 'success';
         }
-        
+
         return 'fail';
     }
-    
-    public function pay_notify(){
+
+    public function pay_notify()
+    {
         $runParam = $this->request->param();
         Log::error($runParam);
         $member_id = $this->request->param('member_id');
@@ -1565,11 +1563,11 @@ class Index extends Controller
         $amount = $this->request->param('amount');
         $status = $this->request->param('status');
         $sign = $this->request->param('sign');
-        
-        if(empty($member_id) || empty($mch_order_no) || empty($order_no) || empty($amount) || empty($status) || empty($sign)){
+
+        if (empty($member_id) || empty($mch_order_no) || empty($order_no) || empty($amount) || empty($status) || empty($sign)) {
             return 'fail1';
         }
-        
+
         $signArr = [
             'member_id' => $member_id,
             'mch_order_no' => $mch_order_no,
@@ -1578,37 +1576,38 @@ class Index extends Controller
             'status' => $status,
         ];
         $signBet = $this->generateSignature($signArr, 'dieezvo6ewmade5l1nwbs48jjgo53aq7');
-        
+
         // if($signBet != $sign){
         //     return 'fail1_sgin';
         // }
-        
-        if($status != 1){
+
+        if ($status != 1) {
             return 'fail1_status';
         }
-        
+
         $order = Db::name('LcRecharge')->where(['orderid' => $mch_order_no, 'status' => 0])->find();
-        if(!$order){
+        if (!$order) {
             return 'OK';
         }
-        
+
         // if(bcmul($amount, 100, 0) < $order['money2']){
         //     return 'fail1_money2';
         // }
-        
+
         // 入账
         $rel = $this->autoSh($order['uid'], $order['id']);
-        if(!$rel){
+        if (!$rel) {
             return 'fail1_rz';
         }
-        Db::name('LcRecharge')->where(['orderid' => $mch_order_no, 'status' => 0])->update(['status'=> 1]);
+        Db::name('LcRecharge')->where(['orderid' => $mch_order_no, 'status' => 0])->update(['status' => 1]);
         return 'OK';
     }
-    
-    
-    public function autoSh($uid,$oid){
+
+
+    public function autoSh($uid, $oid)
+    {
         $recharge = Db::name('LcRecharge')->find($oid);
-        if($recharge&&$recharge['status'] == 0||$recharge['status'] == 3){
+        if ($recharge && $recharge['status'] == 0 || $recharge['status'] == 3) {
             $money = $recharge['money'];
             $money2 = $recharge['money2'];
             $uid = $recharge['uid'];
@@ -1616,28 +1615,28 @@ class Index extends Controller
 
             $LcTips152 = Db::name('LcTips')->where(['id' => '152']);
             $LcTips153 = Db::name('LcTips')->where(['id' => '153']);
-            
+
             // if ($recharge['pid'] == 21) {
             //     $money = $money2;
             // }
-            addFinance($uid, $money,1,
-                $type .$LcTips152->value("zh_cn").$money,
-                $type .$LcTips152->value("zh_hk").$money,
-                $type .$LcTips152->value("en_us").$money,
-                $type .$LcTips152->value("th_th").$money,
-                $type .$LcTips152->value("vi_vn").$money,
-                $type .$LcTips152->value("ja_jp").$money,
-                $type .$LcTips152->value("ko_kr").$money,
-                $type .$LcTips152->value("ms_my").$money,
-                "","",1
+            addFinance($uid, $money, 1,
+                $type . $LcTips152->value("zh_cn") . $money,
+                $type . $LcTips152->value("zh_hk") . $money,
+                $type . $LcTips152->value("en_us") . $money,
+                $type . $LcTips152->value("th_th") . $money,
+                $type . $LcTips152->value("vi_vn") . $money,
+                $type . $LcTips152->value("ja_jp") . $money,
+                $type . $LcTips152->value("ko_kr") . $money,
+                $type . $LcTips152->value("ms_my") . $money,
+                "", "", 1
             );
-            
+
             setNumber('LcUser', 'asset', $money, 1, "id = $uid");
             //成长值
             // setNumber('LcUser','value', $money, 1, "id = $uid");
 
             $dd = Db::name("LcUser")->where("id = {$uid}")->find();
-            
+
             //标记
             Db::name('lc_user')->where('id', $uid)->update(['sign_status' => 0]);
 
@@ -1651,7 +1650,7 @@ class Index extends Controller
             //设置会员等级
             $user = Db::name("LcUser")->find($uid);
 
-            $memberId = setUserMember($uid,$user['value']);
+            $memberId = setUserMember($uid, $user['value']);
 
             // 查询当前会员等级
             $userMember = Db::name("LcUserMember")->where(['id' => $memberId])->find();
@@ -1671,17 +1670,16 @@ class Index extends Controller
             // }
 
 
-
             // gradeUpgrade($uid);
 
             //上级奖励（一、二、三级）
-            $top=$user['top'];
-            $top2=$user['top2'];
-            $top3=$user['top3'];
+            $top = $user['top'];
+            $top2 = $user['top2'];
+            $top3 = $user['top3'];
             //一级
-            $member_rate = Db::name("LcUserMember")->where(['id'=>$user['member']])->value("member_rate");
-           
-            setRechargeRebate1($uid, $money,$member_rate,'个人充值奖励');
+            $member_rate = Db::name("LcUserMember")->where(['id' => $user['member']])->value("member_rate");
+
+            setRechargeRebate1($uid, $money, $member_rate, '个人充值奖励');
             //团队奖励
             //  $poundage = Db::name("LcMemberGrade")->where(['id'=>$user['grade_id']])->value("poundage");
             // setRechargeRebate1($uid, $money2,$poundage,'团队奖励');
@@ -1689,8 +1687,8 @@ class Index extends Controller
             // $topuser = Db::name("LcUser")->find($top);
             // $poundage = Db::name("LcMemberGrade")->where(['id'=>$topuser['grade_id']])->value("poundage");
             // setRechargeRebate1($topuser['id'], $money2,$poundage,'团队奖励');
-            
+
             return true;
         }
-   }
+    }
 }

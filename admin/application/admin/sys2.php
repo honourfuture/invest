@@ -96,7 +96,6 @@ if (!function_exists('sysCheckLog')) {
 }
 
 
-
 if (!function_exists('sysqueue')) {
     /**
      * 创建异步处理任务
@@ -115,9 +114,9 @@ if (!function_exists('sysqueue')) {
             throw new \think\Exception('该任务已经创建，请耐心等待处理完成！');
         }
         $result = Db::name('SystemQueue')->insert([
-            'title'  => $title, 'preload' => $loade,
-            'data'   => json_encode($data, JSON_UNESCAPED_UNICODE),
-            'time'   => $later > 0 ? time() + $later : time(),
+            'title' => $title, 'preload' => $loade,
+            'data' => json_encode($data, JSON_UNESCAPED_UNICODE),
+            'time' => $later > 0 ? time() + $later : time(),
             'double' => intval($double), 'create_at' => date('Y-m-d H:i:s'),
         ]);
         return $result !== false;
@@ -178,20 +177,20 @@ if (!function_exists('base64_image')) {
  */
 function setRechargeRebate($tid, $money)
 {
-    $reward = Db::name('LcReward')->where(['id'=>1])->value("recharge");
+    $reward = Db::name('LcReward')->where(['id' => 1])->value("recharge");
     $rebate = round($reward * $money / 100, 2);
     if (0 < $rebate) {
         $LcTips173 = Db::name('LcTips')->where(['id' => '173']);
         $LcTips174 = Db::name('LcTips')->where(['id' => '174']);
         addFinance($tid, $rebate, 1,
-        $LcTips173->value("name").$money.$LcTips174->value("name").$rebate,
-        $LcTips173->value("zh_cn").$money.$LcTips174->value("zh_cn").$rebate,
-        $LcTips173->value("en_us").$money.$LcTips174->value("en_us").$rebate,
-        $LcTips173->value("th_th").$money.$LcTips174->value("th_th").$rebate,
-        $LcTips173->value("vi_vn").$money.$LcTips174->value("vi_vn").$rebate,
-        $LcTips173->value("ja_jp").$money.$LcTips174->value("ja_jp").$rebate,
-        $LcTips173->value("ko_kr").$money.$LcTips174->value("ko_kr").$rebate,
-        $LcTips173->value("ms_my").$money.$LcTips174->value("ms_my").$rebate
+            $LcTips173->value("name") . $money . $LcTips174->value("name") . $rebate,
+            $LcTips173->value("zh_cn") . $money . $LcTips174->value("zh_cn") . $rebate,
+            $LcTips173->value("en_us") . $money . $LcTips174->value("en_us") . $rebate,
+            $LcTips173->value("th_th") . $money . $LcTips174->value("th_th") . $rebate,
+            $LcTips173->value("vi_vn") . $money . $LcTips174->value("vi_vn") . $rebate,
+            $LcTips173->value("ja_jp") . $money . $LcTips174->value("ja_jp") . $rebate,
+            $LcTips173->value("ko_kr") . $money . $LcTips174->value("ko_kr") . $rebate,
+            $LcTips173->value("ms_my") . $money . $LcTips174->value("ms_my") . $rebate
         );
         setNumber('LcUser', 'money', $rebate, 1, "id = $tid");
         setNumber('LcUser', 'income', $rebate, 1, "id = $tid");
@@ -200,7 +199,7 @@ function setRechargeRebate($tid, $money)
 
 /**
  * @description：返佣
- * @date: 2020/5/14 0014 
+ * @date: 2020/5/14 0014
  * @param $tid
  * @param $money
  * @throws \think\Exception
@@ -208,59 +207,60 @@ function setRechargeRebate($tid, $money)
  * @throws \think\db\exception\ModelNotFoundException
  * @throws \think\exception\DbException
  */
-function setRechargeRebate1($tid, $money,$reward,$bz='')
-    {
-        //会员等级
+function setRechargeRebate1($tid, $money, $reward, $bz = '')
+{
+    //会员等级
     //   var_dump($tid);
     //   var_dump($money);
     //   var_dump($reward);die;
-    if($bz=='个人充值奖励'){
-        $bz=$bz;
-    }else if($bz=='团队奖励'){
-        $bz=$bz;
-    }else{
-        $bz="下级".$bz."会员返佣";
+    if ($bz == '个人充值奖励') {
+        $bz = $bz;
+    } else if ($bz == '团队奖励') {
+        $bz = $bz;
+    } else {
+        $bz = "下级" . $bz . "会员返佣";
     }
-        $rebate = round($reward * $money / 100, 2);
-        if (0 < $rebate) {
-            $LcTips173 = Db::name('LcTips')->where(['id' => '173']);
-            $LcTips174 = Db::name('LcTips')->where(['id' => '174']);
-            addFinance($tid, $rebate, 1,
+    $rebate = round($reward * $money / 100, 2);
+    if (0 < $rebate) {
+        $LcTips173 = Db::name('LcTips')->where(['id' => '173']);
+        $LcTips174 = Db::name('LcTips')->where(['id' => '174']);
+        addFinance($tid, $rebate, 1,
             $bz,
-            $LcTips173->value("zh_cn").$money.$LcTips174->value("zh_cn").$rebate,
-            $LcTips173->value("en_us").$money.$LcTips174->value("en_us").$rebate,
-            $LcTips173->value("th_th").$money.$LcTips174->value("th_th").$rebate,
-            $LcTips173->value("vi_vn").$money.$LcTips174->value("vi_vn").$rebate,
-            $LcTips173->value("ja_jp").$money.$LcTips174->value("ja_jp").$rebate,
-            $LcTips173->value("ko_kr").$money.$LcTips174->value("ko_kr").$rebate,
-            $LcTips173->value("ms_my").$money.$LcTips174->value("ms_my").$rebate
-            );
-            setNumber('LcUser', 'money', $rebate, 1, "id = $tid");
-            setNumber('LcUser', 'income', $rebate, 1, "id = $tid");
-        }
+            $LcTips173->value("zh_cn") . $money . $LcTips174->value("zh_cn") . $rebate,
+            $LcTips173->value("en_us") . $money . $LcTips174->value("en_us") . $rebate,
+            $LcTips173->value("th_th") . $money . $LcTips174->value("th_th") . $rebate,
+            $LcTips173->value("vi_vn") . $money . $LcTips174->value("vi_vn") . $rebate,
+            $LcTips173->value("ja_jp") . $money . $LcTips174->value("ja_jp") . $rebate,
+            $LcTips173->value("ko_kr") . $money . $LcTips174->value("ko_kr") . $rebate,
+            $LcTips173->value("ms_my") . $money . $LcTips174->value("ms_my") . $rebate
+        );
+        setNumber('LcUser', 'money', $rebate, 1, "id = $tid");
+        setNumber('LcUser', 'income', $rebate, 1, "id = $tid");
     }
-function setRechargeRebate2($tid, $money,$reward)
-    {
-        //会员等级
-       
-        $rebate = round($reward * $money / 100, 2);
-        if (0 < $rebate) {
-            $LcTips173 = Db::name('LcTips')->where(['id' => '173']);
-            $LcTips174 = Db::name('LcTips')->where(['id' => '174']);
-            addFinance($tid, $rebate, 1,
+}
+
+function setRechargeRebate2($tid, $money, $reward)
+{
+    //会员等级
+
+    $rebate = round($reward * $money / 100, 2);
+    if (0 < $rebate) {
+        $LcTips173 = Db::name('LcTips')->where(['id' => '173']);
+        $LcTips174 = Db::name('LcTips')->where(['id' => '174']);
+        addFinance($tid, $rebate, 1,
             "下级会员返佣",
-            $LcTips173->value("zh_cn").$money.$LcTips174->value("zh_cn").$rebate,
-            $LcTips173->value("en_us").$money.$LcTips174->value("en_us").$rebate,
-            $LcTips173->value("th_th").$money.$LcTips174->value("th_th").$rebate,
-            $LcTips173->value("vi_vn").$money.$LcTips174->value("vi_vn").$rebate,
-            $LcTips173->value("ja_jp").$money.$LcTips174->value("ja_jp").$rebate,
-            $LcTips173->value("ko_kr").$money.$LcTips174->value("ko_kr").$rebate,
-            $LcTips173->value("ms_my").$money.$LcTips174->value("ms_my").$rebate
-            );
-            setNumber('LcUser', 'money', $rebate, 1, "id = $tid");
-            setNumber('LcUser', 'income', $rebate, 1, "id = $tid");
-        }
+            $LcTips173->value("zh_cn") . $money . $LcTips174->value("zh_cn") . $rebate,
+            $LcTips173->value("en_us") . $money . $LcTips174->value("en_us") . $rebate,
+            $LcTips173->value("th_th") . $money . $LcTips174->value("th_th") . $rebate,
+            $LcTips173->value("vi_vn") . $money . $LcTips174->value("vi_vn") . $rebate,
+            $LcTips173->value("ja_jp") . $money . $LcTips174->value("ja_jp") . $rebate,
+            $LcTips173->value("ko_kr") . $money . $LcTips174->value("ko_kr") . $rebate,
+            $LcTips173->value("ms_my") . $money . $LcTips174->value("ms_my") . $rebate
+        );
+        setNumber('LcUser', 'money', $rebate, 1, "id = $tid");
+        setNumber('LcUser', 'income', $rebate, 1, "id = $tid");
     }
+}
 
 // 访问权限检查中间键
 Middleware::add(function (Request $request, \Closure $next) {
@@ -301,7 +301,7 @@ Route::get('/think/admin/captcha', function () {
  * @throws \think\db\exception\ModelNotFoundException
  * @throws \think\exception\DbException
  */
-function addFinance($uid,$money,$type,$zh_cn,$zh_hk,$en_us,$th_th,$vi_vn,$ja_jp,$ko_kr,$ms_my,$remark="",$reason="",$reason_type=0)
+function addFinance($uid, $money, $type, $zh_cn, $zh_hk, $en_us, $th_th, $vi_vn, $ja_jp, $ko_kr, $ms_my, $remark = "", $reason = "", $reason_type = 0)
 {
     $user = Db::name('LcUser')->find($uid);
     if (!$user) return false;
@@ -311,14 +311,14 @@ function addFinance($uid,$money,$type,$zh_cn,$zh_hk,$en_us,$th_th,$vi_vn,$ja_jp,
         'money' => $money,
         'type' => $type,
         'reason' => $reason,
-        "zh_cn" =>$zh_cn,
-        "zh_hk" =>$zh_hk,
-        "en_us" =>$en_us,
-        "th_th" =>$th_th,
-        "vi_vn" =>$vi_vn,
-        "ja_jp" =>$ja_jp,
-        "ko_kr" =>$ko_kr,
-        "ms_my" =>$ms_my,
+        "zh_cn" => $zh_cn,
+        "zh_hk" => $zh_hk,
+        "en_us" => $en_us,
+        "th_th" => $th_th,
+        "vi_vn" => $vi_vn,
+        "ja_jp" => $ja_jp,
+        "ko_kr" => $ko_kr,
+        "ms_my" => $ms_my,
         'remark' => $remark,
         'reason_type' => $reason_type,
         'before' => $user['money'],
@@ -359,7 +359,7 @@ function setNumber($database, $field, $value, $type = 1, $where = '')
 
 function setUserMember($uid, $value)
 {
-    
+
     $member = Db::name('LcUserMember')->where("value <= '{$value}'")->order('value desc')->find();
 
     if (empty($member)) {
@@ -401,34 +401,34 @@ function gradeUpgrade($uid)
     // $xjlj_money = Db::name("LcUser")->where("recom_id", $uid)->sum("czmoney");
     //团队充值 本人累计充值 + 下级直推累计充值
     // $lj_money = $member['czmoney'] + $xjlj_money;
-     $memberList = Db::name('LcUser')->field('id, phone, top,czmoney,name,time, auth')->select();
-      
-      $itemList = get_downline_list2($memberList,$uid);
+    $memberList = Db::name('LcUser')->field('id, phone, top,czmoney,name,time, auth')->select();
+
+    $itemList = get_downline_list2($memberList, $uid);
     //   var_dump($itemList);die;
-      $lj_money=0;
-      
-      $is_sf = Db::name('LcUser')->where(['id' => $uid])->value('is_sf');
+    $lj_money = 0;
+
+    $is_sf = Db::name('LcUser')->where(['id' => $uid])->value('is_sf');
     //   var_dump($this->userInfo['czmoney']);
     //   var_dump($this->userInfo['is_sf']);die;
-      if($is_sf==0){
+    if ($is_sf == 0) {
         //   $all_czmoney=$this->userInfo['czmoney'];
-            $lj_money = Db::name('LcUser')->where(['id' => $uid])->value('czmoney');
-      }
-                foreach ($itemList as $k=>$v){
-                    $lj_money+=$v['czmoney'];
-                   
-                }
+        $lj_money = Db::name('LcUser')->where(['id' => $uid])->value('czmoney');
+    }
+    foreach ($itemList as $k => $v) {
+        $lj_money += $v['czmoney'];
+
+    }
     // 取团队ID
     $team_id = Db::name("LcMemberGrade")->where('id', '>', 1)->order('id desc')->find();
     // 比较等级
-    $msg='用户【'.$member['phone'].'】直推会员数:'.$tg_num.'<br>';
-    $msg.='用户【'.$member['phone'].'】直推团长数:'.$tz_num.'<br>';
-    $msg.='用户【'.$member['phone'].'】下级累计充值:'.$lj_money.'<br>';
+    $msg = '用户【' . $member['phone'] . '】直推会员数:' . $tg_num . '<br>';
+    $msg .= '用户【' . $member['phone'] . '】直推团长数:' . $tz_num . '<br>';
+    $msg .= '用户【' . $member['phone'] . '】下级累计充值:' . $lj_money . '<br>';
     printLog($msg);
-    
-    
+
+
     $tid = bjgrade($tg_num, $lj_money, $tz_num);
-    $msg1='用户【'.$member['phone'].'】等级比较结果id:'.$tid;
+    $msg1 = '用户【' . $member['phone'] . '】等级比较结果id:' . $tid;
     printLog($msg1);
     // 获取比较后的段对
     $team_data = Db::name("LcMemberGrade")->where("id", $tid)->field('all_activity,title,id,recom_tz,recom_number')->find();
@@ -505,28 +505,28 @@ function gradeUpgrade($uid)
                     }
                 }
             }
-        } 
+        }
     }
 }
 
 function get_downline_list2($user_list, $telephone, $level = 0)
-    {
-        // var_dump($telephone);
-        $arr = array();
-        foreach ($user_list as $key => $v) { 
-            // var_dump($v['id']);die;
-            // if($level<=2){
-                 if ($v['top'] == $telephone) {  //inviteid为0的是顶级分类
-                $v['level'] = $level + 1;
-                $arr[] = $v;
-                // var_dump($arr);die;
-                $arr = array_merge($arr, get_downline_list2($user_list, $v['id'], $level + 1));
-            }
-            // }
-           
+{
+    // var_dump($telephone);
+    $arr = array();
+    foreach ($user_list as $key => $v) {
+        // var_dump($v['id']);die;
+        // if($level<=2){
+        if ($v['top'] == $telephone) {  //inviteid为0的是顶级分类
+            $v['level'] = $level + 1;
+            $arr[] = $v;
+            // var_dump($arr);die;
+            $arr = array_merge($arr, get_downline_list2($user_list, $v['id'], $level + 1));
         }
-        return $arr;
+        // }
+
     }
+    return $arr;
+}
 
 /**
  * 比较等级
@@ -550,14 +550,15 @@ function bjgrade($recom_number, $all_activity, $recom_tz)
     return $mid;
 }
 
-/** 
+/**
  * 打印日志
  * $msg 日志内容
  */
-function printLog($msg) {
-	if (!is_dir('log')){
-		mkdir('log',0777,true);
-	}
-	$path="log/teamgrade.txt";
-	file_put_contents($path, "【" . date('Y-m-d H:i:s') . "】" . $msg . "\r\n\r\n", FILE_APPEND);
+function printLog($msg)
+{
+    if (!is_dir('log')) {
+        mkdir('log', 0777, true);
+    }
+    $path = "log/teamgrade.txt";
+    file_put_contents($path, "【" . date('Y-m-d H:i:s') . "】" . $msg . "\r\n\r\n", FILE_APPEND);
 }

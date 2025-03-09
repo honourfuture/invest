@@ -17,13 +17,10 @@ namespace app\api\controller;
 
 
 use library\Controller;
-use Endroid\QrCode\QrCode;
-use think\Db;
 use library\File;
-use think\facade\Session;
+use think\Db;
 use think\facade\Cache;
-use think\facade\Log;
-use library\tools\Data;
+use think\facade\Session;
 use think\Image;
 
 /**
@@ -39,32 +36,32 @@ class Index extends Controller
         $mobile = '18223537801';
         $encrypt = $aes->encrypt($mobile);
         $decrypt = $aes->decrypt($encrypt);
-        echo $encrypt.'<br/>';
+        echo $encrypt . '<br/>';
         echo $decrypt;
     }
-    
+
     //公告列表
     public function message()
     {
         $list = Db::name('lc_article')->where('type', 12)->order('sort asc,id desc')->select();
         $this->success('获取成功', $list);
     }
-    
+
     //平台信息
     public function platinfo()
     {
         $info = Db::name('lc_info')->field('plat_total_num,today_inc_num,today_recharge_num,trade_total,today_trade,today_withdraw,rate_usd')->find(1);
-        $info['plat_total_num'] += rand(10,20);
-        $info['today_inc_num'] += rand(1,2);
+        $info['plat_total_num'] += rand(10, 20);
+        $info['today_inc_num'] += rand(1, 2);
         $info['today_recharge_num']++;
-        $info['trade_total'] += rand(500,1000);
-        $info['today_trade'] += rand(100,500);
-        $info['today_withdraw'] += rand(200,600);
+        $info['trade_total'] += rand(500, 1000);
+        $info['today_trade'] += rand(100, 500);
+        $info['today_withdraw'] += rand(200, 600);
         Db::name('lc_info')->where('id', 1)->update($info);
-        
+
         $this->success('获取成功', $info);
     }
-    
+
     //数字藏品活动信息
     public function figure_collect_activity()
     {
@@ -74,7 +71,7 @@ class Index extends Controller
         ];
         $this->success('获取成功', $data);
     }
-    
+
     //数字藏品列表
     public function figure_collect()
     {
@@ -82,55 +79,55 @@ class Index extends Controller
         $where[] = ['status', '=', 1];
         $where[] = ['num', '>', 0];
         $list = Db::name('lc_figure_collect')->where($where)->field('id,name,image,num,surplus_num,price')->select();
-        
+
         $this->success('获取成功', $list);
     }
-    
+
     //数字藏品详情
     public function figure_collect_detail()
     {
         $id = $this->request->get('id', 0);
-        
+
         if (!$info = Db::name('lc_figure_collect')->field('id,name,image,num,surplus_num,price')->find($id)) {
             $this->error('数字藏品不存在');
         }
-        
+
         $this->success('获取成功', $info);
     }
-    
-    
+
+
     //购买数字藏品
     public function buy_figure_collect()
     {
         $id = $this->request->param('id', 0);
         $password = $this->request->param('password');
-        
+
         if (!$info = Db::name('lc_figure_collect')->find($id)) {
             $this->error('数字藏品不存在');
         }
-        
+
         // $uid = 38550;
         $this->checkToken();
         $uid = $this->userInfo['id'];
         $userinfo = Db::name('lc_user')->find($uid);
-        
+
         //密码验证
         if (md5($password) != $userinfo['password2']) {
             $this->error('支付密码错误');
         }
-        
+
         if ($userinfo['money'] < $info['price']) {
             $this->error('账户余额不足，请充值');
         }
-        
-        
+
+
         Db::name('lc_figure_collect_log')->insertGetId([
             'figure_collect_id' => $info['id'],
             'uid' => $uid,
             'money' => $info['price'],
             'sell_rate' => $info['sell_rate'],
             'lock_days' => $info['lock_days'],
-            'able_sell_time' => (time() + $info['lock_days']*86400),
+            'able_sell_time' => (time() + $info['lock_days'] * 86400),
             'status' => 0,
             'create_time' => time()
         ]);
@@ -141,17 +138,17 @@ class Index extends Controller
             'uid' => $uid,
             'money' => $info['price'],
             'type' => 2,
-            'zh_cn' => '购买数字藏品 '.$info['price'],
+            'zh_cn' => '购买数字藏品 ' . $info['price'],
             'before' => $userinfo['money'],
             'time' => date('Y-m-d H:i:s', time())
         ]);
         //修改藏品数量
         Db::name('lc_figure_collect')->where('id', $info['id'])->setDec('surplus_num');
-        
+
         $this->success('购买成功');
     }
-    
-    
+
+
     //我的藏品
     public function my_figure_collect()
     {
@@ -160,26 +157,26 @@ class Index extends Controller
         $uid = $this->userInfo['id'];
         $list = Db::name('lc_figure_collect_log l')->join('lc_figure_collect c', 'l.figure_collect_id = c.id')
             ->where(['uid' => $uid])
-            ->whereIn('l.status', [0,1])
+            ->whereIn('l.status', [0, 1])
             ->field('l.id,l.money,l.create_time,c.name,c.image,l.able_sell_time')
             ->order('id desc')
             ->select();
-            
-        foreach($list as &$item) {
+
+        foreach ($list as &$item) {
             $item['create_time'] = date('Y-m-d H:i:s', $item['create_time']);
             $item['expire_time'] = date('Y-m-d H:i:s', $item['able_sell_time']);
         }
-            
+
         $this->success('获取成功', $list);
     }
-    
+
     //卖出藏品
     public function sell_figure_collect()
     {
         //  $uid = 38550;
         $this->checkToken();
         $uid = $this->userInfo['id'];
-        
+
         $id = $this->request->param('id', 0);
         $password = $this->request->param('password');
         $userinfo = Db::name('lc_user')->find($uid);
@@ -190,20 +187,20 @@ class Index extends Controller
         if (!$info = Db::name('lc_figure_collect_log')->where('uid', $uid)->find($id)) {
             $this->error('数字藏品不存在');
         }
-        
+
         if ($info['status'] == 1) {
             $this->error('藏品已挂售，暂不能进行交易');
         }
-        
+
         if ($info['able_sell_time'] > time()) {
             $this->error('藏品处于锁仓期，暂不能进行交易');
         }
-        
+
         Db::name('lc_figure_collect_log')->where('id', $info['id'])->update(['status' => 1]);
-        
+
         $this->success('藏品已挂售，等待审核');
     }
-    
+
     //盲盒活动信息
     public function blind_activity()
     {
@@ -215,21 +212,21 @@ class Index extends Controller
         ];
         $this->success('获取成功', $data);
     }
-    
+
     //开盒
     public function open_blind()
     {
         $info = Db::name('lc_info')->find(1);
-        
+
         if (!$info['is_blind'] || empty($info['members'])) {
             $this->error('活动未开启');
-        } 
-        
-        
+        }
+
+
         //获取产品列表
         $product_list = Db::name('lc_blind')->where('status', 1)->order('sort asc')->column('id');
         if (!count($product_list)) $this->error('产品数据为空');
-            
+
         $members = explode(',', $info['members']);
         // $uid = 38550;
         $this->checkToken();
@@ -238,10 +235,10 @@ class Index extends Controller
         if (!in_array($userinfo['member'], $members)) {
             $this->error('等级太低，没有抽奖权限');
         }
-        
-        $rand_value = rand(1,10000);
-        $blind_rate = $info['blind_rate']*100;
-        if($rand_value <= $blind_rate) {
+
+        $rand_value = rand(1, 10000);
+        $blind_rate = $info['blind_rate'] * 100;
+        if ($rand_value <= $blind_rate) {
             //获取产品列表
             $rand_product_id = $product_list[array_rand($product_list, 1)];
             $product_info = Db::name('lc_blind')->field('id,name,price,rate,period')->find($rand_product_id);
@@ -250,18 +247,18 @@ class Index extends Controller
             $this->error('很遗憾，未抽到任何礼物');
         }
     }
-    
+
     //盲盒产品详情
     public function blind_detail()
     {
         $id = $this->request->param('id', 0);
         $blind_info = Db::name('lc_blind')->find($id);
-        if(!$blind_info) {
+        if (!$blind_info) {
             $this->error('产品不存在');
         }
         $this->success('获取成功', $blind_info);
     }
-    
+
     //购买盲盒产品
     public function buy_blind()
     {
@@ -275,12 +272,12 @@ class Index extends Controller
         if (md5($password) != $userinfo['password2']) {
             $this->error('支付密码错误');
         }
-        
+
         $blind_info = Db::name('lc_blind')->find($blind_id);
-        if(!$blind_info) {
+        if (!$blind_info) {
             $this->error('产品不存在');
         }
-        
+
         //创建订单
         $blind_buy_log_id = Db::name('lc_blind_buy_log')->insertGetId([
             'blind_id' => $blind_info['id'],
@@ -302,15 +299,15 @@ class Index extends Controller
             'uid' => $uid,
             'money' => $blind_info['price'],
             'type' => 2,
-            'zh_cn' => '购买盲盒产品 '.$blind_info['price'],
+            'zh_cn' => '购买盲盒产品 ' . $blind_info['price'],
             'before' => $userinfo['money'],
             'time' => date('Y-m-d H:i:s', time())
         ]);
         Db::name('lc_blind_buy_log')->where('id', $blind_buy_log_id)->update(['pay_status' => 1]);
-        
+
         $this->success('购买成功');
     }
-    
+
     //支付盲盒未支付订单
     public function pay_blind_order()
     {
@@ -321,34 +318,34 @@ class Index extends Controller
         $password = $this->request->param('password');
         $userinfo = Db::name('lc_user')->find($uid);
         $blind_buy_info = Db::name('lc_blind_buy_log')->find($id);
-        if(!$blind_buy_info) {
+        if (!$blind_buy_info) {
             $this->error('购买记录不存在');
         }
         //密码验证
         if (md5($password) != $userinfo['password2']) {
             $this->error('支付密码错误');
         }
-        
+
         if ($userinfo['money'] < $blind_buy_info['money']) {
             $this->error('账户余额不足，请充值');
         }
-         //扣除用户余额
+        //扣除用户余额
         Db::name('lc_user')->where('id', $uid)->update(['money' => bcsub($userinfo['money'], $blind_buy_info['money'], 2)]);
         //资金变动记录
         Db::name('lc_finance')->insert([
             'uid' => $uid,
             'money' => $blind_buy_info['money'],
             'type' => 2,
-            'zh_cn' => '购买盲盒产品 '.$blind_buy_info['money'],
+            'zh_cn' => '购买盲盒产品 ' . $blind_buy_info['money'],
             'before' => $userinfo['money'],
             'time' => date('Y-m-d H:i:s', time())
         ]);
         Db::name('lc_blind_buy_log')->where('id', $id)->update(['pay_status' => 1]);
-        
+
         $this->success('购买成功');
     }
-    
-    
+
+
     //取消盲盒订单
     public function cancel_blind_order()
     {
@@ -356,7 +353,7 @@ class Index extends Controller
         Db::name('lc_blind_buy_log')->where('id', $id)->update(['pay_status' => 2]);
         $this->success('取消成功');
     }
-    
+
     //购买列表
     public function blind_list()
     {
@@ -366,7 +363,7 @@ class Index extends Controller
         $userinfo = Db::name('lc_user')->find($uid);
         $where = [];
         $type = $this->request->param('type'); //0-全部 1-待支付 2-已取消
-        if($type == 1) {
+        if ($type == 1) {
             $where[] = ['pay_status', '=', 0];
         } elseif ($type == 2) {
             $where[] = ['pay_status', '=', 2];
@@ -375,47 +372,49 @@ class Index extends Controller
         $list = Db::name('lc_blind_buy_log l')->join('lc_blind b', 'l.blind_id = b.id')
             ->field('l.id,l.money,l.rate,b.name,b.image,l.period,l.create_time')
             ->where($where)->order('id desc')->select();
-            
-        foreach($list as &$item) {
+
+        foreach ($list as &$item) {
             if ($item['period'] == 1) {
                 $time = 86400;
             } elseif ($item['period'] == 2) {
-                $time = 7*86400;
+                $time = 7 * 86400;
             } elseif ($item['period'] == 3) {
-                $time = 30*86400;
+                $time = 30 * 86400;
             }
-            $item['expire_time'] = date('Y-m-d H:i:s', ($item['create_time']+$time));
+            $item['expire_time'] = date('Y-m-d H:i:s', ($item['create_time'] + $time));
         }
         $this->success('获取成功', $list);
     }
-    
+
     public function mini()
     {
         $this->success("操作成功9999991");
     }
-    
-    public function rate(){
-        $data = Db::name('lc_info') -> where('id', 1) -> value('rate_usd');
+
+    public function rate()
+    {
+        $data = Db::name('lc_info')->where('id', 1)->value('rate_usd');
         $this->success("操作成功", ['usd' => $data]);
-        
+
     }
-    
-    public function getLine(){
+
+    public function getLine()
+    {
         $this->checkToken();
         $uid = $this->userInfo['id'];
         $info = Db::name('LcInfo')->find(1);
-        
+
         $list = $info['line'];
         $list = preg_replace('/\s/', '@', $list);
         $list = explode('@@', $list);
         //获取session
         $cacheLine = Cache::get('line_' . $uid);
-        if($cacheLine == ''){
+        if ($cacheLine == '') {
             $cacheLine = 0;
         }
-        
+
         //判断是否到最大
-        if($cacheLine >= count($list)){
+        if ($cacheLine >= count($list)) {
             $cacheLine = 0;
         }
         $temp = explode('#', $list[$cacheLine]);
@@ -429,26 +428,27 @@ class Index extends Controller
         ];
         $this->success("操作成功", $newData);
     }
+
     public function webconfig()
     {
         $apicache = Cache::get('api_cache_webconfig');
-        if($apicache){
+        if ($apicache) {
             $data = $apicache;
-        }else{
+        } else {
             $info = Db::name('LcInfo')->find(1);
-            
+
             $list = $info['line'];
             $list = preg_replace('/\s/', '@', $list);
             $list = explode('@@', $list);
-            
+
             //获取session
             $cacheLine = Session::get('line');
-            if($cacheLine == ''){
+            if ($cacheLine == '') {
                 $cacheLine = 0;
             }
-            
+
             //判断是否到最大
-            if($cacheLine >= count($list)){
+            if ($cacheLine >= count($list)) {
                 $cacheLine = 0;
             }
             $temp = explode('#', $list[$cacheLine]);
@@ -459,9 +459,9 @@ class Index extends Controller
                 'value' => $temp[1],
                 'sel' => 0
             ];
-            
+
             //var_dump($list);exit;
-            
+
             $data = array(
                 "title" => $info['webname'],
                 "web_name" => $info['webname'],
@@ -484,7 +484,7 @@ class Index extends Controller
                 "is_see" => $info['is_see'],
                 'line' => $newData
             );
-            Cache::set('api_cache_webconfig',$data,60);
+            Cache::set('api_cache_webconfig', $data, 60);
         }
         $this->success("操作成功", $data);
     }
@@ -499,9 +499,9 @@ class Index extends Controller
     public function int()
     {
         $apicache = Cache::get('api_cache_index_int');
-        if($apicache){
+        if ($apicache) {
             $data = $apicache;
-        }else{
+        } else {
             $params = $this->request->param();
             $language = $params["language"];
             $banner = Db::name('LcSlide')->field("$language,url")->where(['show' => 1, 'type' => 0])->order('sort asc,id desc')->select();
@@ -553,9 +553,9 @@ class Index extends Controller
                     'wgt_down_url' => $version['wgt_down_url'],
                     'wgt_instructions' => $version['wgt_instructions'],
                 ),
-    
+
             );
-            Cache::set('api_cache_index_int',$data,60);
+            Cache::set('api_cache_index_int', $data, 60);
         }
         $this->success("操作成功", $data);
     }
@@ -622,12 +622,12 @@ class Index extends Controller
     public function news()
     {
         $params = $this->request->param();
-        $apicache = Cache::get('api_cache_index_news_type'.$params['type']);
-        if($apicache){
+        $apicache = Cache::get('api_cache_index_news_type' . $params['type']);
+        if ($apicache) {
             $article = $apicache;
-        }else{
+        } else {
             $article = Db::name('LcArticle')->where(['show' => 1, 'type' => $params['type']])->order('sort asc,id desc')->select();
-            Cache::set('api_cache_index_news_type'.$params['type'],$article,65);
+            Cache::set('api_cache_index_news_type' . $params['type'], $article, 65);
         }
         $this->success("操作成功", ['list' => $article]);
     }
@@ -666,25 +666,25 @@ class Index extends Controller
     {
         $params = $this->request->param();
         $language = $params["language"];
-        $title = isset($params['title'])?$params['title']:'';
-        $index_type = isset($params['index_type'])?$params['index_type']:'';
-        $show_home = isset($params['show_home'])?$params['show_home']:'';
-        $key = 'api_cache_index_item_search_'.$title.'_'.$index_type.'_'.$show_home;
+        $title = isset($params['title']) ? $params['title'] : '';
+        $index_type = isset($params['index_type']) ? $params['index_type'] : '';
+        $show_home = isset($params['show_home']) ? $params['show_home'] : '';
+        $key = 'api_cache_index_item_search_' . $title . '_' . $index_type . '_' . $show_home;
         $apicache = Cache::get($key);
-        if($apicache){
+        if ($apicache) {
             $data = $apicache;
-        }else{
-             $where = "";
+        } else {
+            $where = "";
             if (isset($params['title'])) $where = "$language LIKE '%{$params['title']}%'";
             if (isset($params['index_type']) && $params['index_type'] != 0) {
-                if($params['index_type']==2){
+                if ($params['index_type'] == 2) {
                     $where = "is_rec = '1'";
-                }else{
+                } else {
                     $where = "index_type = '{$params['index_type']}'";
                 }
             }
-    
-    
+
+
             if (isset($params['show_home'])) $where = "show_home = '{$params['show_home']}'";
             $data = Db::name('LcItem')->field("id,$language,min,max,num,total,rate,percent,cycle_type,hour,index_type,user_member,add_time, (select tag_name from lc_item_tag where id = tag_one) tag_one , (select tag_name from lc_item_tag where id = tag_two) tag_two,  (select tag_name from lc_item_tag where id = tag_three) tag_three,desc_$language")->where($where)->order('sort asc,id desc')->select();
             // 查询配置
@@ -692,40 +692,40 @@ class Index extends Controller
             for ($i = 0; $i < count($data); $i++) {
                 $data[$i]['member_value'] = Db::name("LcUserMember")->where("id", $data[$i]['user_member'])->value("value");
                 $data[$i]['new'] = time() - strtotime($data[$i]['add_time']) > $config['new_day'] * 86400 ? false : true;
-               
-                if($data[$i]['cycle_type']==1){
-                    $data[$i]['cycle_type']='每小时返利，到期返本'; 
+
+                if ($data[$i]['cycle_type'] == 1) {
+                    $data[$i]['cycle_type'] = '每小时返利，到期返本';
                 }
-                 if($data[$i]['cycle_type']==2){
-                    $data[$i]['cycle_type']='每日返利，到期返本';
+                if ($data[$i]['cycle_type'] == 2) {
+                    $data[$i]['cycle_type'] = '每日返利，到期返本';
                 }
-                 if($data[$i]['cycle_type']==3){
-                    $data[$i]['cycle_type']='每周返利，到期返本';
+                if ($data[$i]['cycle_type'] == 3) {
+                    $data[$i]['cycle_type'] = '每周返利，到期返本';
                 }
-                 if($data[$i]['cycle_type']==4){
-                    $data[$i]['cycle_type']='每月返利，到期返本';
+                if ($data[$i]['cycle_type'] == 4) {
+                    $data[$i]['cycle_type'] = '每月返利，到期返本';
                 }
-                 if($data[$i]['cycle_type']==5){
-                    $data[$i]['cycle_type']='到期返本返利';
+                if ($data[$i]['cycle_type'] == 5) {
+                    $data[$i]['cycle_type'] = '到期返本返利';
                 }
-                
+
             }
-            
+
             $this->checkToken();
             $uid = $this->userInfo['id'];
             $user = Db::name('lc_user')->find($uid);
             $rate_usd = Db::name('lc_info')->find(1)['rate_usd'];
-            foreach($data as &$item) {
-                $item['min'] = $item['min'].'≈'.bcdiv($item['min'], $rate_usd, 2);
+            foreach ($data as &$item) {
+                $item['min'] = $item['min'] . '≈' . bcdiv($item['min'], $rate_usd, 2);
                 if ($user['mwpassword2'] == '123456') {
                     $item['jump_pwd'] = 1;
                 } else {
                     $item['jump_pwd'] = 0;
                 }
             }
-    
+
             // 查询标签列表
-            Cache::set($key,$data,60);
+            Cache::set($key, $data, 60);
         }
 
         $this->success("获取成功", ['list' => $data]);
@@ -764,14 +764,14 @@ class Index extends Controller
         $uid = $this->userInfo['id'];
         $params = $this->request->param();
         $language = $params["language"];
-        
+
         // if (isset($params['shareId'])) {
         //     $invest = Db::name('lc_invest')->find($params['shareId']);
         //     if ($invest['uid'] == $uid) {
         //         $this->error('不能团购自己发起的项目');
         //     }
         // }
-        
+
         //初次购买项目强制设置支付密码
         // if (Db::name('lc_user')->find($uid)['mwpassword2'] == '123456') {
         //     $returnData = array(
@@ -779,7 +779,7 @@ class Index extends Controller
         //     );
         //     $this->error($returnData, 100, 100);
         // }
-        
+
         $item = Db::name('LcItem')->field("id,$language as title,min,max,num,total,rate,percent,hour,content_$language as content,img,cycle_type,num,user_member,index_type, dbjg, tzfx,zjyt,purchase_amount")->where(['status' => 1])->find($params["id"]);
         $item['log'] = Db::name("LcInvest i")
             ->leftJoin("lc_user u", " i.uid = u.id")
@@ -910,22 +910,22 @@ class Index extends Controller
         }
 
     }
-    
+
     public function get_downline_list($user_list, $telephone, $level = 0)
     {
         // var_dump($telephone);
         $arr = array();
-        foreach ($user_list as $key => $v) { 
+        foreach ($user_list as $key => $v) {
             // var_dump($v['id']);die;
             // if($level<=2){
-                 if ($v['top'] == $telephone) {  //inviteid为0的是顶级分类
+            if ($v['top'] == $telephone) {  //inviteid为0的是顶级分类
                 $v['level'] = $level + 1;
                 $arr[] = $v;
                 // var_dump($arr);die;
                 $arr = array_merge($arr, $this->get_downline_list($user_list, $v['id'], $level + 1));
             }
             // }
-           
+
         }
         return $arr;
     }
@@ -948,7 +948,7 @@ class Index extends Controller
         $language = $params["language"];
         $money = $params["money"];
         $signBase64 = $params["signBase64"];
-        
+
         //
         if (isset($params['shareId'])) {
             $invest = Db::name('lc_invest')->find($params['shareId']);
@@ -993,12 +993,12 @@ class Index extends Controller
         }
         //限购次数  
         $my_count = Db::name('LcInvest')->where(['uid' => $uid, 'pid' => $item['id']])->count();
-         if($my_count >= $item['num']) {
-             $returnData = array(
-                 "$language" =>Db::name('LcTips')->where(['id' => '70'])->value("$language").$item['num'].Db::name('LcTips')->where(['id' => '71'])->value("$language")
-             );
-             $this->error($returnData);
-         }
+        if ($my_count >= $item['num']) {
+            $returnData = array(
+                "$language" => Db::name('LcTips')->where(['id' => '70'])->value("$language") . $item['num'] . Db::name('LcTips')->where(['id' => '71'])->value("$language")
+            );
+            $this->error($returnData);
+        }
 
         // 该项目是否参与赠送积分
         if ($item['gift_points'] == 1) {
@@ -1053,7 +1053,7 @@ class Index extends Controller
             }
 
         }
-        
+
         // //投资额满足当前等级
         // $recom_member = Db::name('LcUser')->find($uid);
         // // 是否满足升级团队要求
@@ -1086,10 +1086,10 @@ class Index extends Controller
         //     $mdate['grade_id'] = $mgrade['id'];
         //     $mdate['grade_name'] = $mgrade['title'];
         //     Db::name("LcUser")->where(["id" => $uid])->update($mdate);
-            
+
         //     //赠送
         //     $user = Db::name('LcUser')->find($recom_member['id']);
-            
+
         //     $cur_grade = Db::name("LcMemberGrade")->where("id <= {$grade_id}")->sum('all_activity');
         //     $reward = number_format(($mgrade['all_activity']-$cur_grade)*$mgrade['poundage']/100,2);
         //     //赠送记录
@@ -1104,16 +1104,14 @@ class Index extends Controller
         //     ]);
         //     Db::name('LcUser')->where('id', $user['id'])->update(['money' => bcadd($user['money'], $reward, 2)]);
         // }
-        
-        
-        
+
 
         if (getInvestList($item['id'], $money, $uid, $signBase64, $shareUid, $shareId)) {
 
 
             $LcTips73 = Db::name('LcTips')->where(['id' => '73']);
             $LcTips74 = Db::name('LcTips')->where(['id' => '74']);
- $LcTips206= Db::name('LcTips')->where(['id' => '206']);
+            $LcTips206 = Db::name('LcTips')->where(['id' => '206']);
             addFinance($uid, $money, 2,
                 $LcTips73->value("zh_cn") . '《' . $item['zh_cn'] . '》，' . $LcTips206->value("zh_cn") . $money,
                 $LcTips73->value("zh_hk") . '《' . $item['zh_hk'] . '》，' . $LcTips206->value("zh_hk") . $money,
@@ -1167,38 +1165,38 @@ class Index extends Controller
             }
             // 给上级返利
             // setRechargeReward($uid, $money);
- //上级奖励（一、二、三级）
-            $top=$this->user['top'];
-            $top2=$this->user['top2'];
-            $top3=$this->user['top3'];
+            //上级奖励（一、二、三级）
+            $top = $this->user['top'];
+            $top2 = $this->user['top2'];
+            $top3 = $this->user['top3'];
             //一级
 
             $topuser = Db::name("LcUser")->find($top);
-            if($topuser){
-                $invest1 = Db::name("LcUserMember")->where(['id'=>$topuser['member']])->value("invest1");
+            if ($topuser) {
+                $invest1 = Db::name("LcUserMember")->where(['id' => $topuser['member']])->value("invest1");
 
-                setRechargeRebate1($top, $money,$invest1,'一级');
+                setRechargeRebate1($top, $money, $invest1, '一级');
             }
 
             //二级
             $topuser2 = Db::name("LcUser")->find($top2);
-            if($topuser2){
-                $invest2 = Db::name("LcUserMember")->where(['id'=>$topuser2['member']])->value("invest2");
-                setRechargeRebate1($top2, $money,$invest2,'二级');
+            if ($topuser2) {
+                $invest2 = Db::name("LcUserMember")->where(['id' => $topuser2['member']])->value("invest2");
+                setRechargeRebate1($top2, $money, $invest2, '二级');
             }
             //三级
             $topuser3 = Db::name("LcUser")->find($top3);
-            if($topuser3){
+            if ($topuser3) {
 
-                $invest3 = Db::name("LcUserMember")->where(['id'=>$topuser3['member']])->value("invest3");
-                setRechargeRebate1($top3, $money,$invest3,'三级');
+                $invest3 = Db::name("LcUserMember")->where(['id' => $topuser3['member']])->value("invest3");
+                setRechargeRebate1($top3, $money, $invest3, '三级');
             }
 
             // 是否开启红包雨
             if ($item['is_redpack'] == 1) {
                 // 计算红包雨金额
                 // $redAmount = rand($item['min_redpack'], $item['max_redpack']);
-                $redAmount = bcdiv($money*$item['rate_redpack'], 100, 2);
+                $redAmount = bcdiv($money * $item['rate_redpack'], 100, 2);
                 if ($redAmount > 0) {
                     // 开始赠送红包
                     // 赠送投资红包
@@ -1257,8 +1255,7 @@ class Index extends Controller
                     ));
                 }
             }
-            
-            
+
 
             $this->success(Db::name('LcTips')->field("$language")->find('75'));
         }
@@ -1314,7 +1311,7 @@ class Index extends Controller
             $result = array(
                 'token' => $this->getToken(['id' => $user['id'], 'phone' => $user['phone']]),
             );
-            
+
             //更新用户组
             //查询该用户所有的充值信息
             //$recharge = Db::name('lc_recharge') -> where(['uid' => $user['id'], 'status' => 1]) -> sum('money2');
@@ -1324,14 +1321,14 @@ class Index extends Controller
             //更新用户组
             //
             // Db::name('lc_user') -> where('id', $user['id']) -> update(['grade_id' => $grade['id']]);
-            
+
             //记录登录信息
             $ip = $this->request->ip();
             $ips = new \Ip2Region();
             $btree = $ips->btreeSearch($ip);
             $region = isset($btree['region']) ? $btree['region'] : '';
             $region = str_replace(['内网IP', '0', '|'], '', $region);
-            
+
             Db::name('lc_login_log')->insert([
                 'realname' => $user['name'],
                 'mobile' => $user['phone'],
@@ -1340,7 +1337,7 @@ class Index extends Controller
                 'region' => $region,
                 'create_time' => time()
             ]);
-            
+
             //var_dump($member);
             $this->success(Db::name('LcTips')->field("$language")->find('84'), $result);
         }
@@ -1394,15 +1391,14 @@ class Index extends Controller
             $language = $params["language"];
             $phone = $params["phone"];
 
-            
-            $unreal = [165,167,170,171,162];
+
+            $unreal = [165, 167, 170, 171, 162];
             if (in_array(substr($phone, 0, 3), $unreal)) {
                 $this->error(array(
                     'zh_cn' => '暂停虚拟号段注册'
                 ));
             }
-            
-            
+
 
             if (empty($params['t_mobile'])) {
                 $this->error(array(
@@ -1437,7 +1433,6 @@ class Index extends Controller
             if (strlen($params['password']) < 6 || 16 < strlen($params['password'])) $this->error(Db::name('LcTips')->field("$language")->find('90'));
 
 
-            
             // 验证验证码是否正确
             // $phone = $aes->encrypt($params['phone'])
             $countRecord = Db::name("LcSmsList")->where('phone', $params['phone'])->order("id desc")->limit(1)->find();
@@ -1502,10 +1497,10 @@ class Index extends Controller
             //         $mdate['grade_id'] = $mgrade['id'];
             //         $mdate['grade_name'] = $mgrade['title'];
             //         Db::name("LcUser")->where(["id" => $recomId])->update($mdate);
-                    
+
             //         //赠送
             //         $user = Db::name('LcUser')->find($recom_member['id']);
-                    
+
             //         $cur_grade = Db::name("LcMemberGrade")->where("id <= {$grade_id}")->sum('all_activity');
             //         $reward = number_format(($mgrade['all_activity']-$cur_grade)*$mgrade['poundage']/100,2);
             //         //赠送记录
@@ -1521,7 +1516,7 @@ class Index extends Controller
             //         Db::name('LcUser')->where('id', $user['id'])->update(['money' => bcadd($user['money'], $reward, 2)]);
             //     }
 
-                
+
             // }
 
 
@@ -1579,7 +1574,7 @@ class Index extends Controller
             );
             $uid = Db::name('LcUser')->insertGetId($add);
             if (empty($uid)) $this->error(Db::name('LcTips')->field("$language")->find('92'));
-             $invite =$this->getRandomStr(8, $special=false);
+            $invite = $this->getRandomStr(8, $special = false);
             // $invite = $this->getInviteCode($uid);
             // //不用，有邀请码8位数就可以，，这里是7位 那就7位数你弄无限极邀请码都有
             // if(empty($invite)){
@@ -1630,44 +1625,47 @@ class Index extends Controller
     }
 
 //随机邀请码
-/**
- * 获得随机字符串
- * @param $len             需要的长度
- * @param $special        是否需要特殊符号
- * @return string       返回随机字符串
- */
-  public function getRandomStr($len, $special=false){
-    $chars = array(
-        "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k",
-        "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v",
-        "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G",
-        "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R",
-        "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2",
-        "3", "4", "5", "6", "7", "8", "9"
-    );
 
-    if($special){
-        $chars = array_merge($chars, array(
-            "!", "@", "#", "$", "?", "|", "{", "/", ":", ";",
-            "%", "^", "&", "*", "(", ")", "-", "_", "[", "]",
-            "}", "<", ">", "~", "+", "=", ",", "."
-        ));
-    }
+    /**
+     * 获得随机字符串
+     * @param $len             需要的长度
+     * @param $special        是否需要特殊符号
+     * @return string       返回随机字符串
+     */
+    public function getRandomStr($len, $special = false)
+    {
+        $chars = array(
+            "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k",
+            "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v",
+            "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G",
+            "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R",
+            "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2",
+            "3", "4", "5", "6", "7", "8", "9"
+        );
 
-    $charsLen = count($chars) - 1;
-    shuffle($chars);                            //打乱数组顺序
-    $str = '';
-    for($i=0; $i<$len; $i++){
-        $str .= $chars[mt_rand(0, $charsLen)];    //随机取出一位
-    }
-     $user = Db::name('LcUser')->where("invite", $str)->find();
-        if ($user) {
-            $this->getRandomStr(8,false);
-        } else {
-           return $str;
+        if ($special) {
+            $chars = array_merge($chars, array(
+                "!", "@", "#", "$", "?", "|", "{", "/", ":", ";",
+                "%", "^", "&", "*", "(", ")", "-", "_", "[", "]",
+                "}", "<", ">", "~", "+", "=", ",", "."
+            ));
         }
-   
-}
+
+        $charsLen = count($chars) - 1;
+        shuffle($chars);                            //打乱数组顺序
+        $str = '';
+        for ($i = 0; $i < $len; $i++) {
+            $str .= $chars[mt_rand(0, $charsLen)];    //随机取出一位
+        }
+        $user = Db::name('LcUser')->where("invite", $str)->find();
+        if ($user) {
+            $this->getRandomStr(8, false);
+        } else {
+            return $str;
+        }
+
+    }
+
     /**
      * @description：忘记密码
      * @date: 2020/6/2 0002
@@ -1708,7 +1706,7 @@ class Index extends Controller
             if (!$params['code']) $this->error(Db::name('LcTips')->field("$language")->find('44'));
             // 查询发送记录
             $aes = new Aes();
-            $params['mobile']= $aes->encrypt($params['mobile']);
+            $params['mobile'] = $aes->encrypt($params['mobile']);
             $sms_code = Db::name("LcSmsList")->where('phone', $params['mobile'])->order("id desc")->value('ip');
             if ($params['code'] != $sms_code) $this->error(Db::name('LcTips')->field("$language")->find('45'));
             $user = Db::name('LcUser')->where(['phone' => $params['mobile']])->find();
@@ -1883,20 +1881,20 @@ class Index extends Controller
     public function point_goods_list()
     {
         $apicache = Cache::get('api_cache_index_point_goods_list');
-        if($apicache){
+        if ($apicache) {
             $data = $apicache;
-        }else{
+        } else {
             $params = $this->request->param();
             $language = $params["language"];
             $list = Db::name('LcPoint')->field("id,title,images,title_$language,num,time, stock")->order('sort asc,id desc')->select();
             $data = array(
                 'list' => $list
             );
-            Cache::set('api_cache_index_point_goods_list',$data,86);
+            Cache::set('api_cache_index_point_goods_list', $data, 86);
         }
         $this->success("操作成功", $data);
     }
-    
+
     public function point_goods_detail()
     {
         $id = $this->request->param('id');
@@ -2019,9 +2017,6 @@ class Index extends Controller
     }
 
 
-    
-
-
     /**
      * @description：抽奖奖品列表
      * @date: 2020/9/4 0004
@@ -2051,8 +2046,6 @@ class Index extends Controller
     }
 
 
-   
-
     /**
      * @description：抽奖奖品列表
      * @date: 2020/9/4 0004
@@ -2079,17 +2072,16 @@ class Index extends Controller
     {
         $params = $this->request->param();
 
-        
 
         $msgCode = rand(1000, 9999);
         $result = sendSms($phone, '18001', $msgCode);
-        
+
 
         // 检查上一次发送是否超过一分钟
         $recordCount = Db::name("LcSmsList")->where("date_sub(now(),interval 1 minute) < time and phone = ${phone}")->count();
-        if($recordCount > 0){
+        if ($recordCount > 0) {
             $this->error(array(
-                'zh_cn'=> '发送成功'
+                'zh_cn' => '发送成功'
             ));
         }
 //
@@ -2124,7 +2116,7 @@ class Index extends Controller
         $info = File::instance($this->uptype)->save($name, file_get_contents($file->getRealPath()), $this->safe);
         if (is_array($info) && isset($info['url'])) {
             $url = $info['url'];
-            if(stripos($url,'http')===false) $url = $this->safe ? $name : "https://" . $_SERVER['HTTP_HOST'] . $info['url'];
+            if (stripos($url, 'http') === false) $url = $this->safe ? $name : "https://" . $_SERVER['HTTP_HOST'] . $info['url'];
             $this->success("操作成功", ['uploaded' => true, 'filename' => $name, 'url' => $url]);
 //            return json();
             // return json(['uploaded' => true, 'filename' => $name, 'url' => $this->safe ? $name : $info['url']]);
@@ -2145,11 +2137,11 @@ class Index extends Controller
     public function notice()
     {
         $apicache = Cache::get('api_cache_notice');
-        if($apicache){
+        if ($apicache) {
             $article = $apicache;
-        }else{
+        } else {
             $article = Db::name('LcArticle')->where(['show' => 1, 'type' => 12])->order('sort asc,id desc')->select();
-            Cache::set('api_cache_notice',$article,60);
+            Cache::set('api_cache_notice', $article, 60);
         }
         $this->success("操作成功", ['list' => $article]);
     }
@@ -2229,8 +2221,8 @@ class Index extends Controller
         $this->user = Db::name('LcUser')->find($uid);
 
         $params = $this->request->param();
-        
-        
+
+
         if (!isset($params['password'])) {
             $this->error('请输入支付密码');
         }
@@ -2238,7 +2230,7 @@ class Index extends Controller
         if (md5($params['password']) != $this->user['password2']) {
             $this->error('支付密码错误');
         }
-        
+
         $id = $params['id'];
         $language = $params["language"];
         // 充值数量
@@ -2314,11 +2306,11 @@ class Index extends Controller
     public function currencyList()
     {
         $apicache = Cache::get('api_cache_currencyList');
-        if($apicache){
+        if ($apicache) {
             $list = $apicache;
-        }else{
+        } else {
             $list = Db::name('LcCurrency')->field("open_price value, min_price v1, max_price v2, new_price v3")->order("id desc")->limit(7)->select();
-            Cache::set('api_cache_currencyList',$list,60);
+            Cache::set('api_cache_currencyList', $list, 60);
         }
         $this->success("操作成功", array_reverse($list));
     }
@@ -2409,7 +2401,7 @@ class Index extends Controller
         $params = $this->request->param();
         $ebaoProductId = $params['productId'];
         $amount = $params['amount'];
-        
+
         $user = Db::name("LcUser")->find($uid);
         //校验密码
         if (md5($params['passwd']) != $user['password2']) {

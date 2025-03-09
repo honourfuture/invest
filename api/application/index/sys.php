@@ -13,12 +13,10 @@
 // | github 代码仓库：https://github.com/zoujingli/ThinkAdmin
 // +----------------------------------------------------------------------
 
-use library\File;
+use app\api\controller\Aes;
 use think\Db;
-use think\facade\Request;
 use think\facade\Session;
 use Xkeyi\AliyunSms\SendSms;
-use app\api\controller\Aes;
 
 if (!function_exists('isLogin')) {
     /**
@@ -74,7 +72,50 @@ function GetIpLookup($ip = '')
     $data = (array)$ip->data;
     return $data;
 }
-
+function add_finance($uid, $money, $type, $langs, $remark = "", $reason = "", $reason_type = 0, $trade_type = 2, $order_id = 0)
+{
+    $user = Db::name('LcUser')->find($uid);
+    if (!$user) return false;
+    if ($user['money'] < 0) return false;
+    if ($type == 1) {
+        $after_money = bcadd($user['money'], $money, 2);
+    } else if ($type == 2) {
+        $after_money = bcsub($user['money'], $money, 2);
+    }
+    $data = array(
+        'uid' => $uid,
+        'money' => $money,
+        'type' => $type,
+        'reason' => $reason,
+        "zh_cn" => $langs['zh_cn'] ?? '',
+        "zh_hk" => $langs['zh_hk'] ?? '',
+        "en_us" => $langs['en_us'] ?? '',
+        "th_th" => $langs['th_th'] ?? '',
+        "vi_vn" => $langs['vi_vn'] ?? '',
+        "ja_jp" => $langs['ja_jp'] ?? '',
+        "ko_kr" => $langs['ko_kr'] ?? '',
+        "ms_my" => $langs['ms_my'] ?? '',
+        'remark' => $remark,
+        'reason_type' => $reason_type,
+        'before' => $user['money'],
+        'time' => date('Y-m-d H:i:s'),
+        'trade_type' => $trade_type,
+        'after_money' => $after_money,
+        'after_asset' => $user['asset'],
+        'before_asset' => $user['asset'],
+        'orderid' => $order_id
+    );
+    Db::startTrans();
+    $re = Db::name('LcFinance')->insert($data);
+    // var_dump($re);die;
+    if ($re) {
+        Db::commit();
+        return true;
+    } else {
+        Db::rollback();
+        return false;
+    }
+}
 /**
  * Describe:添加流水
  * DateTime: 2020/9/5 19:52
@@ -95,14 +136,14 @@ function GetIpLookup($ip = '')
  * @throws \think\db\exception\ModelNotFoundException
  * @throws \think\exception\DbException
  */
-function addFinance($uid,$money,$type,$zh_cn,$zh_hk,$en_us,$th_th,$vi_vn,$ja_jp,$ko_kr,$ms_my,$remark="",$reason="",$reason_type=0,$trade_type = 2)
+function addFinance($uid, $money, $type, $zh_cn, $zh_hk, $en_us, $th_th, $vi_vn, $ja_jp, $ko_kr, $ms_my, $remark = "", $reason = "", $reason_type = 0, $trade_type = 2)
 {
     $user = Db::name('LcUser')->find($uid);
     if (!$user) return false;
     if ($user['money'] < 0) return false;
     if ($type == 1) {
         $after_money = bcadd($user['money'], $money, 2);
-    } else if($type == 2) {
+    } else if ($type == 2) {
         $after_money = bcsub($user['money'], $money, 2);
     }
     $data = array(
@@ -110,14 +151,14 @@ function addFinance($uid,$money,$type,$zh_cn,$zh_hk,$en_us,$th_th,$vi_vn,$ja_jp,
         'money' => $money,
         'type' => $type,
         'reason' => $reason,
-        "zh_cn" =>$zh_cn,
-        "zh_hk" =>$zh_hk,
-        "en_us" =>$en_us,
-        "th_th" =>$th_th,
-        "vi_vn" =>$vi_vn,
-        "ja_jp" =>$ja_jp,
-        "ko_kr" =>$ko_kr,
-        "ms_my" =>$ms_my,
+        "zh_cn" => $zh_cn,
+        "zh_hk" => $zh_hk,
+        "en_us" => $en_us,
+        "th_th" => $th_th,
+        "vi_vn" => $vi_vn,
+        "ja_jp" => $ja_jp,
+        "ko_kr" => $ko_kr,
+        "ms_my" => $ms_my,
         'remark' => $remark,
         'reason_type' => $reason_type,
         'before' => $user['money'],
@@ -139,14 +180,14 @@ function addFinance($uid,$money,$type,$zh_cn,$zh_hk,$en_us,$th_th,$vi_vn,$ja_jp,
     }
 }
 
-function addFinanceAsset($uid,$money,$type,$zh_cn,$zh_hk,$en_us,$th_th,$vi_vn,$ja_jp,$ko_kr,$ms_my,$remark="",$reason="",$reason_type=0,$trade_type = 1)
+function addFinanceAsset($uid, $money, $type, $zh_cn, $zh_hk, $en_us, $th_th, $vi_vn, $ja_jp, $ko_kr, $ms_my, $remark = "", $reason = "", $reason_type = 0, $trade_type = 1)
 {
     $user = Db::name('LcUser')->find($uid);
     if (!$user) return false;
     if ($user['asset'] < 0) return false;
     if ($type == 1) {
         $after_asset = bcadd($user['asset'], $money, 2);
-    } else if($type == 2) {
+    } else if ($type == 2) {
         $after_asset = bcsub($user['asset'], $money, 2);
     }
     $data = array(
@@ -154,14 +195,14 @@ function addFinanceAsset($uid,$money,$type,$zh_cn,$zh_hk,$en_us,$th_th,$vi_vn,$j
         'money' => $money,
         'type' => $type,
         'reason' => $reason,
-        "zh_cn" =>$zh_cn,
-        "zh_hk" =>$zh_hk,
-        "en_us" =>$en_us,
-        "th_th" =>$th_th,
-        "vi_vn" =>$vi_vn,
-        "ja_jp" =>$ja_jp,
-        "ko_kr" =>$ko_kr,
-        "ms_my" =>$ms_my,
+        "zh_cn" => $zh_cn,
+        "zh_hk" => $zh_hk,
+        "en_us" => $en_us,
+        "th_th" => $th_th,
+        "vi_vn" => $vi_vn,
+        "ja_jp" => $ja_jp,
+        "ko_kr" => $ko_kr,
+        "ms_my" => $ms_my,
         'remark' => $remark,
         'reason_type' => $reason_type,
         'before' => $user['money'],
@@ -407,7 +448,7 @@ function getPayName($pay)
         case 'wechat_scan':
             return '微信在线扫码支付';
         case 'usdt':
-        return 'USDT';
+            return 'USDT';
         default:
     }
     return '未知支付';
@@ -538,6 +579,7 @@ function getProjectSurplus($pid)
     if ($surplus < 0) return 0;
     return $surplus;
 }
+
 /**
  * @description：推荐充值奖励设置
  * @date: 2020/5/14 0014
@@ -625,7 +667,7 @@ function setRechargeReward($uid, $money)
 
 function setUserMember($uid, $value)
 {
-    
+
     $member = Db::name('LcUserMember')->where("value <= '{$value}'")->order('value desc')->find();
 
     if (empty($member)) {
@@ -659,19 +701,19 @@ function getUserPhone($uid)
  * @throws \think\db\exception\ModelNotFoundException
  * @throws \think\exception\DbException
  */
-function getInvestList($id, $money, $uid, $signBase64, $shareUid, $shareId, $team_reward = 0,$coupon_id=0,$add_rate=0)
+function getInvestList($id, $money, $uid, $signBase64, $shareUid, $shareId, $team_reward = 0, $coupon_id = 0, $add_rate = 0)
 {
     ini_set("error_reporting", "E_ALL & ~E_NOTICE");
     $item = Db::name('LcItem')->where(['id' => $id])->find();
 //    $title = $item['title'];
     $zh_cn = $item['zh_cn'];
-    $zh_hk = isset($item['zh_hk'])?$item['zh_hk']:'';
-    $en_us= isset($item['en_us'])?$item['en_us']:'';
-    $th_th = isset($item['th_th'])?$item['th_th']:'';
-    $vi_vn = isset($item['vi_vn'])?$item['vi_vn']:'';
-    $ja_jp = isset($item['ja_jp'])?$item['ja_jp']:'';
-    $ko_kr = isset($item['ko_kr'])?$item['ko_kr']:'';
-    $ms_my = isset($item['ms_my'])?$item['ms_my']:'';
+    $zh_hk = isset($item['zh_hk']) ? $item['zh_hk'] : '';
+    $en_us = isset($item['en_us']) ? $item['en_us'] : '';
+    $th_th = isset($item['th_th']) ? $item['th_th'] : '';
+    $vi_vn = isset($item['vi_vn']) ? $item['vi_vn'] : '';
+    $ja_jp = isset($item['ja_jp']) ? $item['ja_jp'] : '';
+    $ko_kr = isset($item['ko_kr']) ? $item['ko_kr'] : '';
+    $ms_my = isset($item['ms_my']) ? $item['ms_my'] : '';
     $hour = $item['hour'];
     $day = $item['day'];
     $rate = $item['rate'];
@@ -683,11 +725,11 @@ function getInvestList($id, $money, $uid, $signBase64, $shareUid, $shareId, $tea
         $user = Db::name("LcUser")->find($uid);
         $member = Db::name("LcUserMember")->find($user['member']);
         //首页热门精选获得高一等级的加息收益
-        if($item['show_home']==1){
-            $next_member = Db::name("LcUserMember")->where('value > '.$member['value'])->order('value asc')->find();
-            if($next_member) $member = $next_member;
+        if ($item['show_home'] == 1) {
+            $next_member = Db::name("LcUserMember")->where('value > ' . $member['value'])->order('value asc')->find();
+            if ($next_member) $member = $next_member;
         }
-        $rate = $rate+$member['rate'];
+        $rate = $rate + $member['rate'];
         $user_rate = $member['rate'];
     } else {
         $member = Db::name('lc_user_member')->find($user['member']);
@@ -698,13 +740,13 @@ function getInvestList($id, $money, $uid, $signBase64, $shareUid, $shareId, $tea
     //     $next_member = Db::name("LcUserMember")->where('value > '.$member['value'])->order('value asc')->find();
     //     if($next_member) $member = $next_member;
     // }
-    
+
     // 创建一个投资记录
-    $invest = array('uid' => $uid, 'pid' => $id, 'zh_hk' => $zh_hk,'zh_cn' => $zh_cn, 'en_us' => $en_us, 'th_th' => $th_th, 
-    'vi_vn' => $vi_vn, 'ja_jp' => $ja_jp, 'ko_kr' => $ko_kr, 'ms_my' => $ms_my, 
-    'money' => $money, 'hour' => $hour, 'day' => $day, 
-    'rate' => $rate, 'status' => 0, 'time' => date('Y-m-d H:i:s'), 'group_yield' => $item['group_yield'], 'sign_base64' => $signBase64, 'share_uid' => $shareUid , 'share_oid' => $shareId);
-    
+    $invest = array('uid' => $uid, 'pid' => $id, 'zh_hk' => $zh_hk, 'zh_cn' => $zh_cn, 'en_us' => $en_us, 'th_th' => $th_th,
+        'vi_vn' => $vi_vn, 'ja_jp' => $ja_jp, 'ko_kr' => $ko_kr, 'ms_my' => $ms_my,
+        'money' => $money, 'hour' => $hour, 'day' => $day,
+        'rate' => $rate, 'status' => 0, 'time' => date('Y-m-d H:i:s'), 'group_yield' => $item['group_yield'], 'sign_base64' => $signBase64, 'share_uid' => $shareUid, 'share_oid' => $shareId);
+
     //当前会员等级利率
     $user = Db::name('lc_user')->find($uid);
     // $member = Db::name('lc_user_member')->find($user['member']);
@@ -712,7 +754,7 @@ function getInvestList($id, $money, $uid, $signBase64, $shareUid, $shareId, $tea
     $invest['user_rate'] = $user_rate;
     $invest['user_member'] = $member['id'];
     $invest['team_reward'] = $team_reward;
-    
+
     $is_use_coupon = 0;
     if ($coupon_id) {
         $coupon = Db::name('lc_coupon_list')->find($coupon_id);
@@ -725,67 +767,67 @@ function getInvestList($id, $money, $uid, $signBase64, $shareUid, $shareId, $tea
         $grow_value = bcmul($money, $item['grow_type'], 2);
         setNumber('LcUser', 'value', $grow_value, 1, "id = $uid");
     }
-    
+
     setUserMember($uid, Db::name('lc_user')->find($uid)['value']);
-    
+
     $iid = Db::name('LcInvest')->insertGetId($invest);
-    
+
     if (!empty($iid)) {
-        
+
         if ($is_use_coupon) {
             Db::name('lc_coupon_list')->where('id', $coupon['id'])->update(['status' => 1, 'usetime' => date('Y-m-d H:i:s'), 'invest_id' => $iid]);
         }
-        
+
         $bool = false;
         $i = 1;
 
         $nums = 1;
         $addTime = "day";
         // 判断项目投资的返利模式
-        if($indexType == 1){
+        if ($indexType == 1) {
             // 按小时
             $nums = $hour;
             $addTime = "hour";
-        }else if($indexType == 2){
+        } else if ($indexType == 2) {
             // 按日 小时 * 24
             $nums = $hour / 24;
-        }else if($indexType == 3){
+        } else if ($indexType == 3) {
             // 每周
             $nums = ceil(intval($hour / 24 / 7));
-            $addTime = "week"; 
-        }else if($indexType == 4){
+            $addTime = "week";
+        } else if ($indexType == 4) {
             // 每月返利
             $nums = ceil(intval($hour / 24 / 30));
             $addTime = "month";
-        } else if($indexType == 6){
+        } else if ($indexType == 6) {
             // 每年返利
             $nums = ceil(intval($hour / 24 / 365));
             $addTime = "year";
-        } 
+        }
 //        else if($indexType == 5){
 //            // 到期返利
 //            $nums = 1;
 //        }
 
-        if($nums < 1) $nums = 1;
+        if ($nums < 1) $nums = 1;
         // $day =  bcdiv(bcdiv($hour,24,3), $nums,3);
-        $day = $hour/24/$nums;
+        $day = $hour / 24 / $nums;
         $wait_invest = 0;
         while ($i <= $nums) {
-            if($nums == 1){
+            if ($nums == 1) {
                 $time1 = date('Y-m-d H:i:s', strtotime('+' . $hour . ' hour'));
-            }else{
-                $time1 = date('Y-m-d H:i:s', strtotime('+' . $i . ' '. $addTime));
+            } else {
+                $time1 = date('Y-m-d H:i:s', strtotime('+' . $i . ' ' . $addTime));
             }
 
             // $data = array('uid' => $uid, 'iid' => $iid, 'num' => $i, 'zh_hk' => $zh_hk,'zh_cn' => $zh_cn, 'en_us' => $en_us, 'th_th' => $th_th, 'vi_vn' => $vi_vn, 'ja_jp' => $ja_jp, 'ko_kr' => $ko_kr, 'ms_my' => $ms_my, 'money1' => round($money * $rate  / 100 , 2), 'money2' => 0, 'time1' => $time1, 'time2' => '0000-00-00 00:00:00', 'pay1' => $money * $rate / 100 , 'pay2' => 0, 'status' => 0);
-            $oldMoney = $money * $rate * $day  / 100;
-            $money1 = bcdiv($oldMoney,1,5); // 真实总利息
+            $oldMoney = $money * $rate * $day / 100;
+            $money1 = bcdiv($oldMoney, 1, 5); // 真实总利息
             // if($indexType != 1){
             //     $money1 = bcdiv($money1, $day, 3); // 每一期利息
             // }
             // var_dump($money,$rate,$day,$money1,$invest['user_member'],$nums);die;
-            $data = array('uid' => $uid, 'iid' => $iid, 'num' => $i, 'zh_hk' => $zh_hk,'zh_cn' => $zh_cn, 'en_us' => $en_us, 'th_th' => $th_th, 'vi_vn' => $vi_vn, 'ja_jp' => $ja_jp, 'ko_kr' => $ko_kr, 'ms_my' => $ms_my, 'money1' => $money1, 'money2' => 0, 'time1' => $time1, 'time2' => '0000-00-00 00:00:00', 'pay1' => $money * $rate * $day / 100 , 'pay2' => 0, 'status' => 0, 'user_rate' => $user_rate);
+            $data = array('uid' => $uid, 'iid' => $iid, 'num' => $i, 'zh_hk' => $zh_hk, 'zh_cn' => $zh_cn, 'en_us' => $en_us, 'th_th' => $th_th, 'vi_vn' => $vi_vn, 'ja_jp' => $ja_jp, 'ko_kr' => $ko_kr, 'ms_my' => $ms_my, 'money1' => $money1, 'money2' => 0, 'time1' => $time1, 'time2' => '0000-00-00 00:00:00', 'pay1' => $money * $rate * $day / 100, 'pay2' => 0, 'status' => 0, 'user_rate' => $user_rate);
             if ($i == $nums) {
                 $data['pay1'] += $money;
                 $data['money2'] += $money;
@@ -796,15 +838,15 @@ function getInvestList($id, $money, $uid, $signBase64, $shareUid, $shareId, $tea
             ++$i;
             $wait_invest = bcadd($wait_invest, $oldMoney, 2);
         }
-        
-        
+
+
         //增加会员投资金额、待收利息、待还本金
         Db::name('lc_user')->where('id', $uid)->update([
             'invest_sum' => bcadd($user['invest_sum'], $money, 2),
             'wait_invest' => bcadd($user['wait_invest'], $wait_invest, 2),
             'wait_money' => bcadd($user['wait_money'], $money, 2)
         ]);
-        
+
         return $bool;
     }
     return false;
@@ -897,12 +939,12 @@ function sendSms($phone, $code, $msg)
     if ($sms_type == 1) $recode = yunpian($phone, $code, $smsMsg);
     elseif ($sms_type == 2) $recode = wangJian($phone, $smsMsgs);
     elseif ($sms_type == 3) $recode = $recode = smsbao($phone, $smsMsg);
-    else $recode = alisms($phone, $sms,$sms_code);
+    else $recode = alisms($phone, $sms, $sms_code);
     $data = array('phone' => $phone, 'msg' => $smsMsg, 'code' => $recode . '#' . reSmsCode($recode)['msg'], 'time' => date('Y-m-d H:i:s'), 'ip' => $sms_code);
     $aes = new Aes();
     $data['phone'] = $aes->encrypt($data['phone']);
     Db::name('LcSmsList')->insert($data);
-    if ($sms_type == 4&&$recode!='000') return array('code' => 1, 'msg' => $recode);
+    if ($sms_type == 4 && $recode != '000') return array('code' => 1, 'msg' => $recode);
     return reSmsCode($recode);
 }
 
@@ -917,7 +959,8 @@ function sendSms($phone, $code, $msg)
  * @throws \think\Exception
  * @throws \think\exception\PDOException
  */
-function alisms($phone, $sms_data,$sms_code){
+function alisms($phone, $sms_data, $sms_code)
+{
     $config = [
         'access_key_id' => sysconf('aliyun_key_id'),
         'access_key_secret' => sysconf('aliyun_key_secret'),
@@ -925,7 +968,7 @@ function alisms($phone, $sms_data,$sms_code){
     ];
     $sms = new SendSms($config);
     $result = $sms->send($phone, $sms_data['template_code'], ['code' => $sms_code]);
-    if($result['Code'] == 'OK'){
+    if ($result['Code'] == 'OK') {
         return '000';
     }
     return $result['Message'];
@@ -1002,7 +1045,7 @@ function wangJian($phone, $smsMsg)
  */
 function smsBao($phone, $content)
 {
-    $phone = '+'.$phone;
+    $phone = '+' . $phone;
     $smsapi = "https://api.smsbao.com/wsms";
     $user = sysconf('smsbao_user');
     $pass = sysconf('smsbao_pass');
@@ -1190,28 +1233,27 @@ function getAllMonthDays()
  * DateTime: 2020/9/5 20:26
  * @return bool
  */
-function check_wap(){
-    if(preg_match('/(blackberry|configuration\/cldc|hp |hp-|htc |htc_|htc-|iemobile|kindle|midp|mmp|motorola|mobile|nokia|opera mini|opera |Googlebot-Mobile|YahooSeeker\/M1A1-R2D2|android|iphone|ipod|mobi|palm|palmos|pocket|portalmmm|ppc;|smartphone|sonyericsson|sqh|spv|symbian|treo|up.browser|up.link|vodafone|windows ce|xda |xda_)/i', $_SERVER['HTTP_USER_AGENT'])){
+function check_wap()
+{
+    if (preg_match('/(blackberry|configuration\/cldc|hp |hp-|htc |htc_|htc-|iemobile|kindle|midp|mmp|motorola|mobile|nokia|opera mini|opera |Googlebot-Mobile|YahooSeeker\/M1A1-R2D2|android|iphone|ipod|mobi|palm|palmos|pocket|portalmmm|ppc;|smartphone|sonyericsson|sqh|spv|symbian|treo|up.browser|up.link|vodafone|windows ce|xda |xda_)/i', $_SERVER['HTTP_USER_AGENT'])) {
         return true;
-    }
-    else{
+    } else {
         return false;
     }
 }
 
 
-
-
-/** 
+/**
  * 打印日志
  * $msg 日志内容
  */
-function printLog($msg) {
-	if (!is_dir('log')){
-		mkdir('log',0777,true);
-	}
-	$path="log/teamgrade.txt";
-	file_put_contents($path, "【" . date('Y-m-d H:i:s') . "】" . $msg . "\r\n\r\n", FILE_APPEND);
+function printLog($msg)
+{
+    if (!is_dir('log')) {
+        mkdir('log', 0777, true);
+    }
+    $path = "log/teamgrade.txt";
+    file_put_contents($path, "【" . date('Y-m-d H:i:s') . "】" . $msg . "\r\n\r\n", FILE_APPEND);
 }
 
 
@@ -1245,34 +1287,34 @@ function gradeUpgrade($uid)
     // $xjlj_money = Db::name("LcUser")->where("recom_id", $uid)->sum("czmoney");
     //团队充值 本人累计充值 + 下级直推累计充值
     // $lj_money = $member['czmoney'] + $xjlj_money;
-     $memberList = Db::name('LcUser')->field('id, phone, top,czmoney,name,time, auth')->select();
-      
-      $itemList = get_downline_list2($memberList,$uid);
+    $memberList = Db::name('LcUser')->field('id, phone, top,czmoney,name,time, auth')->select();
+
+    $itemList = get_downline_list2($memberList, $uid);
     //   var_dump($itemList);die;
-      $lj_money=0;
-      
-       $is_sf = Db::name('LcUser')->where(['id' => $uid])->value('is_sf');
+    $lj_money = 0;
+
+    $is_sf = Db::name('LcUser')->where(['id' => $uid])->value('is_sf');
     //   var_dump($this->userInfo['czmoney']);
     //   var_dump($this->userInfo['is_sf']);die;
-      if($is_sf==0){
+    if ($is_sf == 0) {
         //   $all_czmoney=$this->userInfo['czmoney'];
-            $lj_money = Db::name('LcUser')->where(['id' => $uid])->value('czmoney');
-      }
-                foreach ($itemList as $k=>$v){
-                    $lj_money+=$v['czmoney'];
-                   
-                }
+        $lj_money = Db::name('LcUser')->where(['id' => $uid])->value('czmoney');
+    }
+    foreach ($itemList as $k => $v) {
+        $lj_money += $v['czmoney'];
+
+    }
     // 取团队ID
     $team_id = Db::name("LcMemberGrade")->where('id', '>', 1)->order('id desc')->find();
     // 比较等级
-    $msg='用户【'.$member['phone'].'】直推会员数:'.$tg_num.'<br>';
-    $msg.='用户【'.$member['phone'].'】直推团长数:'.$tz_num.'<br>';
-    $msg.='用户【'.$member['phone'].'】下级累计充值:'.$lj_money.'<br>';
+    $msg = '用户【' . $member['phone'] . '】直推会员数:' . $tg_num . '<br>';
+    $msg .= '用户【' . $member['phone'] . '】直推团长数:' . $tz_num . '<br>';
+    $msg .= '用户【' . $member['phone'] . '】下级累计充值:' . $lj_money . '<br>';
     printLog($msg);
-    
-    
+
+
     $tid = bjgrade($tg_num, $lj_money, $tz_num);
-    $msg1='用户【'.$member['phone'].'】等级比较结果id:'.$tid;
+    $msg1 = '用户【' . $member['phone'] . '】等级比较结果id:' . $tid;
     printLog($msg1);
     // 获取比较后的段对
     $team_data = Db::name("LcMemberGrade")->where("id", $tid)->field('all_activity,title,id,recom_tz,recom_number')->find();
@@ -1349,27 +1391,28 @@ function gradeUpgrade($uid)
                     }
                 }
             }
-        } 
+        }
     }
 }
- function get_downline_list2($user_list, $telephone, $level = 0)
-    {
-        // var_dump($telephone);
-        $arr = array();
-        foreach ($user_list as $key => $v) { 
-            // var_dump($v['id']);die;
-            // if($level<=2){
-                 if ($v['top'] == $telephone) {  //inviteid为0的是顶级分类
-                $v['level'] = $level + 1;
-                $arr[] = $v;
-                // var_dump($arr);die;
-                $arr = array_merge($arr, get_downline_list2($user_list, $v['id'], $level + 1));
-            }
-            // }
-           
+
+function get_downline_list2($user_list, $telephone, $level = 0)
+{
+    // var_dump($telephone);
+    $arr = array();
+    foreach ($user_list as $key => $v) {
+        // var_dump($v['id']);die;
+        // if($level<=2){
+        if ($v['top'] == $telephone) {  //inviteid为0的是顶级分类
+            $v['level'] = $level + 1;
+            $arr[] = $v;
+            // var_dump($arr);die;
+            $arr = array_merge($arr, get_downline_list2($user_list, $v['id'], $level + 1));
         }
-        return $arr;
+        // }
+
     }
+    return $arr;
+}
 
 /**
  * 比较等级

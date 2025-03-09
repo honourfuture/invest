@@ -17,7 +17,7 @@ return [
         'password' => '',
         'port' => '6379',
         // 全局缓存有效期（0为永久有效）
-        'expire' => 0,
+        'expire' => 1,
         // 缓存前缀
         'prefix' => 'gthink',
     ],

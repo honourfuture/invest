@@ -40,9 +40,9 @@ class Index extends Controller
      */
     public function index()
     {
-        $this->title = '后台管理'.date('Y-m-d H:i:s').'当前时区：'.config('app.default_timezone');
+        $this->title = '后台管理' . date('Y-m-d H:i:s') . '当前时区：' . config('app.default_timezone');
         $auth = AdminService::instance()->apply(true);
-        if(!$auth->isLogin()) $this->redirect('@admin/login');
+        if (!$auth->isLogin()) $this->redirect('@admin/login');
         $this->menus = MenuService::instance()->getTree();
         if (empty($this->menus) && !$auth->isLogin()) {
             $this->redirect('@admin/login');
@@ -58,29 +58,30 @@ class Index extends Controller
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
      */
-    public function check(){
+    public function check()
+    {
         $auth = AdminService::instance()->apply(true);
-        if($auth->isLogin()){
-            $cash_count = Db::name("LcCash")->where(['status'=>0,'warn'=>0])->count();
-         
-            $recharge_count = Db::name("LcRecharge")->where(['status'=>0,'warn'=>0, 'yun_order_id' => ''])->count();
-            
-            $certificate_count = Db::name('LcCertificate')->where(['status'=>0])->count();
-            
-            if($certificate_count>0){
-                $this->success("<a style='color:#FFFFFF' data-open='/admin/certificate/index.html'>您有{$certificate_count}条新的身份认证审核记录，请查看！</a>",['url'=>'/static/mp3/sm.mp3']);
+        if ($auth->isLogin()) {
+            $cash_count = Db::name("LcCash")->where(['status' => 0, 'warn' => 0])->count();
+
+            $recharge_count = Db::name("LcRecharge")->where(['status' => 0, 'warn' => 0, 'yun_order_id' => ''])->count();
+
+            $certificate_count = Db::name('LcCertificate')->where(['status' => 0])->count();
+
+            if ($certificate_count > 0) {
+                $this->success("<a style='color:#FFFFFF' data-open='/admin/certificate/index.html'>您有{$certificate_count}条新的身份认证审核记录，请查看！</a>", ['url' => '/static/mp3/sm.mp3']);
             }
-            
-            if($cash_count>0&&$recharge_count>0){
-                $this->success("<a style='color:#FFFFFF' data-open='/admin/recharge/index.html'>您有{$cash_count}条新的提现记录和{$recharge_count}条新的充值记录，请查看！</a>",['url'=>'/static/mp3/cztx.mp3']);
+
+            if ($cash_count > 0 && $recharge_count > 0) {
+                $this->success("<a style='color:#FFFFFF' data-open='/admin/recharge/index.html'>您有{$cash_count}条新的提现记录和{$recharge_count}条新的充值记录，请查看！</a>", ['url' => '/static/mp3/cztx.mp3']);
             }
-            if($cash_count>0&&$recharge_count==0){
-                $this->success("<a style='color:#FFFFFF' data-open='/admin/cash/index.html'>您有{$cash_count}条新的提现记录，请查看！</a>",['url'=>'/static/mp3/tx.mp3']);
+            if ($cash_count > 0 && $recharge_count == 0) {
+                $this->success("<a style='color:#FFFFFF' data-open='/admin/cash/index.html'>您有{$cash_count}条新的提现记录，请查看！</a>", ['url' => '/static/mp3/tx.mp3']);
             }
-            if ($cash_count == 0 && 0 < $recharge_count){
-                $this->success("<a style='color:#FFFFFF' data-open='/admin/recharge/index.html'>您有{$recharge_count}条新的充值记录，请查看！</a>",['url'=>'/static/mp3/cz.mp3']);
+            if ($cash_count == 0 && 0 < $recharge_count) {
+                $this->success("<a style='color:#FFFFFF' data-open='/admin/recharge/index.html'>您有{$recharge_count}条新的充值记录，请查看！</a>", ['url' => '/static/mp3/cz.mp3']);
             }
-            
+
             $this->error("暂无记录");
         }
         $this->error("请先登录");
@@ -95,26 +96,27 @@ class Index extends Controller
      * @throws \think\exception\DbException
      * @throws \think\exception\PDOException
      */
-    public function system_ignore(){
+    public function system_ignore()
+    {
         $auth = AdminService::instance()->apply(true);
-        if($auth->isLogin()){
-            Db::name("LcCash")->where(['warn'=>0])->update(['warn'=>1]);
-            Db::name("LcRecharge")->where(['warn'=>0])->update(['warn'=>1]);
+        if ($auth->isLogin()) {
+            Db::name("LcCash")->where(['warn' => 0])->update(['warn' => 1]);
+            Db::name("LcRecharge")->where(['warn' => 0])->update(['warn' => 1]);
             $this->success("操作成功");
         }
         $this->error("请先登录");
     }
-    
+
     public function get_where($search_time, $field)
     {
         if (empty($search_time)) return '';
         $time_arr = explode(' - ', $search_time);
         $start_time = strtotime($time_arr[0]);
-        $end_time = strtotime($time_arr[1])+86400;
+        $end_time = strtotime($time_arr[1]) + 86400;
         $where = "UNIX_TIMESTAMP($field) > $start_time AND UNIX_TIMESTAMP($field) < $end_time";
         return $where;
     }
-    
+
     public function main()
     {
         $search_time = $this->request->get('search_time', '');
@@ -125,21 +127,21 @@ class Index extends Controller
         //真实号
         $real_user_ids = Db::name('lc_user')->where('is_sf', 0)->column('id');
         //内部号
-        $inside_user_ids = Db::name('lc_user')->whereIn('is_sf', [1,2])->column('id');
+        $inside_user_ids = Db::name('lc_user')->whereIn('is_sf', [1, 2])->column('id');
         //已投项目
         // $data['real']['invest'] = Db::name('lc_invest')->whereIn('uid', $real_user_ids)->where($where)->count();
         // $data['inside']['invest'] = Db::name('lc_invest')->whereIn('uid', $inside_user_ids)->where($where)->count();
         //会员总数
         $data['real']['user'] = Db::name('lc_user')->where($where)->where('is_sf', 0)->count();
-        $data['inside']['user'] = Db::name('lc_user')->where($where)->whereIn('is_sf', [1,2])->count();
+        $data['inside']['user'] = Db::name('lc_user')->where($where)->whereIn('is_sf', [1, 2])->count();
         //充值总额
         $data['real']['recharge'] = Db::name('lc_recharge')->where($where)->whereIn('uid', $real_user_ids)->where('status', 1)->sum('money');
         $data['inside']['recharge'] = Db::name('lc_recharge')->where($where)->whereIn('uid', $inside_user_ids)->where('status', 1)->sum('money');
         //提现总额
         $data['real']['cash'] = Db::name('lc_cash')->where($where)->whereIn('uid', $real_user_ids)->where('status', 1)->sum('money');
         $data['inside']['cash'] = Db::name('lc_cash')->where($where)->whereIn('uid', $inside_user_ids)->where('status', 1)->sum('money');
-        
-        
+
+
         //今日时间戳范围
         $today_where = $this->gettimestamp('today');
         //昨日时间戳范围
@@ -150,11 +152,31 @@ class Index extends Controller
         $month_where = $this->gettimestamp('nowmonth');
         //上月时间戳
         $permonth_where = $this->gettimestamp('permonth');
-        
-        
+
         //今日充值
         $data['real']['recharge_today'] = Db::name('lc_recharge')->where($today_where)->whereIn('uid', $real_user_ids)->where('status', 1)->sum('money');
         $data['inside']['recharge_today'] = Db::name('lc_recharge')->where($today_where)->whereIn('uid', $inside_user_ids)->where('status', 1)->sum('money');
+        // 获取当日首充总金额
+        $today = date('Y-m-d'); // 当前日期
+//        $real_user_ids = [1, 2, 3]; // 指定用户ID列表
+
+        // 子查询：获取每个用户的首充记录ID
+         $subQuery = Db::name('lc_recharge')
+            ->field('uid, MIN(id) AS first_recharge_id')
+            ->whereTime('add_time', 'today') // 使用 whereTime 方法
+//            ->whereIn('uid', $real_user_ids) // 指定用户
+            ->where('status', 1) // 充值成功
+            ->group('uid')
+            ->buildSql();
+
+        // 主查询：计算首充总金额
+        $totalFirstRecharge = Db::name('lc_recharge')
+            ->alias('lc')
+            ->join([$subQuery => 'first_recharges'], 'lc.id = first_recharges.first_recharge_id')
+            ->sum('lc.money');
+
+        // 结果
+        $data['real']['first_recharge_today'] = $totalFirstRecharge;
         //今日提现
         $data['real']['cash_today'] = Db::name('lc_cash')->where($today_where)->whereIn('uid', $real_user_ids)->where('status', 1)->sum('money');
         $data['inside']['cash_today'] = Db::name('lc_cash')->where($today_where)->whereIn('uid', $inside_user_ids)->where('status', 1)->sum('money');
@@ -172,7 +194,7 @@ class Index extends Controller
         // $data['inside']['cash_month'] = Db::name('lc_cash')->where($month_where)->whereIn('uid', $inside_user_ids)->where('status', 1)->sum('money');
         //今日注册用户
         $data['real']['register_today'] = Db::name('lc_user')->where($today_where)->where('is_sf', 0)->count();
-        $data['inside']['register_today'] = Db::name('lc_user')->where($today_where)->whereIn('is_sf', [1,2])->count();
+        $data['inside']['register_today'] = Db::name('lc_user')->where($today_where)->whereIn('is_sf', [1, 2])->count();
         //今日投资用户
         $data['real']['invest_today'] = Db::name('lc_invest')->where($today_where)->whereIn('uid', $real_user_ids)->count();
         $data['inside']['invest_today'] = Db::name('lc_invest')->where($today_where)->whereIn('uid', $inside_user_ids)->count();
@@ -200,9 +222,9 @@ class Index extends Controller
         // //上月投资用户
         // $data['real']['invest_permonth'] = Db::name('lc_invest')->where($permonth_where)->whereIn('uid', $real_user_ids)->count();
         // $data['inside']['invest_permonth'] = Db::name('lc_invest')->where($permonth_where)->whereIn('uid', $inside_user_ids)->count();
-        
+
         //明日预计发放收益
-            //项目收益
+        //项目收益
         //     $invest_tomorrow = $this->calc_invest($real_user_ids,$inside_user_ids,'tomorrow','time1',0,'money1');
         //     //藏品收益
         //     $figure_collect_tomorrow = $this->calc_figure_collect($real_user_ids,$inside_user_ids,'tomorrow','able_sell_time',1,'expect_profit');
@@ -219,7 +241,7 @@ class Index extends Controller
         //     $blind_bj_tomorrow = $this->calc_blind($real_user_ids,$inside_user_ids,'tomorrow','expect_time',0,'money');
         //     //途游宝收益
         //     $ebao_bj_tomorrow = $this->calc_ebao($real_user_ids,$inside_user_ids,'tomorrow','time',0,'money',2);
-            
+
         // //本周预计发放收益
         //     //项目收益
         //     $invest_week = $this->calc_invest($real_user_ids,$inside_user_ids,'nowweek','time1',0,'money1');
@@ -238,7 +260,7 @@ class Index extends Controller
         //     $blind_bj_week = $this->calc_blind($real_user_ids,$inside_user_ids,'nowweek','expect_time',0,'money');
         //     //途游宝收益
         //     $ebao_bj_week = $this->calc_ebao($real_user_ids,$inside_user_ids,'nowweek','time',0,'money',2);
-            
+
         // //本月预计发放收益
         //     //项目收益
         //     $invest_month = $this->calc_invest($real_user_ids,$inside_user_ids,'nowmonth','time1',0,'money1');
@@ -257,7 +279,7 @@ class Index extends Controller
         //     $blind_bj_month = $this->calc_blind($real_user_ids,$inside_user_ids,'nowmonth','expect_time',0,'money');
         //     //途游宝收益
         //     $ebao_bj_month = $this->calc_ebao($real_user_ids,$inside_user_ids,'nowmonth','time',0,'money',2);
-            
+
         // //上月预计发放收益
         //     //项目收益
         //     $invest_premonth = $this->calc_invest($real_user_ids,$inside_user_ids,'permonth','time1',0,'money1');
@@ -276,7 +298,7 @@ class Index extends Controller
         //     $blind_bj_premonth = $this->calc_blind($real_user_ids,$inside_user_ids,'permonth','expect_time',0,'money');
         //     //途游宝收益
         //     $ebao_bj_premonth = $this->calc_ebao($real_user_ids,$inside_user_ids,'permonth','time',0,'money',2);
-        
+
         // //明日预计发放收益
         // $data['real']['profit_tomorrow'] = $invest_tomorrow['real']+$figure_collect_tomorrow['real']+$blind_tomorrow['real']+$ebao_tomorrow['real'];
         // $data['inside']['profit_tomorrow'] = $invest_tomorrow['inside']+$figure_collect_tomorrow['inside']+$blind_tomorrow['inside']+$ebao_tomorrow['inside'];
@@ -295,14 +317,14 @@ class Index extends Controller
         // //本月预计返还本金
         // $data['real']['bj_month'] = $invest_bj_month['real']+$figure_collect_bj_month['real']+$blind_bj_month['real']+$ebao_bj_month['real'];
         // $data['inside']['bj_month'] = $invest_bj_month['inside']+$figure_collect_bj_month['inside']+$blind_bj_month['inside']+$ebao_bj_month['inside'];
-        
+
         // //上月预计返还收益 
         // $data['real']['profit_premonth'] = $invest_premonth['real']+$figure_collect_premonth['real']+$blind_premonth['real']+$ebao_premonth['real'];
         // $data['inside']['profit_premonth'] = $invest_premonth['inside']+$figure_collect_premonth['inside']+$blind_premonth['inside']+$ebao_premonth['inside'];
         // //上月预计返还本金
         // $data['real']['bj_premonth'] = $invest_bj_premonth['real']+$figure_collect_bj_premonth['real']+$blind_bj_premonth['real']+$ebao_bj_premonth['real'];
         // $data['inside']['bj_premonth'] = $invest_bj_premonth['inside']+$figure_collect_bj_premonth['inside']+$blind_bj_premonth['inside']+$ebao_bj_premonth['inside'];
-            
+
         //今日项目交易量
         // $trade_today = $this->calc_trade('today',$real_user_ids,$inside_user_ids);
         // $data['real']['trade_today'] = $trade_today['real'];
@@ -329,41 +351,41 @@ class Index extends Controller
         //     $item['real_total_num'] = Db::name('lc_user')->where($where)->where('grade_id', $item['id'])->whereIn('id', $real_user_ids)->count();
         //     $item['inside_total_num'] = Db::name('lc_user')->where($where)->where('grade_id', $item['id'])->whereIn('id', $inside_user_ids)->count();
         // }
-        
+
         // // 持币总数
         // $data['real']['imb'] = Db::name('lc_user')->where($where)->whereIn('id', $real_user_ids)->sum('kj_money');
         // $data['inside']['imb'] = Db::name('lc_user')->where($where)->whereIn('id', $inside_user_ids)->sum('kj_money');
         // // 提币总数
         // $data['real']['out_imb'] = Db::name('lc_mechines_finance')->where($this->get_where($search_time, 'add_time'))->where('type', 2)->whereIn('id', $real_user_ids)->sum('amount');
         // $data['inside']['out_imb'] = Db::name('lc_mechines_finance')->where($this->get_where($search_time, 'add_time'))->where('type', 2)->whereIn('id', $inside_user_ids)->sum('amount');
-        
+
         //在线人数
-        $data['real']['online'] = Db::name('lcUser')->whereIn('id', $real_user_ids)->where('logintime', '>', time() - 300) -> count();
-        $data['inside']['online'] = Db::name('lcUser')->whereIn('id', $inside_user_ids)->where('logintime', '>', time() - 300) -> count();
+        $data['real']['online'] = Db::name('lcUser')->whereIn('id', $real_user_ids)->where('logintime', '>', time() - 300)->count();
+        $data['inside']['online'] = Db::name('lcUser')->whereIn('id', $inside_user_ids)->where('logintime', '>', time() - 300)->count();
         //今日签到人数
         // var_dump($this->gettimestamp('today','date'));exit;
-        $data['real']['sign'] = Db::name('lc_user_sign_log l')->join('lc_user u', 'l.uid = u.id')->where($this->gettimestamp('today','date'))->where('is_sf', 0)->count();
-        $data['inside']['sign'] = Db::name('lc_user_sign_log l')->join('lc_user u', 'l.uid = u.id')->where($this->gettimestamp('today','date'))->whereIn('is_sf', [1,2])->count();
-        
+        $data['real']['sign'] = Db::name('lc_user_sign_log l')->join('lc_user u', 'l.uid = u.id')->where($this->gettimestamp('today', 'date'))->where('is_sf', 0)->count();
+        $data['inside']['sign'] = Db::name('lc_user_sign_log l')->join('lc_user u', 'l.uid = u.id')->where($this->gettimestamp('today', 'date'))->whereIn('is_sf', [1, 2])->count();
+
         //明日预计返回本金及收益
-        $data['real']['item_sy'] = Db::name('lc_invest_list l')->join('lc_user u', 'l.uid = u.id')->where('is_sf', 0)->where($this->gettimestamp('tomorrow','time1'))->sum('money1');
-        $data['inside']['item_sy'] = Db::name('lc_invest_list l')->join('lc_user u', 'l.uid = u.id')->whereIn('is_sf', [1,2])->where($this->gettimestamp('tomorrow','time1'))->sum('money1');
-        $data['real']['item_bj'] = Db::name('lc_invest_list l')->join('lc_user u', 'l.uid = u.id')->where('is_sf', 0)->where($this->gettimestamp('tomorrow','time1'))->sum('money');
-        $data['inside']['item_bj'] = Db::name('lc_invest_list l')->join('lc_user u', 'l.uid = u.id')->whereIn('is_sf', [1,2])->where($this->gettimestamp('tomorrow','time1'))->sum('money');
+        $data['real']['item_sy'] = Db::name('lc_invest_list l')->join('lc_user u', 'l.uid = u.id')->where('is_sf', 0)->where($this->gettimestamp('tomorrow', 'time1'))->sum('money1');
+        $data['inside']['item_sy'] = Db::name('lc_invest_list l')->join('lc_user u', 'l.uid = u.id')->whereIn('is_sf', [1, 2])->where($this->gettimestamp('tomorrow', 'time1'))->sum('money1');
+        $data['real']['item_bj'] = Db::name('lc_invest_list l')->join('lc_user u', 'l.uid = u.id')->where('is_sf', 0)->where($this->gettimestamp('tomorrow', 'time1'))->sum('money');
+        $data['inside']['item_bj'] = Db::name('lc_invest_list l')->join('lc_user u', 'l.uid = u.id')->whereIn('is_sf', [1, 2])->where($this->gettimestamp('tomorrow', 'time1'))->sum('money');
         //今日复投金额
-        
+
         $start = strtotime(date('Y-m-d'));
-        $over = strtotime(date('Y-m-d',strtotime('+1 day')));
+        $over = strtotime(date('Y-m-d', strtotime('+1 day')));
         $map = "UNIX_TIMESTAMP(f.time) >= $start AND UNIX_TIMESTAMP(f.time) <= $over";
         $data['real']['ft_balance'] = Db::name('lc_finance f')->join('lc_user u', 'f.uid = u.id')->where('is_sf', 0)->where('reason_type', 16)->where($map)->sum('f.money');
-        $data['inside']['ft_balance'] = Db::name('lc_finance f')->join('lc_user u', 'f.uid = u.id')->whereIn('is_sf', [1,2])->where('reason_type', 16)->where($map)->sum('f.money');
-        
+        $data['inside']['ft_balance'] = Db::name('lc_finance f')->join('lc_user u', 'f.uid = u.id')->whereIn('is_sf', [1, 2])->where('reason_type', 16)->where($map)->sum('f.money');
+
         $this->assign('data_statistics', $data);
         $data = [];
-        
+
         //上月-入款、出款、发送收益、新增投资、新增投资额
-        $lastMonthFirstDate = strtotime(date('Y-m-01 00:00:00', strtotime(date("Y-m-d")))." -1 month");
-        $lastMonthLastDate = strtotime(date('Y-m-01 23:59:59', strtotime(date("Y-m-d")))." -1 day");
+        $lastMonthFirstDate = strtotime(date('Y-m-01 00:00:00', strtotime(date("Y-m-d"))) . " -1 month");
+        $lastMonthLastDate = strtotime(date('Y-m-01 23:59:59', strtotime(date("Y-m-d"))) . " -1 day");
         $data['report']['last_month'] = [
             'recharge' => Db::name('LcRecharge')->where("UNIX_TIMESTAMP(time) BETWEEN $lastMonthFirstDate AND $lastMonthLastDate AND status = 1")->sum('money'),
             'cash' => Db::name('LcCash')->where("UNIX_TIMESTAMP(time) BETWEEN $lastMonthFirstDate AND $lastMonthLastDate AND status = 1")->sum('money'),
@@ -373,7 +395,7 @@ class Index extends Controller
         ];
         //本月-入款、出款、发送收益、新增投资、新增投资额
         $firstDate = strtotime(date('Y-m-01 00:00:00', strtotime(date("Y-m-d"))));
-        $lastDate = strtotime(date('Y-m-01 23:59:59', strtotime(date("Y-m-d")))." +1 month -1 day");
+        $lastDate = strtotime(date('Y-m-01 23:59:59', strtotime(date("Y-m-d"))) . " +1 month -1 day");
         $data['report']['month'] = [
             'recharge' => Db::name('LcRecharge')->where("UNIX_TIMESTAMP(time) BETWEEN $firstDate AND $lastDate AND status = 1")->sum('money'),
             'cash' => Db::name('LcCash')->where("UNIX_TIMESTAMP(time) BETWEEN $firstDate AND $lastDate AND status = 1")->sum('money'),
@@ -388,11 +410,11 @@ class Index extends Controller
             'invest' => bcadd($data['report']['month']['invest'], $data['report']['last_month']['invest'], 2),
             'invest_sum' => bcadd($data['report']['month']['invest_sum'], $data['report']['last_month']['invest_sum'], 2),
         ];
-        
+
         $monthDays = $this->getMonthDays();
-        foreach($monthDays as $k=>$v){
+        foreach ($monthDays as $k => $v) {
             $first = strtotime($v);
-            $last = $first+86400-1;
+            $last = $first + 86400 - 1;
             $day[$k]['date'] = $v;
             $static = Db::name('lc_static')->where('date', $v)->find();
             $day[$k]['real_user'] = $static['real_user'];
@@ -411,7 +433,7 @@ class Index extends Controller
             $day[$k]['inside_expire_money'] = $static['inside_expire_money'];
             $day[$k]['real_interest'] = $static['real_interest'];
             $day[$k]['inside_interest'] = $static['inside_interest'];
-            
+
             // $day[$k]['recharge'] = Db::name('LcRecharge')->where("UNIX_TIMESTAMP(time) BETWEEN $first AND $last AND status = 1")->sum('money');
             // $day[$k]['cash'] = Db::name('LcCash')->where("UNIX_TIMESTAMP(time) BETWEEN $first AND $last AND status = 1")->sum('money');
             // $day[$k]['invest_list'] = Db::name('LcInvestList')->where("UNIX_TIMESTAMP(time2) BETWEEN $first AND $last AND status = 1")->sum('pay1');
@@ -420,8 +442,8 @@ class Index extends Controller
             // $day[$k]['invest_sum'] = Db::name('LcInvest')->where("UNIX_TIMESTAMP(time) BETWEEN $first AND $last")->sum('money');
             // $day[$k]['expire'] = Db::name('LcInvestList')->where("UNIX_TIMESTAMP(time1) BETWEEN $first AND $last")->sum('money');
             // $day[$k]['interest'] = Db::name('LcInvestList')->where("UNIX_TIMESTAMP(time1) BETWEEN $first AND $last")->sum('money1');
-            
-            
+
+
             // $day[$k]['recharge'] = 0;
             // $day[$k]['cash'] = 0;
             // $day[$k]['invest_list'] = 0;
@@ -431,123 +453,128 @@ class Index extends Controller
             // $day[$k]['expire'] = 0;
             // $day[$k]['interest'] = 0;
         }
-        
+
         $data['today'] = $day;
         $this->assign('data', $data);
         $this->fetch();
-            
-        
+
+
     }
-    
-    public function calc_trade($time,$real_user_ids,$inside_user_ids) {
+
+    public function calc_trade($time, $real_user_ids, $inside_user_ids)
+    {
         //项目
         $real_trade_invest = Db::name('lc_invest')->whereIn('uid', $real_user_ids)->where($this->gettimestamp($time))->sum('money');
         $inside_trade_invest = Db::name('lc_invest')->whereIn('uid', $inside_user_ids)->where($this->gettimestamp($time))->sum('money');
         //藏品
-        $real_trade_figure_collect = Db::name('lc_figure_collect_log')->whereIn('uid', $real_user_ids)->where($this->gettimestamp($time,'create_time',1))->sum('money');
-        $inside_trade_figure_collect = Db::name('lc_figure_collect_log')->whereIn('uid', $inside_user_ids)->where($this->gettimestamp($time,'create_time',1))->sum('money');
+        $real_trade_figure_collect = Db::name('lc_figure_collect_log')->whereIn('uid', $real_user_ids)->where($this->gettimestamp($time, 'create_time', 1))->sum('money');
+        $inside_trade_figure_collect = Db::name('lc_figure_collect_log')->whereIn('uid', $inside_user_ids)->where($this->gettimestamp($time, 'create_time', 1))->sum('money');
         //盲盒
         $real_trade_blind = Db::name('lc_blind_buy_log')->whereIn('uid', $real_user_ids)->where('pay_status', 1)
-        ->where($this->gettimestamp($time,'create_time',1))->sum('money');
+            ->where($this->gettimestamp($time, 'create_time', 1))->sum('money');
         $inside_trade_blind = Db::name('lc_blind_buy_log')->whereIn('uid', $inside_user_ids)->where('pay_status', 1)
-        ->where($this->gettimestamp($time,'create_time',1))->sum('money');
+            ->where($this->gettimestamp($time, 'create_time', 1))->sum('money');
         //途游宝
         $real_trade_ebao = Db::name('lc_ebao_product_record')->whereIn('uid', $real_user_ids)
-        ->where($this->gettimestamp($time,'add_time'))->sum('money');
+            ->where($this->gettimestamp($time, 'add_time'))->sum('money');
         $inside_trade_ebao = Db::name('lc_ebao_product_record')->whereIn('uid', $inside_user_ids)
-        ->where($this->gettimestamp($time,'add_time'))->sum('money');
-        $real = $real_trade_blind+$real_trade_figure_collect+$real_trade_blind+$real_trade_ebao;
-        $inside = $inside_trade_blind+$inside_trade_figure_collect+$inside_trade_blind+$inside_trade_ebao;
+            ->where($this->gettimestamp($time, 'add_time'))->sum('money');
+        $real = $real_trade_blind + $real_trade_figure_collect + $real_trade_blind + $real_trade_ebao;
+        $inside = $inside_trade_blind + $inside_trade_figure_collect + $inside_trade_blind + $inside_trade_ebao;
         return ['real' => $real, 'inside' => $inside];
     }
-    
+
     //计算项目
-    public function calc_invest($real_user_ids,$inside_user_ids,$time,$field,$type=0,$s_field)
+    public function calc_invest($real_user_ids, $inside_user_ids, $time, $field, $type = 0, $s_field)
     {
-        $real = Db::name('lc_invest_list')->where($this->gettimestamp($time,$field,$type))->whereIn('uid', $real_user_ids)->where('status', 0)->sum($s_field);
-        $inside = Db::name('lc_invest_list')->where($this->gettimestamp($time,$field,$type))->whereIn('uid', $inside_user_ids)->where('status', 0)->sum($s_field);
+        $real = Db::name('lc_invest_list')->where($this->gettimestamp($time, $field, $type))->whereIn('uid', $real_user_ids)->where('status', 0)->sum($s_field);
+        $inside = Db::name('lc_invest_list')->where($this->gettimestamp($time, $field, $type))->whereIn('uid', $inside_user_ids)->where('status', 0)->sum($s_field);
         return ['real' => $real, 'inside' => $inside];
     }
+
     //计算藏品收益
-    public function calc_figure_collect($real_user_ids,$inside_user_ids,$time,$field,$type=0,$s_field)
+    public function calc_figure_collect($real_user_ids, $inside_user_ids, $time, $field, $type = 0, $s_field)
     {
-        $real = Db::name('lc_figure_collect_log')->where($this->gettimestamp($time,$field,$type))->whereIn('uid', $real_user_ids)->sum($s_field);
-        $inside = Db::name('lc_figure_collect_log')->where($this->gettimestamp($time,$field,$type))->whereIn('uid', $inside_user_ids)->sum($s_field);
+        $real = Db::name('lc_figure_collect_log')->where($this->gettimestamp($time, $field, $type))->whereIn('uid', $real_user_ids)->sum($s_field);
+        $inside = Db::name('lc_figure_collect_log')->where($this->gettimestamp($time, $field, $type))->whereIn('uid', $inside_user_ids)->sum($s_field);
         return ['real' => $real, 'inside' => $inside];
     }
+
     //计算盲盒收益
-    public function calc_blind($real_user_ids,$inside_user_ids,$time,$field,$type=0,$s_field)
+    public function calc_blind($real_user_ids, $inside_user_ids, $time, $field, $type = 0, $s_field)
     {
-        $real = Db::name('lc_blind_buy_log')->where($this->gettimestamp($time,$field,$type))->whereIn('uid', $real_user_ids)->where('pay_status', 1)->sum($s_field);
-        $inside = Db::name('lc_blind_buy_log')->where($this->gettimestamp($time,$field,$type))->whereIn('uid', $inside_user_ids)->where('pay_status', 1)->sum($s_field);
+        $real = Db::name('lc_blind_buy_log')->where($this->gettimestamp($time, $field, $type))->whereIn('uid', $real_user_ids)->where('pay_status', 1)->sum($s_field);
+        $inside = Db::name('lc_blind_buy_log')->where($this->gettimestamp($time, $field, $type))->whereIn('uid', $inside_user_ids)->where('pay_status', 1)->sum($s_field);
         return ['real' => $real, 'inside' => $inside];
     }
+
     //计算途游宝收益
-    public function calc_ebao($real_user_ids,$inside_user_ids,$time,$field,$type=0,$s_field,$status)
+    public function calc_ebao($real_user_ids, $inside_user_ids, $time, $field, $type = 0, $s_field, $status)
     {
         $real = Db::name('lc_ebao_record')->where($this->gettimestamp($time))->whereIn('uid', $real_user_ids)->where('status', $status)->sum($s_field);
         $inside = Db::name('lc_ebao_record')->where($this->gettimestamp($time))->whereIn('uid', $inside_user_ids)->where('status', $status)->sum($s_field);
         return ['real' => $real, 'inside' => $inside];
     }
-    
-    public function gettimestamp($targetTime,$field='time',$type=0){
-        switch ($targetTime){
+
+    public function gettimestamp($targetTime, $field = 'time', $type = 0)
+    {
+        switch ($targetTime) {
             case 'today'://今天
                 $timeamp['start'] = strtotime(date('Y-m-d'));
-                $timeamp['over'] = strtotime(date('Y-m-d',strtotime('+1 day')));
+                $timeamp['over'] = strtotime(date('Y-m-d', strtotime('+1 day')));
                 break;
             case 'tomorrow': //明日
-                $timeamp['start'] = strtotime(date('Y-m-d',strtotime('+1 day')));
-                $timeamp['over'] = strtotime(date('Y-m-d',strtotime('+2 day')));
+                $timeamp['start'] = strtotime(date('Y-m-d', strtotime('+1 day')));
+                $timeamp['over'] = strtotime(date('Y-m-d', strtotime('+2 day')));
                 break;
             case 'yesterday'://昨天
-                $timeamp['start'] = strtotime(date('Y-m-d',strtotime('-1 day')));
+                $timeamp['start'] = strtotime(date('Y-m-d', strtotime('-1 day')));
                 $timeamp['over'] = strtotime(date('Y-m-d'));
                 break;
             case 'beforyesterday'://前天
-                $timeamp['start'] = strtotime(date('Y-m-d',strtotime('-2 day')));
-                $timeamp['over'] = strtotime(date('Y-m-d',strtotime('-1 day')));
+                $timeamp['start'] = strtotime(date('Y-m-d', strtotime('-2 day')));
+                $timeamp['over'] = strtotime(date('Y-m-d', strtotime('-1 day')));
                 break;
             case 'nowmonth'://本月
                 $timeamp['start'] = strtotime(date('Y-m-01'));
-                $timeamp['over'] = strtotime(date('Y-m-d',strtotime('+1 day')));
+                $timeamp['over'] = strtotime(date('Y-m-d', strtotime('+1 day')));
                 break;
             case 'permonth'://上月
-                $timeamp['start'] = strtotime(date('Y-m-01',strtotime('-1 month')));
+                $timeamp['start'] = strtotime(date('Y-m-01', strtotime('-1 month')));
                 $timeamp['over'] = strtotime(date('Y-m-01'));
                 break;
             case 'preweek'://上周 注意我们是从周一开始算
-                $timeamp['start'] = strtotime(date('Y-m-d',strtotime('-2 week Monday')));
-                $timeamp['over'] = strtotime(date('Y-m-d',strtotime('-1 week Monday +1 day')));
+                $timeamp['start'] = strtotime(date('Y-m-d', strtotime('-2 week Monday')));
+                $timeamp['over'] = strtotime(date('Y-m-d', strtotime('-1 week Monday +1 day')));
                 break;
             case 'nowweek'://本周
-                $timeamp['start'] = strtotime(date('Y-m-d',strtotime('-1 week Monday')));
-                $timeamp['over'] = strtotime(date('Y-m-d',strtotime('+1 day')));
+                $timeamp['start'] = strtotime(date('Y-m-d', strtotime('-1 week Monday')));
+                $timeamp['over'] = strtotime(date('Y-m-d', strtotime('+1 day')));
                 break;
             case 'preday'://30
-                $timeamp['start'] = strtotime(date('Y-m-d'),strtotime($param.' day'));
+                $timeamp['start'] = strtotime(date('Y-m-d'), strtotime($param . ' day'));
                 $timeamp['end'] = strtotime(date('Y-m-d'));
                 break;
             case 'nextday'://30
                 $timeamp['start'] = strtotime(date('Y-m-d'));
-                $timeamp['over'] = strtotime(date('Y-m-d'),strtotime($param.' day'));
+                $timeamp['over'] = strtotime(date('Y-m-d'), strtotime($param . ' day'));
                 break;
             case 'preyear'://去年
-                $timeamp['start'] = strtotime(date('Y-01-01',strtotime('-1 year')));
-                $timeamp['over'] = strtotime(date('Y-12-31',strtotime('-1 year')));
+                $timeamp['start'] = strtotime(date('Y-01-01', strtotime('-1 year')));
+                $timeamp['over'] = strtotime(date('Y-12-31', strtotime('-1 year')));
                 break;
             case 'nowyear'://今年
                 $timeamp['start'] = strtotime(date('Y-01-01'));
-                $timeamp['over'] = strtotime(date('Y-m-d',strtotime('+1 day')));
+                $timeamp['over'] = strtotime(date('Y-m-d', strtotime('+1 day')));
                 break;
             case 'quarter'://季度
-                $quarter = ceil((date('m'))/3);
-                $timeamp['start'] = mktime(0, 0, 0,$quarter*3-3+1,1,date('Y'));
-                $timeamp['over'] = mktime(23,59,59,$quarter*3,date('t',mktime(0, 0 , 0,$season*3,1,date("Y"))),date('Y'));
+                $quarter = ceil((date('m')) / 3);
+                $timeamp['start'] = mktime(0, 0, 0, $quarter * 3 - 3 + 1, 1, date('Y'));
+                $timeamp['over'] = mktime(23, 59, 59, $quarter * 3, date('t', mktime(0, 0, 0, $season * 3, 1, date("Y"))), date('Y'));
                 break;
             default:
                 $timeamp['start'] = strtotime(date('Y-m-d'));
-                $timeamp['over'] = strtotime(date('Y-m-d',strtotime('+1 day')));
+                $timeamp['over'] = strtotime(date('Y-m-d', strtotime('+1 day')));
                 break;
         }
         $start_time = $timeamp['start'];
@@ -584,12 +611,12 @@ class Index extends Controller
 
 
         // 今日投资
-        $today_tz =   Db::name("LcInvest")->where("to_days(time) = to_days(now())")->field('uid')->select();
+        $today_tz = Db::name("LcInvest")->where("to_days(time) = to_days(now())")->field('uid')->select();
         $yestoday_tz = Db::name("LcInvest")->where("TO_DAYS(NOW( ) ) - TO_DAYS( time) <= 1  ")->field('uid')->select();
 
-        $today_tz_num=count(array_map("unserialize", array_unique(array_map("serialize", $today_tz))));
-        $yestoday_tz_num=count(array_map("unserialize", array_unique(array_map("serialize", $yestoday_tz))));
-        
+        $today_tz_num = count(array_map("unserialize", array_unique(array_map("serialize", $today_tz))));
+        $yestoday_tz_num = count(array_map("unserialize", array_unique(array_map("serialize", $yestoday_tz))));
+
         //今日投资
         // $today_tz_num = Db::name("LcInvest")->where('time', 'today')->group('uid')->count();
         //昨日投资
@@ -605,7 +632,7 @@ class Index extends Controller
 
 
         // 团队数量
-        $grade_num = Db::name("LcUser")->where('grade_id',">=",'2')->count();
+        $grade_num = Db::name("LcUser")->where('grade_id', ">=", '2')->count();
 
         // 持币总数
         $imbNum = Db::name("LcUser")->sum("kj_money");
@@ -628,46 +655,44 @@ class Index extends Controller
 
 
         // $this->recharge_sum = Db::name('LcRecharge')->where("status = 1")->sum('money');
-        
+
         // $this->cash_sum = Db::name('LcCash')->where("status = 1")->sum('money');
         //   $adnid= db("LcUser")->where('is_sf','eq',0)->field('id')->select();
         // $adnid=array_column($adnid,'id');
-        
+
         $adnid = Db::name('LcUser')->where('is_sf', 0)->column('id');
-          // 今日充值
+        // 今日充值
         // $this->today_cz = Db::name('LcRecharge')->whereIn('uid', $adnid)->where('time', 'today')->where('status', 1)->sum('money');
-        $this->today_cz =   Db::name("LcRecharge")->where('uid','in',$adnid)->where("to_days(time) = to_days(now())")->where("status = 1")->sum('money');
+        $this->today_cz = Db::name("LcRecharge")->where('uid', 'in', $adnid)->where("to_days(time) = to_days(now())")->where("status = 1")->sum('money');
         //今日回款
         // $this->today_hk = Db::name("LcInvestList")->whereIn('uid', $adnid)->where('time2', 'today')->where('status', 1)->sum('pay2');
-         $this->today_hk =   Db::name("LcInvestList")->where('uid','in',$adnid)->where("to_days(time2) = to_days(now())")->where("status = 1")->sum('pay2');
+        $this->today_hk = Db::name("LcInvestList")->where('uid', 'in', $adnid)->where("to_days(time2) = to_days(now())")->where("status = 1")->sum('pay2');
         // where('id','eq',36024)->
-      
+
         // $this->recharge_sum = Db::name('LcRecharge')->whereIn('uid', $adnid)->where('status', 1)->sum('money');
-        $this->recharge_sum = Db::name('LcRecharge')->where('uid','in',$adnid)->where("status = 1")->sum('money');
-   
+        $this->recharge_sum = Db::name('LcRecharge')->where('uid', 'in', $adnid)->where("status = 1")->sum('money');
+
         // $this->cash_sum = Db::name('LcCash')->whereIn('uid', $adnid)->where('status', 1)->sum('money');
-        $this->cash_sum = Db::name('LcCash')->where('uid','in',$adnid)->where("status = 1")->sum('money');
-       
-        
-       
+        $this->cash_sum = Db::name('LcCash')->where('uid', 'in', $adnid)->where("status = 1")->sum('money');
+
+
         // $allmnid= db("LcUser")->where('is_sf','in',[1,2])->field('id')->select();
         //  $allmnid=array_column($allmnid,'id');
-         $allmnid = Db::name('LcUser')->whereIn('is_sf', [1,2])->column('id');
+        $allmnid = Db::name('LcUser')->whereIn('is_sf', [1, 2])->column('id');
         //  $allmnid=implode(',',$allmnid);
         //  var_dump($allmnid);
-      
-       
-        
-        $this->mn_recharge_sum = Db::name('LcRecharge')->where('uid','in',$allmnid)->where("status = 1")->sum('money');
-          
-        $this->mn_recharge_sum_today = Db::name('LcRecharge')->where('uid','in',$allmnid)->where("status = 1")->where("to_days(time) = to_days(now())")->sum('money');
-        $this->mn_cash_sum_today = Db::name('LcCash')->where('uid','in',$allmnid)->where("status = 1")->where("to_days(time) = to_days(now())")->sum('money');
-         $this->mn_cash_sum = Db::name('LcCash')->where('uid','in',$allmnid)->where("status = 1")->sum('money');
-        $this->mn_tz_sum_today = Db::name('LcInvest')->where('uid','in',$allmnid)->where("to_days(time) = to_days(now())")->sum('money');
-        
+
+
+        $this->mn_recharge_sum = Db::name('LcRecharge')->where('uid', 'in', $allmnid)->where("status = 1")->sum('money');
+
+        $this->mn_recharge_sum_today = Db::name('LcRecharge')->where('uid', 'in', $allmnid)->where("status = 1")->where("to_days(time) = to_days(now())")->sum('money');
+        $this->mn_cash_sum_today = Db::name('LcCash')->where('uid', 'in', $allmnid)->where("status = 1")->where("to_days(time) = to_days(now())")->sum('money');
+        $this->mn_cash_sum = Db::name('LcCash')->where('uid', 'in', $allmnid)->where("status = 1")->sum('money');
+        $this->mn_tz_sum_today = Db::name('LcInvest')->where('uid', 'in', $allmnid)->where("to_days(time) = to_days(now())")->sum('money');
+
         //获取在线人数
-        $pCount = Db::name('lcUser') -> where('logintime', '>', time() - 300) -> count();
-         
+        $pCount = Db::name('lcUser')->where('logintime', '>', time() - 300)->count();
+
 
         $table = $this->finance_report();
         $this->month = $table['month'];
@@ -684,10 +709,10 @@ class Index extends Controller
         $this->yesterdayTransaction = $yesterdayTransaction;
         $this->weekTransaction = $weekTransaction;
         $this->toMonthTransaction = $toMonthTransaction;
-        $this -> pCount = $pCount;
+        $this->pCount = $pCount;
         $this->fetch();
     }
-    
+
     public function main3()
     {
         $now = time();
@@ -706,17 +731,17 @@ class Index extends Controller
         $data['today_tz_num'] = Db::name("LcInvest")->where('time', 'today')->group('uid')->count();
         //昨日投资用户
         $data['yestoday_tz_num'] = Db::name('LcInvest')->where('time', 'yestoday')->group('uid')->count();
-          // 今日充值
+        // 今日充值
         $data['today_cz'] = Db::name('LcRecharge')->whereIn('uid', $adnid)->where('time', 'today')->where('status', 1)->sum('money');
         //今日回款
         $data['today_hk'] = Db::name("LcInvestList")->whereIn('uid', $adnid)->where('time2', 'today')->where('status', 1)->sum('pay2');
-        
+
         //明日预计发放收益
         $data['money_m'] = Db::name("LcInvestList")->where("UNIX_TIMESTAMP(time1) <= $now AND status = '0'")->sum("money1");
         //明日预计返还本金
         $data['benjin_bj'] = Db::name("LcInvestList")->where("DATE_FORMAT(time1,'%Y-%m-%d') = date_add(DATE_FORMAT(NOW(),'%Y-%m-%d'), interval 1 day) AND status = '0'")->sum("money");
         //团队数量
-        $data['grade_num']  = Db::name("LcUser")->where('grade_id',">=",'2')->count();
+        $data['grade_num'] = Db::name("LcUser")->where('grade_id', ">=", '2')->count();
         // 当天交易
         $data['todayTransaction'] = Db::name("LcInvest")->where('time', 'today')->sum("money");
         // 昨天交易
@@ -725,28 +750,28 @@ class Index extends Controller
         $data['weekTransaction'] = Db::name("LcInvest")->where('time', 'week')->sum("money");
         // 本月交易
         $data['monthTransaction'] = Db::name("LcInvest")->where('time', 'month')->sum("money");
-        
-        
-        $allmnid = Db::name('LcUser')->whereIn('is_sf', [1,2])->column('id');
+
+
+        $allmnid = Db::name('LcUser')->whereIn('is_sf', [1, 2])->column('id');
         //今日模拟账户充值
-        $data['mn_recharge_sum_today'] = Db::name('LcRecharge')->whereIn('uid',$allmnid)->where("status = 1")->where('time', 'today')->sum('money');
-        $data['mn_recharge_sum'] = Db::name('LcRecharge')->whereIn('uid',$allmnid)->where("status = 1")->sum('money');
-          
-        $data['mn_cash_sum_today'] = Db::name('LcCash')->whereIn('uid',$allmnid)->where("status = 1")->where('time', 'today')->sum('money');
-        $data['mn_cash_sum'] = Db::name('LcCash')->whereIn('uid',$allmnid)->where("status = 1")->sum('money');
-        $data['mn_tz_sum_today'] = Db::name('LcInvest')->whereIn('uid',$allmnid)->where('time', 'today')->sum('money');
+        $data['mn_recharge_sum_today'] = Db::name('LcRecharge')->whereIn('uid', $allmnid)->where("status = 1")->where('time', 'today')->sum('money');
+        $data['mn_recharge_sum'] = Db::name('LcRecharge')->whereIn('uid', $allmnid)->where("status = 1")->sum('money');
+
+        $data['mn_cash_sum_today'] = Db::name('LcCash')->whereIn('uid', $allmnid)->where("status = 1")->where('time', 'today')->sum('money');
+        $data['mn_cash_sum'] = Db::name('LcCash')->whereIn('uid', $allmnid)->where("status = 1")->sum('money');
+        $data['mn_tz_sum_today'] = Db::name('LcInvest')->whereIn('uid', $allmnid)->where('time', 'today')->sum('money');
         // 持币总数
         $data['imbNum'] = Db::name("LcUser")->sum("kj_money");
 
         // 提币总数
         $data['outImbNum'] = Db::name("LcMechinesFinance")->where("type = 2")->sum("amount");
-        
+
         //获取在线人数
-        $data['pCount'] = Db::name('lcUser') -> where('logintime', '>', time() - 300) -> count();
-        
+        $data['pCount'] = Db::name('lcUser')->where('logintime', '>', time() - 300)->count();
+
         //上月-入款、出款、发送收益、新增投资、新增投资额
-        $lastMonthFirstDate = strtotime(date('Y-m-01 00:00:00', strtotime(date("Y-m-d")))." -1 month");
-        $lastMonthLastDate = strtotime(date('Y-m-01 23:59:59', strtotime(date("Y-m-d")))." -1 day");
+        $lastMonthFirstDate = strtotime(date('Y-m-01 00:00:00', strtotime(date("Y-m-d"))) . " -1 month");
+        $lastMonthLastDate = strtotime(date('Y-m-01 23:59:59', strtotime(date("Y-m-d"))) . " -1 day");
         $data['report']['last_month'] = [
             'recharge' => Db::name('LcRecharge')->where("UNIX_TIMESTAMP(time) BETWEEN $lastMonthFirstDate AND $lastMonthLastDate AND status = 1")->sum('money'),
             'cash' => Db::name('LcRecharge')->where("UNIX_TIMESTAMP(time) BETWEEN $lastMonthFirstDate AND $lastMonthLastDate AND status = 1")->sum('money'),
@@ -756,7 +781,7 @@ class Index extends Controller
         ];
         //本月-入款、出款、发送收益、新增投资、新增投资额
         $firstDate = strtotime(date('Y-m-01 00:00:00', strtotime(date("Y-m-d"))));
-        $lastDate = strtotime(date('Y-m-01 23:59:59', strtotime(date("Y-m-d")))." +1 month -1 day");
+        $lastDate = strtotime(date('Y-m-01 23:59:59', strtotime(date("Y-m-d"))) . " +1 month -1 day");
         $data['report']['month'] = [
             'recharge' => Db::name('LcRecharge')->where("UNIX_TIMESTAMP(time) BETWEEN $firstDate AND $lastDate AND status = 1")->sum('money'),
             'cash' => Db::name('LcRecharge')->where("UNIX_TIMESTAMP(time) BETWEEN $firstDate AND $lastDate AND status = 1")->sum('money'),
@@ -771,11 +796,11 @@ class Index extends Controller
             'invest' => bcadd($data['report']['month']['invest'], $data['report']['last_month']['invest'], 2),
             'invest_sum' => bcadd($data['report']['month']['invest_sum'], $data['report']['last_month']['invest_sum'], 2),
         ];
-        
+
         $monthDays = $this->getMonthDays();
-        foreach($monthDays as $k=>$v){
+        foreach ($monthDays as $k => $v) {
             $first = strtotime($v);
-            $last = $first+86400-1;
+            $last = $first + 86400 - 1;
             $day[$k]['date'] = $v;
             $day[$k]['recharge'] = Db::name('LcRecharge')->where("UNIX_TIMESTAMP(time) BETWEEN $first AND $last AND status = 1")->sum('money');
             $day[$k]['cash'] = Db::name('LcCash')->where("UNIX_TIMESTAMP(time) BETWEEN $first AND $last AND status = 1")->sum('money');
@@ -786,23 +811,24 @@ class Index extends Controller
             $day[$k]['expire'] = Db::name('LcInvestList')->where("UNIX_TIMESTAMP(time1) BETWEEN $first AND $last")->sum('money');
             $day[$k]['interest'] = Db::name('LcInvestList')->where("UNIX_TIMESTAMP(time1) BETWEEN $first AND $last")->sum('money1');
         }
-        
+
         $data['today'] = $day;
         $this->assign('data', $data);
         $this->fetch('main1');
     }
 
-    private function finance_report(){
+    private function finance_report()
+    {
         $firstDate = strtotime(date('Y-m-01 00:00:00', strtotime(date("Y-m-d"))));
-        $lastDate = strtotime(date('Y-m-01 23:59:59', strtotime(date("Y-m-d")))." +1 month -1 day");
+        $lastDate = strtotime(date('Y-m-01 23:59:59', strtotime(date("Y-m-d"))) . " +1 month -1 day");
         $month['recharge'] = Db::name('LcRecharge')->where("UNIX_TIMESTAMP(time) BETWEEN $firstDate AND $lastDate AND status = 1")->sum('money');
         $month['cash'] = Db::name('LcCash')->where("UNIX_TIMESTAMP(time) BETWEEN $firstDate AND $lastDate AND status = 1")->sum('money');
         $month['invest_list'] = Db::name('LcInvestList')->where("UNIX_TIMESTAMP(time2) BETWEEN $firstDate AND $lastDate AND status = 1")->sum('pay1');
         $month['invest'] = Db::name('LcInvest')->where("UNIX_TIMESTAMP(time) BETWEEN $firstDate AND $lastDate")->count();
         $month['invest_sum'] = Db::name('LcInvest')->where("UNIX_TIMESTAMP(time) BETWEEN $firstDate AND $lastDate")->sum('money');
 
-        $lastMonthFirstDate = strtotime(date('Y-m-01 00:00:00', strtotime(date("Y-m-d")))." -1 month");
-        $lastMonthLastDate = strtotime(date('Y-m-01 23:59:59', strtotime(date("Y-m-d")))." -1 day");
+        $lastMonthFirstDate = strtotime(date('Y-m-01 00:00:00', strtotime(date("Y-m-d"))) . " -1 month");
+        $lastMonthLastDate = strtotime(date('Y-m-01 23:59:59', strtotime(date("Y-m-d"))) . " -1 day");
         $lastMonth['recharge'] = Db::name('LcRecharge')->where("UNIX_TIMESTAMP(time) BETWEEN $lastMonthFirstDate AND $lastMonthLastDate AND status = 1")->sum('money');
         $lastMonth['cash'] = Db::name('LcCash')->where("UNIX_TIMESTAMP(time) BETWEEN $lastMonthFirstDate AND $lastMonthLastDate AND status = 1")->sum('money');
         $lastMonth['invest_list'] = Db::name('LcInvestList')->where("UNIX_TIMESTAMP(time2) BETWEEN $lastMonthFirstDate AND $lastMonthLastDate AND status = 1")->sum('pay1');
@@ -810,9 +836,9 @@ class Index extends Controller
         $lastMonth['invest_sum'] = Db::name('LcInvest')->where("UNIX_TIMESTAMP(time) BETWEEN $lastMonthFirstDate AND $lastMonthLastDate")->sum('money');
 
         $monthDays = $this->getMonthDays();
-        foreach($monthDays as $k=>$v){
+        foreach ($monthDays as $k => $v) {
             $first = strtotime($v);
-            $last = $first+86400-1;
+            $last = $first + 86400 - 1;
             $day[$k]['date'] = $v;
             $day[$k]['recharge'] = Db::name('LcRecharge')->where("UNIX_TIMESTAMP(time) BETWEEN $first AND $last AND status = 1")->sum('money');
             $day[$k]['cash'] = Db::name('LcCash')->where("UNIX_TIMESTAMP(time) BETWEEN $first AND $last AND status = 1")->sum('money');
@@ -823,7 +849,7 @@ class Index extends Controller
             $day[$k]['expire'] = Db::name('LcInvestList')->where("UNIX_TIMESTAMP(time1) BETWEEN $first AND $last")->sum('money');
             $day[$k]['interest'] = Db::name('LcInvestList')->where("UNIX_TIMESTAMP(time1) BETWEEN $first AND $last")->sum('money1');
         }
-        return array('day' => $day,'month' => $month,'last_month'=>$lastMonth);
+        return array('day' => $day, 'month' => $month, 'last_month' => $lastMonth);
     }
 
     /**
@@ -838,7 +864,7 @@ class Index extends Controller
         $now_day = date('d');
         $lastDay = date('Y-m-d', strtotime("$firstDay +1 month -1 day"));
         while (date('Y-m-d', strtotime("$firstDay +$i days")) <= $lastDay) {
-            if($i>=$now_day) break;
+            if ($i >= $now_day) break;
             $monthDays[] = date('Y-m-d', strtotime("$firstDay +$i days"));
             $i++;
         }
@@ -869,26 +895,26 @@ class Index extends Controller
             $this->_form('SystemUser', 'admin@user/pass', 'id', [], ['id' => $id]);
         } else {
             $data = $this->_input([
-                'password'    => $this->request->post('password'),
-                'repassword'  => $this->request->post('repassword'),
+                'password' => $this->request->post('password'),
+                'repassword' => $this->request->post('repassword'),
                 'oldpassword' => $this->request->post('oldpassword'),
             ], [
                 'oldpassword' => 'require',
-                'password'    => 'require|min:4',
-                'repassword'  => 'require|confirm:password',
+                'password' => 'require|min:4',
+                'repassword' => 'require|confirm:password',
             ], [
                 'oldpassword.require' => '旧密码不能为空！',
-                'password.require'    => '登录密码不能为空！',
-                'password.min'        => '登录密码长度不能少于4位有效字符！',
-                'repassword.require'  => '重复密码不能为空！',
-                'repassword.confirm'  => '重复密码与登录密码不匹配，请重新输入！',
+                'password.require' => '登录密码不能为空！',
+                'password.min' => '登录密码长度不能少于4位有效字符！',
+                'repassword.require' => '重复密码不能为空！',
+                'repassword.confirm' => '重复密码与登录密码不匹配，请重新输入！',
             ]);
             $user = Db::name('SystemUser')->where(['id' => $id])->find();
             // echo md5(md5($data['oldpassword']).$user['salt']);exit;
-            if (md5(md5($data['oldpassword']).$user['salt']) !== $user['password']) {
+            if (md5(md5($data['oldpassword']) . $user['salt']) !== $user['password']) {
                 $this->error('旧密码验证失败，请重新输入！');
             }
-            if (Data::save('SystemUser', ['id' => $user['id'], 'password' => md5(md5($data['password']).$user['salt'])])) {
+            if (Data::save('SystemUser', ['id' => $user['id'], 'password' => md5(md5($data['password']) . $user['salt'])])) {
                 $this->success('密码修改成功，下次请使用新密码登录！', '');
             } else {
                 $this->error('密码修改失败，请稍候再试！');
