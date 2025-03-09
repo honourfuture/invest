@@ -3011,8 +3011,8 @@ class User extends Controller
 
                     $invest_income_ids = Db::name('lc_invest_list')
                         ->whereIn('iid', $item_id)
-                        ->where('reason_type', 11)
                         ->column('id');
+                    $where[] = ['reason_type', 'in', [11]];
                     if ($invest_income_ids) {
                         $where[] = ['orderid', 'in', $invest_income_ids];
                     }
