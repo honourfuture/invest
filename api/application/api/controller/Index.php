@@ -951,6 +951,7 @@ class Index extends Controller
     public function int()
     {
         $apicache = Cache::store('redis')->get('api_cache_index_int_' . $this->request->param('language'));
+        $apicache = false;
         if ($apicache) {
             $data = $apicache;
         } else {
@@ -958,6 +959,17 @@ class Index extends Controller
             $language = $params["language"];
             $banner = Db::name('LcSlide')->field("$language as zh_cn,url")->where(['show' => 1, 'type' => 0])->order('sort asc,id desc')->select();
             $popup = Db::name('LcPopup')->field("content_$language as content,show")->find(1);
+
+            if ($this->checkLogin()) {
+                $now = date('Y-m-d H:i:s');
+                $user = DB::name('LcUser')->where('id', $this->userInfo['id'])
+                    ->where("end_notice_time > '$now'")
+                    ->find();
+                if($user){
+                    $popup['content'] = $user['notice'];
+                }
+            }
+
             $ad1 = Db::name('LcSlide')->field("$language,url")->where(['show' => 1, 'type' => 1])->limit(1)->select();
             $ad2 = Db::name('LcSlide')->field("$language,url")->where(['show' => 1, 'type' => 2])->limit(2)->select();
             $ad3 = Db::name('LcSlide')->field("$language,url")->where(['show' => 1, 'type' => 3])->limit(2)->select();
@@ -1360,6 +1372,8 @@ class Index extends Controller
         $item['zjyt'] = $item['zjyt_' . $language];
         $itemId = $params["id"];
         $user = Db::name("LcUser")->find($uid);
+        $able_member = Db::name('lc_user_member')->whereIn('id', explode(',', $item['members']))->column('name');
+        $item['able_member'] = implode(',', $able_member);
 
         $member = Db::name("LcUserMember")->where("id", $user['member'])->find();
 

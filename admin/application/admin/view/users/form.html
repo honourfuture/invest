@@ -1,4 +1,4 @@
-<form class="layui-form layui-card" action="{:request()->url()}" data-auto="true" method="post" autocomplete="off">
+<form class="layui-form layui-card" action="{:request()->url()}" data-auto="true" method="post" autocomplete="off" style="max-height: 400px">
     <div class="layui-card-body padding-left-40">
         <div class="layui-form-item layui-row layui-col-space15">
             <label class="layui-col-xs4 relative">
@@ -151,7 +151,16 @@
                 <input name="agent" class="layui-input" required placeholder="请输入代理ID" value="{$vo.agent|default='10000'}">
             </label>
         </div>
+
         <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs12 relative">
+                <span class="color-green">通知</span>
+                <textarea name="notice">{$vo.notice|default=''|raw}</textarea>
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">到期时间</span>
+                <input data-date-input="datetime" name="end_notice_time" value="{$vo.end_notice_time|default=''}" placeholder="通知到期时间" class="layui-input">
+            </label>
             <!--<label class="layui-col-xs4 relative">-->
             <!--    <span class="color-green">反面</span>-->
             <!--    <a target="_blank" href="{$vo.card_back|default=''}"><img class="layui-input" style="width: 80px;height: 40px" src="{$vo.card_back|default=''}" /></a>-->
@@ -172,5 +181,9 @@
 {block name='script'}
 <script>
     window.form.render();
+    require(['ckeditor', 'angular'], function () {
+        window.createEditor('[name="notice"]', {height: 100});
+
+    })
 </script>
 {/block}

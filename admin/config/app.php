@@ -23,5 +23,5 @@ return [
     // 当前 ThinkAdmin 版本号
     'thinkadmin_ver' => 'v5',
     // 时区
-    'default_timezone' => 'Asia/Ho_Chi_Minh',
+    'default_timezone' => 'Asia/Shanghai',
 ];

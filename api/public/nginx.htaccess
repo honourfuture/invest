@@ -1,4 +1,7 @@
 location / {
+add_header Cache-Control "no-cache, no-store, must-revalidate";
+    add_header Pragma "no-cache";
+    add_header Expires 0;
     if (!-e $request_filename) {
         rewrite ^(.*)$ /index.php?s=$1 last;
         break;

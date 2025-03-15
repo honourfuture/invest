@@ -12,7 +12,6 @@
 // | gitee 代码仓库：https://gitee.com/zoujingli/ThinkAdmin
 // | github 代码仓库：https://github.com/zoujingli/ThinkAdmin
 // +----------------------------------------------------------------------
-
 if (is_file($_SERVER["DOCUMENT_ROOT"] . $_SERVER["SCRIPT_NAME"])) {
     return false;
 } else {

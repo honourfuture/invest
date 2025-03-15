@@ -95,6 +95,7 @@ abstract class Controller extends \stdClass
                     if (is_string($return)) {
                         $response->content($response->getContent() . $return);
                     } elseif ($return instanceof Response) {
+
                         $this->__mergeResponse($response, $return);
                     }
                 } catch (HttpResponseException $exception) {
