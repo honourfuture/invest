@@ -14,6 +14,8 @@
 // +----------------------------------------------------------------------
 
 namespace think;
+opcache_reset();
+clearstatcache();
 
 require __DIR__ . '/../thinkphp/base.php';
 Container::get('app')->run()->send();

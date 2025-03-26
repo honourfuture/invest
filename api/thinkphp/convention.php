@@ -32,7 +32,7 @@ return [
         // 默认时区
         'default_timezone'       => 'Asia/Shanghai',
         // 是否开启多语言
-        'lang_switch_on'         => false,
+        'lang_switch_on'         => true,
         // 默认验证器
         'default_validate'       => '',
         // 默认语言

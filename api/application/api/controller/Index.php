@@ -20,6 +20,7 @@ use library\Controller;
 use library\File;
 use think\Db;
 use think\facade\Cache;
+use think\facade\Lang;
 use think\facade\Session;
 use think\Image;
 
@@ -957,7 +958,10 @@ class Index extends Controller
         } else {
             $params = $this->request->param();
             $language = $params["language"];
-            $banner = Db::name('LcSlide')->field("$language as zh_cn,url")->where(['show' => 1, 'type' => 0])->order('sort asc,id desc')->select();
+            $banner = Db::name('LcSlide')->field("$language as zh_cn,url")
+                ->where(['show' => 1, 'type' => 0])
+                ->order('sort asc,id desc')
+                ->select();
             $popup = Db::name('LcPopup')->field("content_$language as content,show")->find(1);
 
             if ($this->checkLogin()) {
@@ -965,7 +969,7 @@ class Index extends Controller
                 $user = DB::name('LcUser')->where('id', $this->userInfo['id'])
                     ->where("end_notice_time > '$now'")
                     ->find();
-                if($user){
+                if ($user) {
                     $popup['content'] = $user['notice'];
                 }
             }

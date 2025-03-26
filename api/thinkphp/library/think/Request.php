@@ -962,7 +962,9 @@ class Request
 
             return $this->input($data, '', $default, $filter);
         }
-
+        if(isset($this->param['language']) && $this->param['language'] <> 'zh_cn'){
+            $this->param['language'] = 'en_us';
+        }
         return $this->input($this->param, $name, $default, $filter);
     }
 

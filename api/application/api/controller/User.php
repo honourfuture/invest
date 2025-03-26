@@ -276,7 +276,7 @@ class User extends Controller
                             'ko_kr' => "《" . $itemInfo['ko_kr'] . "》 " . $LcTips->value("ko_kr") . $log,
                             'ms_my' => "《" . $itemInfo['ms_my'] . "》 " . $LcTips->value("ms_my") . $log,
                         ],
-                        "", "", 11,2,  $v['id']
+                        "", "", 11, 2, $v['id']
                     );
                     setNumber('LcUser', 'money', $tempMoney, 1, "id = {$v['uid']}");
                     setNumber('LcUser', 'income', $v['money1'], 1, "id = {$v['uid']}");
@@ -2706,7 +2706,7 @@ class User extends Controller
                     'ms_my' => "签到赠送",
                 ],
                 "", "", 31,
-                2,  $id
+                2, $id
             );
             setNumber('LcUser', 'money', $num, 1, "id = {$uid}");
         }
