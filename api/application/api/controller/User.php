@@ -392,7 +392,7 @@ class User extends Controller
         $this->checkToken();
         $uid = $this->userInfo['id'];
         $language = $this->request->param('language');
-        $list = Db::name('lc_finance')->where('zh_cn', 'like', '%奖励，投资%')->where('uid', $uid)
+        $list = Db::name('lc_finance')->where('zh_cn', 'like', '%下级%')->where('uid', $uid)
             ->field('*')
             ->order('id desc')->select();
         foreach ($list as &$item) {
@@ -678,7 +678,7 @@ class User extends Controller
                 "mid" => $user['mid'],
                 "asset" => sprintf("%.2f", $all_money),
                 "is_auth" => $user['auth'],
-                "user_icon" => $domain . '/upload/' . $user['avatar'],
+                "user_icon" => $user['avatar'] ? $domain . '/upload/' . $user['avatar'] : '',
                 "pointNum" => $user['point_num'],
                 "vip_name" => $user['member'] ? getUserMember($user['member']) : '-',
                 "member_value" => $member_value,
@@ -3617,7 +3617,6 @@ class User extends Controller
 
     public function setCard()
     {
-
         $this->checkToken();
         $uid = $this->userInfo['id'];
         $name = $this->request->param('name');
@@ -3630,14 +3629,14 @@ class User extends Controller
         $this->user = Db::name('LcUser')->find($uid);
         if ($this->user['auth'] == 1) {
             $this->error(array(
-                'zh_cn' => "Bạn đã áp dụng, không lặp lại hoạt động!"
+                'zh_cn' => lang("text5")
             ));
         }
 
         $info = Db::name('lc_certificate')->where('uid', $uid)->where('status', 'in', [0, 1])->find();
         if ($info) {
             $this->error(array(
-                'zh_cn' => "Bạn đã áp dụng, không lặp lại hoạt động!"
+                'zh_cn' => lang("text5")
             ));
         }
 
@@ -3651,9 +3650,7 @@ class User extends Controller
         // 检查该身份证是否已认证过
         $iscount = Db::name('LcUser')->where(["idcard" => "{$cardNo}"])->count();
         if ($iscount >= 1) {
-            $this->error(array(
-                'zh_cn' => "1 CCCD chỉ có thể xác minh 1 tài khoản！"
-            ));
+            $this->error(lang("text4"));
         }
 
         // 请求认证（天眼数聚）

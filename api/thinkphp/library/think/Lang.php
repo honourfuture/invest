@@ -75,9 +75,9 @@ class Lang
     /**
      * 设置语言定义(不区分大小写)
      * @access public
-     * @param  string|array  $name 语言变量
-     * @param  string        $value 语言值
-     * @param  string        $range 语言作用域
+     * @param string|array $name 语言变量
+     * @param string $value 语言值
+     * @param string $range 语言作用域
      * @return mixed
      */
     public function set($name, $value = null, $range = '')
@@ -98,8 +98,8 @@ class Lang
     /**
      * 加载语言定义(不区分大小写)
      * @access public
-     * @param  string|array  $file   语言文件
-     * @param  string        $range  语言作用域
+     * @param string|array $file 语言文件
+     * @param string $range 语言作用域
      * @return array
      */
     public function load($file, $range = '')
@@ -137,8 +137,8 @@ class Lang
     /**
      * 获取语言定义(不区分大小写)
      * @access public
-     * @param  string|null   $name 语言变量
-     * @param  string        $range 语言作用域
+     * @param string|null $name 语言变量
+     * @param string $range 语言作用域
      * @return bool
      */
     public function has($name, $range = '')
@@ -151,9 +151,9 @@ class Lang
     /**
      * 获取语言定义(不区分大小写)
      * @access public
-     * @param  string|null   $name 语言变量
-     * @param  array         $vars 变量替换
-     * @param  string        $range 语言作用域
+     * @param string|null $name 语言变量
+     * @param array $vars 变量替换
+     * @param string $range 语言作用域
      * @return mixed
      */
     public function get($name = null, $vars = [], $range = '')
@@ -165,7 +165,7 @@ class Lang
             return $this->lang[$range];
         }
 
-        $key   = strtolower($name);
+        $key = strtolower($name);
         $value = isset($this->lang[$range][$key]) ? $this->lang[$range][$key] : $name;
 
         // 变量解析
@@ -197,12 +197,23 @@ class Lang
      * @access public
      * @return string
      */
-    public function detect()
+    public function detect($lang = '')
     {
+
         // 自动侦测设置获取语言选择
         $langSet = '';
-
-        if (isset($_GET[$this->langDetectVar])) {
+        if ($lang) {
+            $langSet = strtolower($_GET[$this->langDetectVar]);
+        } elseif (request()->isJson() || request()->isPost()) {
+            $json = request()->getInput(); // 获取原始 JSON 数据
+            $data = json_decode($json, true); // 转换为数组
+            if (isset($data['lang'])) {
+                $langSet = strtolower($data['lang']);
+            }
+            if($langSet <> 'zh_cn'){
+                $langSet = 'en_us';
+            }
+        } else if (isset($_GET[$this->langDetectVar])) {
             // url中设置了语言变量
             $langSet = strtolower($_GET[$this->langDetectVar]);
         } elseif (isset($_COOKIE[$this->langCookieVar])) {
@@ -216,7 +227,7 @@ class Lang
                 $langSet = $this->acceptLanguage[$langSet];
             }
         }
-
+        $this->range = $langSet ?: $this->range;
         if (empty($this->allowLangList) || in_array($langSet, $this->allowLangList)) {
             // 合法的语言
             $this->range = $langSet ?: $this->range;
@@ -228,7 +239,7 @@ class Lang
     /**
      * 设置当前语言到Cookie
      * @access public
-     * @param  string $lang 语言
+     * @param string $lang 语言
      * @return void
      */
     public function saveToCookie($lang = null)
@@ -241,7 +252,7 @@ class Lang
     /**
      * 设置语言自动侦测的变量
      * @access public
-     * @param  string $var 变量名称
+     * @param string $var 变量名称
      * @return void
      */
     public function setLangDetectVar($var)
@@ -252,7 +263,7 @@ class Lang
     /**
      * 设置语言的cookie保存变量
      * @access public
-     * @param  string $var 变量名称
+     * @param string $var 变量名称
      * @return void
      */
     public function setLangCookieVar($var)
@@ -263,7 +274,7 @@ class Lang
     /**
      * 设置允许的语言列表
      * @access public
-     * @param  array $list 语言列表
+     * @param array $list 语言列表
      * @return void
      */
     public function setAllowLangList(array $list)
@@ -274,7 +285,7 @@ class Lang
     /**
      * 设置转义的语言列表
      * @access public
-     * @param  array $list 语言列表
+     * @param array $list 语言列表
      * @return void
      */
     public function setAcceptLanguage(array $list)

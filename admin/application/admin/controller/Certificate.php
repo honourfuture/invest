@@ -46,9 +46,13 @@ class Certificate extends Controller
         $this->title = '身份证列表';
         $map = [];
         $phone = request()->get('u_phone');
+        $id_card = request()->get('id_card');
         if (!empty($phone)) {
             $aes = new Aes();
             $map['u.phone'] = $aes->encrypt($phone);
+        }
+        if (!empty($id_card)) {
+            $map['i.idcard'] = $id_card;
         }
         $query = $this->_query($this->table)->alias('i')->field('i.*,u.phone,u.name as u_name');
         $query->join('lc_user u','i.uid=u.id')->like('i.account#i_account,u.username#u_name')->where($map)->order('i.id desc')->page();

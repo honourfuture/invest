@@ -1359,7 +1359,7 @@ class Index extends Controller
 
         $item = Db::name('LcItem')->field("id,sell_time,total,add_rate,members,able_buy_num,zh_cn,zh_hk,en_us,min,max,num,total,rate,percent,hour,content_$language as content,img,cycle_type,num,user_member,index_type, dbjg as dbjg_zh_cn,dbjg_hk as dbjg_zh_hk,dbjg_us as dbjg_en_us, tzfx as tzfx_zh_cn,tzfx_hk as tzfx_zh_hk,tzfx_us as tzfx_en_us,zjyt as zjyt_zh_cn,zjyt_hk as zjyt_zh_hk,zjyt_us as zjyt_en_us,purchase_amount,show_home")->where(['status' => 1])->find($params["id"]);
         if (!$item) {
-            $this->error('Sản phẩm đã ra khỏi dòng, xin vui lòng đầu tư vào sản phẩm khác');
+            $this->error(\lang('text1'));
         }
 
         $item['log'] = Db::name("LcInvest i")
@@ -1369,6 +1369,7 @@ class Index extends Controller
             ->order('i.id desc')
             ->limit("0,10")
             ->select();
+
         $item['cycle_name'] = cycle_type($item['cycle_type'], $language);
         $item['title'] = $item[$language];
         $item['dbjg'] = $item['dbjg_' . $language];
@@ -1467,7 +1468,12 @@ class Index extends Controller
             ];
             $item['numsText'] = array_reverse(array(date("H") . $nt_arr[$language], date("H", strtotime("-1 hour")) . $nt_arr[$language], date("H", strtotime("-2 hour")) . $nt_arr[$language], date("H", strtotime("-3 hour")) . $nt_arr[$language], date("H", strtotime("-4 hour")) . $nt_arr[$language], date("H", strtotime("-5 hour")) . $nt_arr[$language]));
         }
-        $log = Db::name('LcProjectLog')->field('title as title_zh_cn,title_zh_hk,title_en_us,phone')->order('sort asc,id desc')->limit(10)->select();
+        $log = Db::name('LcProjectLog')
+            ->field('title as title_zh_cn,title_zh_hk,title_en_us,phone')
+            ->order('sort asc,id desc')
+            ->limit(10)
+            ->select();
+
         foreach ($log as &$value) {
             $value['title'] = $value['title_' . $language];
         }
@@ -1660,7 +1666,7 @@ class Index extends Controller
         $redisKey = 'LockKeyUserItemApply' . $uid;
         $lock = new \app\api\util\RedisLock();
         if (!$lock->lock($redisKey, 10, 0)) {
-            $this->error(Db::name('LcTips')->field("$language")->find('229'));
+//            $this->error(Db::name('LcTips')->field("$language")->find('229'));
         }
 
 
@@ -2299,7 +2305,7 @@ class Index extends Controller
             $params["phone"] = trim($params["phone"]);
             $phone = $params["phone"];
             if (empty($params["guo"])) {
-                $guo = 84;
+                $guo = 998;
             } else {
                 $guo = $params["guo"];
             }
@@ -2433,8 +2439,8 @@ class Index extends Controller
                 'auth' => 0,
                 'parent_id' => $parentId,
                 'recom_id' => $recomId,
-                'name' => "Người dùng",
-                'username' => 'Người dùng' . substr($phone, -4),
+                'name' => \lang('text-3'),
+                'username' => \lang('text-3') . substr($phone, -4),
                 'grade_id' => '1',
                 'grade_name' => '普通用户',
                 'item_id' => $item_id
@@ -3645,6 +3651,7 @@ class Index extends Controller
     {
         $language = $this->request->param('language');
         $apicache = Cache::store('redis')->get('api_cache_notice_' . $language);
+        $apicache = false;
         if ($apicache) {
             $article = $apicache;
         } else {

@@ -11,9 +11,8 @@
 
 // 核心中文语言包
 return [
-    'text1' => '产品下线，请投资其他产品',
-    'text2' => '用户认购成功！',
-    'text3' => '用户',
-    'text4' => '一个身份证号码只能验证一个帐户！',
-    'text5' => '您已申请，不重复操作！',
-];
+    'text1' => 'Chiziqdan tashqari mahsulotlar, iltimos, boshqa mahsulotlarga sarmoya kiriting',
+    'text2' => 'Obuna muvaffaqiyatli foydalanuvchi!',
+    'text3' => 'Foydalanuvchilar',
+    'text4' => 'Bitta ID raqami faqat bitta hisobni tasdiqlashi mumkin!',
+    'text5' => 'Siz ariza berdingiz, takrorlamang!',];

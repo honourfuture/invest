@@ -13,7 +13,8 @@
 // | github 代码仓库：https://github.com/zoujingli/ThinkAdmin
 // +----------------------------------------------------------------------
 namespace think;
-
+opcache_reset();
+clearstatcache();
 require __DIR__ . '/../thinkphp/base.php';
 
 Container::get('app')->run()->send();
