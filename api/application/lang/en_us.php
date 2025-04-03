@@ -15,4 +15,7 @@ return [
     'text2' => 'Obuna muvaffaqiyatli foydalanuvchi!',
     'text3' => 'Foydalanuvchilar',
     'text4' => 'Bitta ID raqami faqat bitta hisobni tasdiqlashi mumkin!',
-    'text5' => 'Siz ariza berdingiz, takrorlamang!',];
+    'text5' => 'Siz ariza berdingiz, takrorlamang!',
+    'text6' => 'UZS',
+    'text7' => 'Allaqachon erishilgan',
+];

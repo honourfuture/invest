@@ -1007,6 +1007,7 @@ class User extends Controller
         $totalInvest = Db::name('lc_invest t')->join('lc_item m', 't.pid = m.id')
             // ->where('m.index_type', '<>', 7)
             ->whereIn('t.uid', $teamIdss)->sum('t.money');
+
         // $totalInvest = Db::name('lc_invest t')
         // ->whereIn('t.uid', $teamIdss)->sum('t.money');
 
@@ -1055,16 +1056,12 @@ class User extends Controller
         // $huiyuannum = Db::name('lc_invest_list l')->join('lc_user u', 'l.uid = u.id')->where('u.top', $uid)->group('uid')->count();
         $huiyuannum = Db::name('lc_user u')->join('lc_invest l', 'l.uid = u.id')->join('lc_item i', 'l.pid=i.id')->where('index_type', '<>', 7)->where('top', $uid)->group('l.uid')->count();
 
-
         $finish_arr = [
-            'zh_cn' => '已达标',
-            'zh_hk' => 'Hoàn thành',
-            'en_us' => 'Qualified',
+            'zh_cn' => lang('text7'),
+            'zh_hk' => lang('text7'),
+            'en_us' => lang('text7'),
         ];
 
-        //下一级升级条件
-        $grade_info = Db::name('LcMemberGrade')->where("id", $user_info['grade_id'])->field("id,recom_number,all_activity,recom_tz")->find();
-        $next_grade = Db::name('LcMemberGrade')->where("all_activity", '>', $grade_info['all_activity'])->field("id,recom_number,all_activity,recom_tz")->order('all_activity asc')->find();
         if (!$next_grade) {
             $data['next'] = [
                 'touzi' => ['cur' => $totalInvest, 'need' => $finish_arr[$language], 'progress' => 100],
@@ -3051,7 +3048,7 @@ class User extends Controller
         $rate_usd = Db::name('lc_info')->find(1)['rate_usd'];
 
         foreach ($data as &$value) {
-            $value['money'] = bcdiv($value['money'], $rate_usd, 2) . "U";
+            $value['money'] = bcdiv($value['money'], $rate_usd, 2) . lang("text6");
         }
         $money = array_column($data, "money");
         $this->success("获取成功", ['list' => $data, 'asset' => $user['asset'], 'money' => $user['money'], 'username' => $user['name'] ?: $user['phone'], 'share_reward' => array_sum($money), 'total_income' => vnd_gsh(bcdiv($total_income, 1, 2)), 'total_expend' => vnd_gsh(bcdiv($total_expend, 1, 2))]);
