@@ -1,6 +1,6 @@
 {extend name='admin@main'}
 {block name="content"}
-<form onsubmit="return false;"  data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+<form onsubmit="return false;"  data-auto="true"action="{:request()->url()}"  method="post" class='layui-form layui-card' autocomplete="off">
     <div class="think-box-shadow padding-40">
         <div class="layui-form-item layui-row layui-col-space15">
             <label class="layui-col-xs3 relative">
@@ -48,6 +48,10 @@
             <label class="layui-col-xs3 relative">
                 <span class="color-green">在线人数</span>
                 <input name="online_num" class="layui-input" placeholder="请输入在线人数" value="{$vo.online_num|default='0'}" required>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">在线人数(最大)</span>
+                <input name="online_num_end" class="layui-input" placeholder="请输入在线人数" value="{$vo.online_num_end|default='0'}" required>
             </label>
         </div>
 

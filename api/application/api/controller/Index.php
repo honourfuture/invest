@@ -1004,8 +1004,11 @@ class Index extends Controller
             }
             // 查询配置
             $config = Db::name("LcReward")->find(1);
+            $info = Db::name('LcInfo')->find(1);
             $data = array(
+                'webname' => $info['webname'],
                 'online_num' => $config['online_num'],
+                'online_num_end' => $config['online_num_end'],
                 'notice_num' => $notice_num,
                 'home_video' => $info['home_video'],
                 "is_kline" => $info['is_kline'],
@@ -1471,12 +1474,13 @@ class Index extends Controller
         $log = Db::name('LcProjectLog')
             ->field('title as title_zh_cn,title_zh_hk,title_en_us,phone')
             ->order('sort asc,id desc')
-            ->limit(10)
             ->select();
 
         foreach ($log as &$value) {
             $value['title'] = $value['title_' . $language];
         }
+        shuffle($log);
+
         $item['log'] = $log;
 
         // $item['period'] = $this -> q($item['cycle_type'], $item['hour']);
@@ -2145,7 +2149,7 @@ class Index extends Controller
             $uuid = $params["uuid"];
 
             if (empty($params["guo"])) {
-                $guo = 84;
+                $guo = 998;
             } else {
                 $guo = $params["guo"];
             }
@@ -2339,8 +2343,8 @@ class Index extends Controller
 
             //判断邀请人是否为二级内部账号
             $inviteUser = Db::name('lc_user')->where('invite', $params['t_mobile'])->where('is_yq', 0)->find();
-            if (!$inviteUser) $this->error('Mã mời không tồn tại');
-            if ($inviteUser['is_sf'] == 2) $this->error('Mã mời không hợp lệ');
+            if (!$inviteUser) $this->error(\lang('text8'));
+            if ($inviteUser['is_sf'] == 2) $this->error(\lang('text8'));
 
             // $phone = $params["phone"];
 
@@ -2439,8 +2443,8 @@ class Index extends Controller
                 'auth' => 0,
                 'parent_id' => $parentId,
                 'recom_id' => $recomId,
-                'name' => \lang('text-3'),
-                'username' => \lang('text-3') . substr($phone, -4),
+                'name' => \lang('text3'),
+                'username' => \lang('text3') . substr($phone, -4),
                 'grade_id' => '1',
                 'grade_name' => '普通用户',
                 'item_id' => $item_id
@@ -2590,7 +2594,7 @@ class Index extends Controller
             $params = $this->request->param();
             $language = $params["language"];
             if (empty($params["guo"])) {
-                $guo = 84;
+                $guo = 998;
             } else {
                 $guo = $params["guo"];
             }
@@ -2652,7 +2656,7 @@ class Index extends Controller
             $language = $params["language"];
             $phone = $params["mobile"];
             if (empty($params["guo"])) {
-                $guo = 84;
+                $guo = 998;
             } else {
                 $guo = $params["guo"];
             }
@@ -3538,7 +3542,7 @@ class Index extends Controller
         $phone = $params['phone'];
         $guo = $params['guo'];
         if (empty($guo)) {
-            $guo = 84;
+            $guo = 998;
         }
         // $unreal = [165,167,170,171,162];
         // if (in_array(substr($phone, 0, 3), $unreal)) {

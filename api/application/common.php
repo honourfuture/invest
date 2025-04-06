@@ -88,12 +88,12 @@ function cycle_type($value, $language)
             'Trả lãi từng năm, đáo hạn trả gốc'
         ];
         $arr_en_us = [
-            'Hourly rebate',
-            'Daily rebates, principal refunds upon expiration',
-            'Weekly rebates, principal refunds upon expiration',
-            'Monthly rebates, principal refunds upon expiration',
-            'Due principal rebate',
-            'Annual rebate, principal refund upon expiration'
+            'Soatlik chegirma, to`langan pulni qaytarish',
+            'Kundalik chegirma, kerak bo`lganda pulni qaytarish',
+            'Haftalik chegirmalar, kerak bo`lganda pulni qaytarish',
+            'Oylik chegirmalar, kerak bo`lganda kapitalni qaytarish',
+            'asosiy mablag‘ va foydasini qaytarish',
+            'Yillik chegirma, kerak bo`lganda kapitalni qaytarish'
         ];
         if ($language == 'zh_cn') {
             return $arr_zh_cn[$value-1];

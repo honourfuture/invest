@@ -18,4 +18,6 @@ return [
     'text5' => 'Siz ariza berdingiz, takrorlamang!',
     'text6' => 'UZS',
     'text7' => 'Allaqachon erishilgan',
+    'text8' => 'Taklif kodi mavjud emas',
+    'text9' => 'Minimal olib tashlash miqdori:',
 ];

@@ -1309,35 +1309,43 @@ class User extends Controller
         $today_start_day = date('Y-m-d 00:00:00');
         $today_end_day = date('Y-m-d 23:59:59');
         $invest_status = [];
+        $id_count = [];
         foreach ($invest_lists as $invest) {
+            $id_count[$invest['iid']] = 1;
             $day = date('Y-m-d', strtotime($invest['time1']));
             if (!isset($invest_status[$invest['iid']])) {
                 $invest_status[$invest['iid']] = [
                     'income' => 0,
                     'is_income' => 0,
+                    'num' => 1,
                     'start_day' => false,
                 ];
             }
-
             $invest_status[$invest['iid']]['income'] = bcadd($invest_status[$invest['iid']]['income'], $invest['money1'], 2);
             if ($invest['status'] == 1 && ($invest['time2'] >= $today_start_day) && $invest['time2'] <= $today_end_day) {
                 $invest_status[$invest['iid']]['is_income'] = 1;
+                $invest_status[$invest['iid']]['num'] = $invest['num'];
             }
 
             if ($invest['status'] == 0 && !$invest_status[$invest['iid']]['start_day']) {
                 $invest_status[$invest['iid']]['start_day'] = $day;
+                $id_count[$invest['iid']]++;
+                $invest_status[$invest['iid']]['num'] = $invest['num'];
                 continue;
             }
 
             if ($invest['status'] == 0 && $day < $invest_status[$invest['iid']]['start_day']) {
                 $invest_status[$invest['iid']]['start_day'] = $day;
             }
+            $id_count[$invest['iid']]++;
         }
         $today = date('Y-m-d');
         foreach ($list as &$item) {
             $item['sy'] = 0;
             $item['is_income'] = 0;
             if (isset($invest_status[$item['id']])) {
+                $item['num'] = $invest_status[$item['id']]['num'];
+
                 $item['sy'] = $invest_status[$item['id']]['income'];
                 $item['is_income'] = $invest_status[$item['id']]['is_income'];
                 if ($item['is_income'] == 0 && $invest_status[$item['id']]['start_day']) {
@@ -1507,7 +1515,8 @@ class User extends Controller
         $bank = Db::name('LcBank bank,lc_withdrawal_wallet wallet')->field("bank.account as account,bank.bank as bank,bank.id as id,wallet.charge as charge,wallet.type as type,wallet.rate as rate,wallet.mark as mark, bank.bank_type as bankType")->where('bank.wid=wallet.id AND wallet.show=1')->where(['bank.uid' => $userInfo['id']])->order('bank.id desc')->select();
         foreach ($bank as $k => $v) {
             if (strlen($v['account']) > 6) {
-                $bank[$k]['account'] = dataDesensitization($v['account'], 2, strlen($v['account']) - 6);
+                $dataDesensitization = dataDesensitization($v['account'], 2, strlen($v['account']) - 6);
+                $bank[$k]['account'] = $dataDesensitization ?: $v['account'];
             }
         }
 
@@ -1918,10 +1927,10 @@ class User extends Controller
         //提现金额
         $wallet = Db::name('lc_withdrawal_wallet')->where('id', $bank['wid'])->find();
         if ($params['money'] < $wallet['min_withdrawals']) {
-            $this->error('Số tiền rút tiền tối thiểu：' . $wallet['min_withdrawals']);
+            $this->error(lang('text9') . $wallet['min_withdrawals']);
         }
         if ($params['money'] > $wallet['max_withdrawals']) {
-            $this->error('Số tiền rút tiền tối đa：' . $wallet['max_withdrawals']);
+            $this->error(lang('text9') . $wallet['max_withdrawals']);
         }
 
         $user = Db::name('lc_user')->find($uid);

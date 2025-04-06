@@ -153,7 +153,7 @@ class Im extends Controller
                 $item['username'] = $item['remark'];
             }
             if(empty($item['username'])){
-                $item['username'] = \lang('text-3').$item['uid'];
+                $item['username'] = \lang('text3').$item['uid'];
             }
         }
 
