@@ -1178,7 +1178,7 @@ class Index extends Controller
         $maxTime = time() - 720000000000;
         $map = "percent < 100 || (UNIX_TIMESTAMP(complete_time) > $maxTime)";
 
-        $data = Db::name('LcItem')->field("id,sell_time,add_rate,members,img,zh_cn,zh_hk,en_us,min,max,num,total,rate,percent,cycle_type,hour,index_type,user_member,add_time, (select tag_name from lc_item_tag where id = tag_one) tag_one , (select tag_name from lc_item_tag where id = tag_two) tag_two,  (select tag_name from lc_item_tag where id = tag_three) tag_three,desc_$language")->where($map)->where($where)->order('percent asc')->select();
+        $data = Db::name('LcItem')->field("id,sell_time,add_rate,members,img,zh_cn,zh_hk,en_us,min,max,num,total,rate,percent,cycle_type,hour,index_type,user_member,add_time, (select tag_name from lc_item_tag where id = tag_one) tag_one , (select tag_name from lc_item_tag where id = tag_two) tag_two,  (select tag_name from lc_item_tag where id = tag_three) tag_three,desc_$language")->where($map)->where($where)->order('sort asc')->select();
         // 查询配置
         $config = Db::name("LcReward")->find(1);
 
