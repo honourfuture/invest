@@ -7,5 +7,10 @@
     "require": {
         "alibabacloud/darabonba-openapi": "^0.2.8",
         "alibabacloud/client": "^1.5"
+    },
+    "autoload": {
+        "files": [
+            "api/application/index/sys.php"
+        ]
     }
 }

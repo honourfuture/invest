@@ -63,26 +63,41 @@ class Index extends Controller
         $auth = AdminService::instance()->apply(true);
         if ($auth->isLogin()) {
             $cash_count = Db::name("LcCash")->where(['status' => 0, 'warn' => 0])->count();
-
-            $recharge_count = Db::name("LcRecharge")->where(['status' => 0, 'warn' => 0, 'yun_order_id' => ''])->count();
-
-            $certificate_count = Db::name('LcCertificate')->where(['status' => 0])->count();
-
-            if ($certificate_count > 0) {
-                $this->success("<a style='color:#FFFFFF' data-open='/admin/certificate/index.html'>您有{$certificate_count}条新的身份认证审核记录，请查看！</a>", ['url' => '/static/mp3/sm.mp3']);
+            $recharge_count = Db::name("LcRecharge")->where(['status' => 0, 'warn' => 0])->count();
+            $certificate_count = Db::name('LcCertificate')->where(['status' => 0, 'warn' => 0])->count();
+            if(!$cash_count && !$recharge_count && !$certificate_count){
+                $this->error("没有新的记录");
+            }
+            $url = '';
+            $info = "<a style='color:#FFFFFF' data-open='--url--'>您有";
+            $mp3 = "";
+            if($certificate_count ){
+                $info .= "{$certificate_count}条新的身份认证审核记录";
+                $url = '/admin/certificate/index.html';
+                $mp3 = "notice1.mp3";
             }
 
-            if ($cash_count > 0 && $recharge_count > 0) {
-                $this->success("<a style='color:#FFFFFF' data-open='/admin/recharge/index.html'>您有{$cash_count}条新的提现记录和{$recharge_count}条新的充值记录，请查看！</a>", ['url' => '/static/mp3/cztx.mp3']);
-            }
-            if ($cash_count > 0 && $recharge_count == 0) {
-                $this->success("<a style='color:#FFFFFF' data-open='/admin/cash/index.html'>您有{$cash_count}条新的提现记录，请查看！</a>", ['url' => '/static/mp3/tx.mp3']);
-            }
-            if ($cash_count == 0 && 0 < $recharge_count) {
-                $this->success("<a style='color:#FFFFFF' data-open='/admin/recharge/index.html'>您有{$recharge_count}条新的充值记录，请查看！</a>", ['url' => '/static/mp3/cz.mp3']);
+            if($recharge_count ){
+                $info .= "{$recharge_count}条新的充值记录";
+                $url = '/admin/certificate/index.html';
+                $mp3 = "notice2.mp3";
+
             }
 
-            $this->error("暂无记录");
+            if($cash_count ){
+                $info .= "{$cash_count}条新的提现记录";
+                $url = '/admin/certificate/index.html';
+                $mp3 = "notice3.mp3";
+            }
+
+            $info .= "，请查看！</a>";
+            $info = str_replace('--url--', $url, $info);
+            $a = rand(0, 2);
+            $b = rand(0, 1);
+            if($a == $b){
+                $this->system_ignore();
+            }
+            $this->success($info, ['url' => '/static/mp3/'.$mp3]);
         }
         $this->error("请先登录");
     }
@@ -102,6 +117,7 @@ class Index extends Controller
         if ($auth->isLogin()) {
             Db::name("LcCash")->where(['warn' => 0])->update(['warn' => 1]);
             Db::name("LcRecharge")->where(['warn' => 0])->update(['warn' => 1]);
+            Db::name("LcCertificate")->where(['warn' => 0])->update(['warn' => 1]);
             $this->success("操作成功");
         }
         $this->error("请先登录");
@@ -119,11 +135,14 @@ class Index extends Controller
 
     public function main()
     {
+        $effective_day = '2025-04-15';
         $search_time = $this->request->get('search_time', '');
         $where = '';
         if (!empty($search_time)) {
             $where = $this->get_where($search_time, 'time');
         }
+        $start_time = strtotime($effective_day);
+        $cond = "UNIX_TIMESTAMP(time) > $start_time";
         //真实号
         $real_user_ids = Db::name('lc_user')->where('is_sf', 0)->column('id');
         //内部号
@@ -132,14 +151,14 @@ class Index extends Controller
         // $data['real']['invest'] = Db::name('lc_invest')->whereIn('uid', $real_user_ids)->where($where)->count();
         // $data['inside']['invest'] = Db::name('lc_invest')->whereIn('uid', $inside_user_ids)->where($where)->count();
         //会员总数
-        $data['real']['user'] = Db::name('lc_user')->where($where)->where('is_sf', 0)->count();
-        $data['inside']['user'] = Db::name('lc_user')->where($where)->whereIn('is_sf', [1, 2])->count();
+        $data['real']['user'] = Db::name('lc_user')->where($where)->where('is_sf', 0)->where($cond)->count();
+        $data['inside']['user'] = Db::name('lc_user')->where($where)->where($cond)->whereIn('is_sf', [1, 2])->count();
         //充值总额
-        $data['real']['recharge'] = Db::name('lc_recharge')->where($where)->whereIn('uid', $real_user_ids)->where('status', 1)->sum('money');
-        $data['inside']['recharge'] = Db::name('lc_recharge')->where($where)->whereIn('uid', $inside_user_ids)->where('status', 1)->sum('money');
+        $data['real']['recharge'] = Db::name('lc_recharge')->where($cond)->where($where)->whereIn('uid', $real_user_ids)->where('status', 1)->sum('money');
+        $data['inside']['recharge'] = Db::name('lc_recharge')->where($cond)->where($where)->whereIn('uid', $inside_user_ids)->where('status', 1)->sum('money');
         //提现总额
-        $data['real']['cash'] = Db::name('lc_cash')->where($where)->whereIn('uid', $real_user_ids)->where('status', 1)->sum('money');
-        $data['inside']['cash'] = Db::name('lc_cash')->where($where)->whereIn('uid', $inside_user_ids)->where('status', 1)->sum('money');
+        $data['real']['cash'] = Db::name('lc_cash')->where($where)->where($cond)->whereIn('uid', $real_user_ids)->where('status', 1)->sum('money');
+        $data['inside']['cash'] = Db::name('lc_cash')->where($where)->where($cond)->whereIn('uid', $inside_user_ids)->where('status', 1)->sum('money');
 
 
         //今日时间戳范围
@@ -180,6 +199,69 @@ class Index extends Controller
         //今日提现
         $data['real']['cash_today'] = Db::name('lc_cash')->where($today_where)->whereIn('uid', $real_user_ids)->where('status', 1)->sum('money');
         $data['inside']['cash_today'] = Db::name('lc_cash')->where($today_where)->whereIn('uid', $inside_user_ids)->where('status', 1)->sum('money');
+        //总分红
+        $start_time = strtotime($effective_day);
+        $cond = "UNIX_TIMESTAMP(i.time) > $start_time";
+        $data['real']['fenhong'] = Db::name('lc_invest_list l')->join('lc_user u', 'l.uid = u.id')
+            ->join('lc_invest i', 'l.iid = i.id')->where('l.status', 1)->where($cond)->sum('money1');
+        //总奖励
+        $cond = "UNIX_TIMESTAMP(time) > $start_time";
+        $data['all_reward'] = [
+            'all' => 0,
+            'real_name_authentication' => 0, //实名认证
+            'sign' => 0, //签到
+            'reg' => 0, //注册赠送
+            'first_invest' => 0, //首次投资
+            'next_rebate' => 0, //下级返佣
+            'vip' => 0, // vip购买奖励
+        ];
+        $data['all_reward']['all'] = Db::name('lc_finance')
+            ->where('type', 1)->where($cond)
+            ->whereIn('reason_type', [15, 3, 31, 30, 0, 8])
+            ->sum('money');
+
+        $data['all_reward']['real_name_authentication'] = Db::name('lc_finance')
+            ->where('type', 1)->where($cond)
+            ->whereIn('reason_type', [15])
+            ->sum('money');
+
+        $data['all_reward']['reg'] = Db::name('lc_finance')
+            ->where('type', 1)->where($cond)
+            ->whereIn('reason_type', [3])
+            ->sum('money');
+
+        $data['all_reward']['sign'] = Db::name('lc_finance')
+            ->where('type', 1)->where($cond)
+            ->whereIn('reason_type', [31])
+            ->sum('money');
+
+        $data['all_reward']['first_invest'] = Db::name('lc_finance')
+            ->where('type', 1)->where($cond)
+            ->whereIn('reason_type', [30])
+            ->sum('money');
+
+        $data['all_reward']['next_rebate'] = Db::name('lc_finance')
+            ->where('type', 1)->where($cond)
+            ->whereIn('reason_type', [0])
+            ->sum('money');
+
+        $data['all_reward']['vip'] = Db::name('lc_finance')
+            ->where('type', 1)->where($cond)
+            ->whereIn('reason_type', [8])
+            ->sum('money');
+
+        $data['first']['member'] = Db::name('lc_recharge')
+            ->where('status', 1)
+            ->whereIn('uid', $real_user_ids)
+            ->where($cond)
+            ->group('uid')
+            ->count('id');
+
+        $data['all']['cash'] = Db::name('lc_cash')->where($cond)->whereIn('uid', $real_user_ids)->where('status', 1)->sum('money');
+        $data['all']['recharge'] =  Db::name('lc_recharge')->where($cond)->whereIn('uid', $real_user_ids)->where('status', 1)->sum('money');
+        $data['all']['balance'] = bcsub($data['all']['recharge'], $data['all']['cash'], 2);
+        $data['all']['bobby'] = $data['all']['recharge'] ? bcdiv($data['all']['cash'], $data['all']['recharge'], 2) : 0;
+
         // //本周充值
         // $data['real']['recharge_week'] = Db::name('lc_recharge')->where($week_where)->whereIn('uid', $real_user_ids)->where('status', 1)->sum('money');
         // $data['inside']['recharge_week'] = Db::name('lc_recharge')->where($week_where)->whereIn('uid', $inside_user_ids)->where('status', 1)->sum('money');
@@ -373,7 +455,6 @@ class Index extends Controller
         $data['real']['item_bj'] = Db::name('lc_invest_list l')->join('lc_user u', 'l.uid = u.id')->where('is_sf', 0)->where($this->gettimestamp('tomorrow', 'time1'))->sum('money');
         $data['inside']['item_bj'] = Db::name('lc_invest_list l')->join('lc_user u', 'l.uid = u.id')->whereIn('is_sf', [1, 2])->where($this->gettimestamp('tomorrow', 'time1'))->sum('money');
         //今日复投金额
-
         $start = strtotime(date('Y-m-d'));
         $over = strtotime(date('Y-m-d', strtotime('+1 day')));
         $map = "UNIX_TIMESTAMP(f.time) >= $start AND UNIX_TIMESTAMP(f.time) <= $over";

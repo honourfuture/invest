@@ -1743,6 +1743,10 @@ class User extends Controller
         $language = $params["language"];
         $userInfo = $this->userInfo;
         $user = Db::name('LcUser')->find($uid);
+        if (isSimplePayPassword($params['npassword'])) {
+            $this->error(lang('text10'));
+        }
+
         // if (empty($params['t_txyzm'])) {
         //     $this->error(array(
         //         'zh_cn' => '请填写图形验证码'

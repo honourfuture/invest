@@ -20,4 +20,5 @@ return [
     'text7' => 'Allaqachon erishilgan',
     'text8' => 'Taklif kodi mavjud emas',
     'text9' => 'Minimal olib tashlash miqdori:',
+    'text10' => 'Parol juda oddiy, iltimos, uni qayta o`rnating',
 ];

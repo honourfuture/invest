@@ -131,12 +131,78 @@
             </div>
             <i class="store-total-icon layui-icon"></i>
         </div>
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="store-total-item nowrap" style="background:linear-gradient(-125deg,#60af95,#615a5d)">
+                <div>总分红</div>
+                <div>{$data_statistics.real.fenhong}</div>
+            </div>
+            <i class="store-total-icon layui-icon"></i>
+        </div>
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="store-total-item nowrap" style="background:linear-gradient(-125deg,#60af95,#615a5d)">
+                <div>总奖励金</div>
+                <div>
+                    {$data_statistics.all_reward.all}
+                </div>
+            </div>
+            <i class="store-total-icon layui-icon"></i>
+        </div>
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="store-total-item nowrap" style="background:linear-gradient(-125deg,#60af95,#615a5d)">
+                <div>有效人数</div>
+                <div>{$data_statistics.first.member}</div>
+            </div>
+            <i class="store-total-icon layui-icon"></i>
+        </div>
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="store-total-item nowrap" style="background:linear-gradient(-125deg,#60af95,#615a5d)">
+                <div>总结余/总充值/总提现</div>
+                <div>{$data_statistics.all.balance}/{$data_statistics.all.recharge}/{$data_statistics.all.cash}</div>
+            </div>
+            <i class="store-total-icon layui-icon"></i>
+        </div>
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="store-total-item nowrap" style="background:linear-gradient(-125deg,#60af95,#615a5d)">
+                <div>波比</div>
+                <div>{$data_statistics.all.bobby}</div>
+            </div>
+            <i class="store-total-icon layui-icon"></i>
+        </div>
     </div>
 </div>
 
 <div class="layui-row layui-col-space15">
     <div class="layui-col-md12">
         <div class="think-box-shadow">
+            <table class="layui-table" lay-even>
+                <caption class="text-left margin-bottom-15 font-s14">奖励明细</caption>
+                <colgroup>
+                    <col width="30%">
+                </colgroup>
+                <thead>
+                <tr>
+                    <td>总奖励</td>
+                    <td>实名认证</td>
+                    <td>签到</td>
+                    <td>注册赠送</td>
+                    <td>首次投资</td>
+                    <td>下级返佣</td>
+                    <td>vip购买奖励</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{$data_statistics.all_reward.all}</td>
+                    <td>{$data_statistics.all_reward.real_name_authentication}</td>
+                    <td>{$data_statistics.all_reward.sign}</td>
+                    <td>{$data_statistics.all_reward.reg}</td>
+                    <td>{$data_statistics.all_reward.first_invest}</td>
+                    <td>{$data_statistics.all_reward.next_rebate}</td>
+                    <td>{$data_statistics.all_reward.vip}</td>
+                </tr>
+                </tbody>
+            </table>
+
             <table class="layui-table" lay-even>
                 <caption class="text-left margin-bottom-15 font-s14">综合报表</caption>
                 <colgroup>

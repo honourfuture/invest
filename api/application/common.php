@@ -226,4 +226,40 @@ if (!function_exists('httpRequest')) {
         }
         return  $data;
     }
+
+}
+function isSimplePayPassword(string $password): bool
+{
+    // 长度检查
+    if (strlen($password) !== 6 || !ctype_digit($password)) {
+        return true; // 长度不符或非纯数字也视为不合规
+    }
+
+    // 1. 全部相同
+    if (preg_match('/^(\d)\1{5}$/', $password)) {
+        return true;
+    }
+
+    // 2. 顺增、顺减
+    $inc = '01234567890123456789'; // 双倍长度可避免边界问题
+    $dec = '98765432109876543210';
+    if (strpos($inc, $password) !== false || strpos($dec, $password) !== false) {
+        return true;
+    }
+
+    // 3. 重复模式（如121212、112233）
+    if (preg_match('/^(\d{2})\1$/', $password)) {
+        return true; // 121212
+    }
+    if (preg_match('/^(\d)\1(\d)\2(\d)\3$/', $password)) {
+        return true; // 112233
+    }
+
+    // 4. 常见弱密码列表
+    $weakList = ['123123', '111222', '654321', '123321', '000000'];
+    if (in_array($password, $weakList)) {
+        return true;
+    }
+
+    return false;
 }
