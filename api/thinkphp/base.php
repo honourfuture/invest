@@ -12,7 +12,6 @@ namespace think;
 
 // 载入Loader类
 require __DIR__ . '/library/think/Loader.php';
-include_once __DIR__ . 'index/sys.php';
 
 // 注册自动加载
 Loader::register();
