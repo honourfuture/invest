@@ -493,6 +493,8 @@ class Index extends Controller
         ];
 
         $monthDays = $this->getMonthDays();
+        $monthDays = array_reverse($monthDays);
+
         foreach ($monthDays as $k => $v) {
             $first = strtotime($v);
             $last = $first + 86400 - 1;
