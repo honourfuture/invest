@@ -1710,7 +1710,6 @@ class Index extends Controller
             }
         }
 
-        if ($this->user['auth'] != 1) $this->error(Db::name('LcTips')->field("$language")->find('60'), '', 405);
         if ($this->user['password2'] != md5($params['passwd'])) $this->error(Db::name('LcTips')->field("$language")->find('130'));
         if ($this->user['password2'] == md5('123456')) $this->error(Db::name('LcTips')->field("$language")->find('207'), ['a' => 1]);
         //余额
@@ -1723,7 +1722,7 @@ class Index extends Controller
 
         $need_member = explode(',', $item['members']);
         if (!in_array($this->user['member'], $need_member)) {
-            $this->error('Cấp độ thành viên hiện tại không thể mở khóa vật phẩm');
+            $this->error(\lang('text11'));
         }
         //前提项目
         if ($item['pre_item_id'] > 0) {
@@ -1790,6 +1789,8 @@ class Index extends Controller
                 $this->error($returnData);
             }
         }
+        //实名认证
+        if ($this->user['auth'] != 1) $this->error(Db::name('LcTips')->field("$language")->find('60'), '', 405);
 
 
         // 该项目是否参与赠送积分
