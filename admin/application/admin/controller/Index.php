@@ -257,6 +257,7 @@ class Index extends Controller
             ->group('uid')
             ->count('id');
 
+
         $data['all']['cash'] = Db::name('lc_cash')->where($cond)->whereIn('uid', $real_user_ids)->where('status', 1)->sum('money');
         $data['all']['recharge'] =  Db::name('lc_recharge')->where($cond)->whereIn('uid', $real_user_ids)->where('status', 1)->sum('money');
         $data['all']['balance'] = bcsub($data['all']['recharge'], $data['all']['cash'], 2);

@@ -2145,6 +2145,7 @@ class Index extends Controller
     {
         if ($this->request->isPost()) {
             $params = $this->request->param();
+
             $language = $params["language"];
 
             $uuid = $params["uuid"];
@@ -2171,15 +2172,19 @@ class Index extends Controller
 
             if (!$params['username'] || !$params['password']) $this->error(Db::name('LcTips')->field("$language")->find('79'));
             // if (!judge($params['username'], "phone")) $this->error(Db::name('LcTips')->field("$language")->find('80'));
-
+            printLog(json_encode($params));
             $aes = new Aes();
             $params['username'] = $aes->encrypt($params['username']);
             $user = Db::name('LcUser')->where(['phone' => $params['username'], 'guo' => $guo])->find();
             if (!$user) {
                 $user = Db::name('LcUser')->where(['phone' => "0" . $aes->encrypt($params['username']), 'guo' => $guo])->find();
             }
+            printLog(json_encode($params));
+            if (!$user) {
+                printLog('登录失败');
+                $this->error(Db::name('LcTips')->field("$language")->find('81'));
+            }
 
-            if (!$user) $this->error(Db::name('LcTips')->field("$language")->find('81'));
 
             // if ($user['error_num'] >= 5 && $user['error_time'] > time()) {
             //     $this->error(Db::name('LcTips')->field("$language")->find('228'));
