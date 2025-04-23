@@ -22,4 +22,5 @@ return [
     'text9' => 'Minimal olib tashlash miqdori:',
     'text10' => 'Parol juda oddiy, iltimos, uni qayta o`rnating',
     'text11' => 'Joriy aʼzolik darajasi elementni qulfdan chiqara olmaydi',
+    'text12' => 'Iltimos, avval mahsulotni sotib oling',
 ];

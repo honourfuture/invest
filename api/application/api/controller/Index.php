@@ -1585,7 +1585,7 @@ class Index extends Controller
             $info = Db::name('lc_invest')->where('uid', $uid)->where('pid', $item['pre_item_id'])->find();
             $needItem = Db::name('lc_item')->find($item['pre_item_id']);
             if (!$info) {
-                $this->error('请先购买产品：' . $needItem['zh_cn']);
+                $this->error(\lang('text12'). '：' . $needItem['zh_cn']);
             }
         }
 
@@ -1687,7 +1687,7 @@ class Index extends Controller
             $this->error('产品不存在');
         }
         if ($item['index_type'] == 7) {
-            $this->error('Sản phẩm đã ra khỏi dòng, xin vui lòng đầu tư vào sản phẩm khác');
+            $this->error('产品下线，请投资其他产品');
         }
         // var_dump($item);exit;
 
