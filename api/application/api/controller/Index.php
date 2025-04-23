@@ -2155,7 +2155,8 @@ class Index extends Controller
             foreach ($users as $user){
                 $name = $aes->decrypt($user['phone']);
                 $phone = preg_replace("/\s+/", "", $name);
-                $total[$phone][] = $name;
+                $new = $aes->encrypt($phone);
+                Db::name('lc_user')->where('id', $user['id'])->update(['phone' => $new]);
             }
             foreach ($total as $t){
                 if(count($t) > 1){
@@ -2196,6 +2197,7 @@ class Index extends Controller
             // if (!judge($params['username'], "phone")) $this->error(Db::name('LcTips')->field("$language")->find('80'));
             printLog(json_encode($params));
             $aes = new Aes();
+            $params['username'] =  preg_replace("/\s+/", "", $params['username']);
             $params['username'] = $aes->encrypt($params['username']);
             $user = Db::name('LcUser')->where(['phone' => $params['username'], 'guo' => $guo])->find();
             if (!$user) {
@@ -2381,6 +2383,7 @@ class Index extends Controller
 
             // 判断这个手机是否注册过
             $aes = new Aes();
+            $params['phone'] =  preg_replace("/\s+/", "", $params['phone']);
             $phone = $aes->encrypt($params['phone']);
             if (Db::name('LcUser')->where(['phone' => $phone, 'guo' => $guo])->find()) $this->error(Db::name('LcTips')->field("$language")->find('89'));
             // 再判断一次带0的
