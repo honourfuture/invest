@@ -482,7 +482,7 @@ class Index extends Controller
                 "sms_verify" => $info['sms'],
                 "is_kline" => $info['is_kline'],
                 "is_see" => $info['is_see'],
-                'line' => $newData
+                'line' => $newData,
             );
             Cache::set('api_cache_webconfig', $data, 60);
         }

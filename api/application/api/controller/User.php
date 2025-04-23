@@ -2152,14 +2152,20 @@ class User extends Controller
                 }
             }
         }
-        $rate_usd = Db::name('lc_info')->find(1)['rate_usd'];
+        $info = Db::name('lc_info')->find(1);
+        $rate_usd = $info['rate_usd'];
+        $recharge_range = $info['recharge_range'];
+        $start_time = explode(' - ', $recharge_range)[0] ?? "00:00";
+        $end_time = explode(' - ', $recharge_range)[1] ?? "23:59";
 
         $data = array(
             'money' => bcdiv($user['money'], $rate_usd, 3),
             'min_recharge' => $info['min_recharge'],
             'payment' => $list,
             'asset' => bcdiv($user['asset'], $rate_usd, 3),
-            'kj_money' => $user['kj_money']
+            'kj_money' => $user['kj_money'],
+            'start_time' => $start_time,
+            'end_time' => $end_time,
         );
         $this->success('获取成功！', $data);
     }
