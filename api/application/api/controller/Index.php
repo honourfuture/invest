@@ -1729,7 +1729,7 @@ class Index extends Controller
             $info = Db::name('lc_invest')->where('uid', $uid)->where('pid', $item['pre_item_id'])->find();
             $needItem = Db::name('lc_item')->find($item['pre_item_id']);
             if (!$info) {
-                $this->error('请先购买产品：' . $needItem['zh_cn']);
+                $this->error(\lang('text12').'：' . $needItem['zh_cn']);
             }
         }
 
