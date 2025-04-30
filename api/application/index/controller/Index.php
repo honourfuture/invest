@@ -358,8 +358,7 @@ class Index extends Controller
 
     public function update_grade()
     {
-        $users = Db::name('lc_user l')->order('id asc')->select();
-
+        $users = Db::name('lc_user l')->order('id asc')->where('id > 2000')->select();
         foreach ($users as $user) {
             //下一级团队等级
             $nextGrade = Db::name("LcMemberGrade")->where("id > {$user['grade_id']}")->order("id asc")->limit(1)->find();
@@ -385,28 +384,26 @@ class Index extends Controller
             $extra_money = $totalInvest - $nextGrade['all_activity'];
             echo '额外超出金额：' . $extra_money;
             //普通用户升级一级团队长奖励
-            if ($nextGrade['title'] == '一级团队长') {
-                $extra_money = $totalInvest - $nextGrade['all_activity'];
-                //额外超出金额
-                if ($extra_money > 0) {
-                    $rewardMoney = bcdiv($extra_money * $nextGrade['poundage'], 100, 2);
-                    //赠送记录
-                    Db::name('lc_finance')->insert([
-                        'uid' => $user['id'],
-                        'money' => $rewardMoney,
-                        'type' => 1,
-                        'zh_cn' => $nextGrade['title'] . '奖励，投资' . $extra_money . '奖励' . $rewardMoney,
-                        'zh_hk' => $nextGrade['title_zh_hk'] . 'Phần thưởng，Đầu tư' . $extra_money . 'Phần thưởng' . $rewardMoney,
-                        'en_us' => $nextGrade['title_en_us'] . 'rewards, Investments' . $extra_money . 'reward' . $rewardMoney,
-                        'before' => $user['money'],
-                        'time' => date('Y-m-d H:i:s', time()),
-                        'reason_type' => 8,
-                        'after_money' => bcadd($user['money'], $rewardMoney, 2),
-                        'after_asset' => $user['asset'],
-                        'before_asset' => $user['asset']
-                    ]);
-                    Db::name('lc_user')->where('id', $user['id'])->update(['money' => bcadd($user['money'], $rewardMoney, 2)]);
-                }
+            $extra_money = $totalInvest - $nextGrade['all_activity'];
+            //额外超出金额
+            if ($extra_money > 0) {
+                $rewardMoney = bcdiv($extra_money * $nextGrade['poundage'], 100, 2);
+                //赠送记录
+                Db::name('lc_finance')->insert([
+                    'uid' => $user['id'],
+                    'money' => $rewardMoney,
+                    'type' => 1,
+                    'zh_cn' => $nextGrade['title'] . '奖励升级，投资' . $extra_money . '奖励' . $rewardMoney,
+                    'zh_hk' => $nextGrade['title_zh_hk'] . 'Phần thưởng，Đầu tư' . $extra_money . 'Phần thưởng' . $rewardMoney,
+                    'en_us' => $nextGrade['title_en_us'] . 'rewards, Investments' . $extra_money . 'reward' . $rewardMoney,
+                    'before' => $user['money'],
+                    'time' => date('Y-m-d H:i:s', time()),
+                    'reason_type' => 8,
+                    'after_money' => bcadd($user['money'], $rewardMoney, 2),
+                    'after_asset' => $user['asset'],
+                    'before_asset' => $user['asset']
+                ]);
+                Db::name('lc_user')->where('id', $user['id'])->update(['money' => bcadd($user['money'], $rewardMoney, 2)]);
             }
 
         }
